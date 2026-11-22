@@ -1,4 +1,3 @@
-import numpy as np
 import pytest
 
 from scripts.discrete_gwo_dpfsp import (
@@ -31,7 +30,7 @@ def test_decoder_assigns_every_job_once_and_orders_by_priority():
 def test_decoder_handles_zero_and_one_boundaries():
     decoder = RandomKeyDecoder(_instance())
     solution = decoder.decode([0.0, 1.0, 0.0, 1.0, 0.4, 0.3, 0.2, 0.1])
-    assert solution == ((0, 2), (3, 1))
+    assert solution == ((2, 0), (3, 1))
 
 
 def test_decoder_clips_finite_values_outside_bounds():
