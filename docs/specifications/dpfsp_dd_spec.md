@@ -232,5 +232,6 @@ A validação estrutural anterior do ZIP é uma verificação sintática do form
 - Confirmar por inspeção de exemplos brutos que o parser lê a matriz de processamento e o vetor de due dates do DPFSP-DD na ordem correta. O avaliador descrito aqui pressupõe uma matriz comum (n\times m\), consistente com fábricas idênticas.
 - Confirmar a convenção de indexação dos jobs e máquinas na interface interna (recomendação: 0-based, convertendo no parser).
 - Confirmar se a instância do dataset inclui alguma particularidade além das hipóteses clássicas explicitadas; não adicionar restrições sem evidência documental.
+- Registrar uma divergência na descrição do benchmark Small de Gogos (2023): o texto da seção 2.1 lista jobs `{4,6,8,10,12,16}`, mas a legenda da Figura 6 inclui também `14`; o inventário do ZIP deste projeto confirma arquivos com 14 jobs. Para contagens e seleção experimental, prevalece o conteúdo efetivo do dataset, não a lista textual incompleta.
 
 Nenhum código de algoritmo ou avaliador é implementado por este documento.
