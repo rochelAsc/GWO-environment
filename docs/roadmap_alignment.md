@@ -25,7 +25,7 @@ Confrontar o roteiro acadêmico publicado com o estado do repositório e com o p
 
 O arquivo do repositório chama-se DPFSP_DD.zip. A página do conjunto de dados original o descreve como **DPFSP with due dates**, uma extensão do benchmark de Naderi e Ruiz (2010) para Distributed Permutation Flow Shop Scheduling Problem com datas de entrega e critério de total tardiness.
 
-Fonte: Khare, Ankit (2020), *DPFSP with due dates*, Mendeley Data, DOI https://doi.org/10.17632/4tkhdx4jjx.1. A página descreve explicitamente o conjunto como extensão do benchmark Naderi e Ruiz para DPFSP com datas de entrega. <Cite />
+Fonte: Khare, Ankit (2020), *DPFSP with due dates*, Mendeley Data, DOI https://doi.org/10.17632/4tkhdx4jjx.1. A página descreve explicitamente o conjunto como extensão do benchmark Naderi e Ruiz para DPFSP com datas de entrega. (fonte: página do conjunto de dados no Mendeley Data, consultada em 2026-11-22).
 
 O motor legado em scripts/sistemas_inteligentes_entregavel.py apresenta comportamento de **Permutation Flow Shop (PFS) de uma única fábrica**:
 - em evaluate(..., mode="PFS"), decodifica uma única permutação e a reutiliza em todas as máquinas;
