@@ -32,7 +32,7 @@ O motor legado em scripts/sistemas_inteligentes_entregavel.py apresenta comporta
 - não há, nesse caminho, variável explícita de atribuição de jobs a fábricas nem avaliação de múltiplas fábricas;
 - o parser lê jobs, máquinas, pares máquina-tempo por job e datas de entrega.
 
-Isso cria uma incompatibilidade potencial: um conjunto DPFSP não pode ser declarado benchmark de PFS sem demonstrar que formulação, parser e função objetivo preservam o problema de origem.
+Isso cria uma incompatibilidade potencial: um conjunto DPFSP não pode ser declarado benchmark de PFS sem demonstrar que formulação, parser e função objetivo preservam o problema de origem. Na definição de Naderi e Ruiz (2010), há F fábricas idênticas, cada uma com m máquinas em série; cada job deve ser atribuído a uma fábrica e sequenciado dentro dela. Portanto, a representação precisa codificar tanto a atribuição quanto as sequências locais, e a avaliação deve considerar as fábricas (fonte: https://doi.org/10.1016/j.cor.2009.06.019).
 
 Antes da terceira rodada, é obrigatório:
 1. Inspecionar conteúdo e formato de cada instância do ZIP.
@@ -122,3 +122,5 @@ Não iniciar as 4.140 execuções até que:
 
 ## 8. Referência
 Khare, A. (2020). *DPFSP with due dates*. Mendeley Data, Version 1. https://doi.org/10.17632/4tkhdx4jjx.1
+
+Naderi, B., & Ruiz, R. (2010). The distributed permutation flowshop scheduling problem. *Computers & Operations Research, 37*(4), 754–768. https://doi.org/10.1016/j.cor.2009.06.019
