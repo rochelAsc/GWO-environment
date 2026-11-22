@@ -1,0 +1,40 @@
+{
+  "archive": "data/instances/DPFSP_DD.zip",
+  "archive_bytes": 2937759,
+  "total_zip_entries": 1140,
+  "candidate_instance_files": 1140,
+  "read_errors": 0,
+  "jobs_distribution": {
+    "20": 180,
+    "50": 180,
+    "100": 180,
+    "200": 120,
+    "500": 60,
+    "10": 60,
+    "12": 60,
+    "14": 60,
+    "16": 60,
+    "4": 60,
+    "6": 60,
+    "8": 60
+  },
+  "machines_distribution": {
+    "5": 285,
+    "10": 240,
+    "20": 300,
+    "2": 105,
+    "3": 105,
+    "4": 105
+  },
+  "second_line_integer_distribution": {
+    "2": 260,
+    "3": 260,
+    "4": 260,
+    "5": 120,
+    "6": 120,
+    "7": 120
+  },
+  "total_uncompressed_candidate_bytes": 7670966,
+  "errors": [],
+  "note": "Only ZIP metadata and the first three non-empty lines of each candidate file were inspected. No archive entries were extracted."
+}
