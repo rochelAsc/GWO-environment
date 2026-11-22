@@ -25,7 +25,7 @@ X_3=X_\delta-A_3D_\delta
 X(t+1)=\frac{X_1+X_2+X_3}{3}
 \]
 
-com \(A_k=2ar_{1,k}-a\), \(C_k=2r_{2,k}\), \(r_1,r_2\sim U[0,1]\). O parâmetro \(a\) decresce linearmente de 2 para 0 no GWO canônico. O módulo de \(A\) controla a tendência de exploração (\(|A|>1\)) ou exploração local/ataque (\(|A|<1\)); \(C\) permanece aleatório durante a busca.
+com \(A_k=2ar_{1,k}-a\), \(C_k=2r_{2,k}\), \(r_1,r_2\sim U[0,1]\). O parâmetro \(a\) decresce linearmente de 2 para 0 no GWO canônico. O módulo de \(A\) controla a tendência de exploração (\(|A|>1\)) ou explotação/ataque (\(|A|<1\)); \(C\) permanece aleatório durante a busca.
 
 O pseudocódigo do artigo atualiza todos os agentes, avalia a população atualizada e então atualiza a hierarquia. A implementação nova seguirá atualização **síncrona**: todos os novos lobos serão calculados usando a mesma fotografia dos três líderes no início da geração. A hierarquia será atualizada somente depois de avaliar a geração inteira. Isso evita que um lobo atualizado primeiro altere os líderes usados pelos lobos seguintes.
 
