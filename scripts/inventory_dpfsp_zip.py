@@ -32,7 +32,7 @@ def first_nonempty_lines(archive: zipfile.ZipFile, member: str, count: int = 3):
 
 
 def parse_integer_tokens(line: str):
-    return [int(token) for token in re.findall(r"(?<![\\w.])-?\\d+(?![\\w.])", line)]
+    return [int(token) for token in re.findall(r"(?<![\w.])-?\d+(?![\w.])", line)]
 
 
 def main():
@@ -118,9 +118,9 @@ def main():
         ),
     }
     json_path = output / "summary.json"
-    json_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\\n", encoding="utf-8")
+    json_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2, ensure_ascii=False))
-    print(f"\\nCSV: {csv_path}\\nJSON: {json_path}")
+    print(f"\nCSV: {csv_path}\nJSON: {json_path}")
 
 
 if __name__ == "__main__":
