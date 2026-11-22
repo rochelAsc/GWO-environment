@@ -438,7 +438,7 @@ def main():
         "validation_rules": [
             "UTF-8 text with two non-empty header lines",
             "first header: exactly two positive integers (jobs, machines)",
-            "second header: exactly one positive integer (semantics not assumed)",
+            "second header: exactly one positive integer representing the number of factories (F)",
             "exactly one Duedate marker",
             "exactly jobs processing rows before Duedate",
             "each processing row: one machine-index/time pair per machine",
@@ -450,7 +450,7 @@ def main():
         "note": (
             "Every candidate file was read and checked in memory. No ZIP entries "
             "were extracted, modified, or written back to the archive. The second "
-            "header integer is reported without assigning it a semantic meaning."
+            "header integer is interpreted as the number of factories (F), as documented for this benchmark."
         ),
     }
     (output / "summary.json").write_text(
