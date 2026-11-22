@@ -23,9 +23,10 @@ python -m pytest -q tests/test_dpfsp_dd.py
 
 A implementação do avaliador não depende do GWO. A adaptação random-key do GWO está em [`scripts/discrete_gwo_dpfsp.py`](scripts/discrete_gwo_dpfsp.py), com decisão metodológica e limitações em [`docs/decisions/2026-11-22-discrete-gwo-dpfsp-dd.md`](docs/decisions/2026-11-22-discrete-gwo-dpfsp-dd.md). A especificação matemática permanece em revisão em [`docs/specifications/dpfsp_dd_spec.md`](docs/specifications/dpfsp_dd_spec.md).
 
-Para executar os testes do avaliador e do GWO:
+Instale as dependências e execute os testes do avaliador e do GWO:
 
 ```bash
+python -m pip install numpy pytest
 python -m pytest -q tests/test_dpfsp_dd.py tests/test_discrete_gwo_dpfsp.py
 ```
 
