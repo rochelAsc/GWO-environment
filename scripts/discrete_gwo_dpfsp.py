@@ -27,6 +27,8 @@ class GWOResult:
     generations: int
     history: tuple[int, ...]
     best_position: tuple[float, ...]
+    unique_decoded_solutions: int
+    coordinate_saturation_fraction: float
 
 
 class RandomKeyDecoder:
@@ -147,9 +149,13 @@ class RandomKeyGWO:
         positions = rng.random((self.n_wolves, self.decoder.dimension))
         fitness = np.empty(self.n_wolves, dtype=np.int64)
         decoded: list[tuple[tuple[int, ...], ...]] = []
+        unique_solutions: set[tuple[tuple[int, ...], ...]] = set()
+        saturated_coordinates = 0
+        generated_coordinates = 0
         for index, position in enumerate(positions):
             solution = self.decoder.decode(position)
             decoded.append(solution)
+            unique_solutions.add(canonical_solution_key(solution))
             fitness[index] = self.evaluator.evaluate(solution).total_tardiness
             self.n_evals += 1
 
@@ -166,12 +172,15 @@ class RandomKeyGWO:
             new_positions = self._update_positions(
                 positions, frozen_leaders, self._compute_a(generation), rng
             )
+            saturated_coordinates += int(np.count_nonzero((new_positions == 0.0) | (new_positions == 1.0)))
+            generated_coordinates += int(new_positions.size)
 
             new_fitness = np.empty(self.n_wolves, dtype=np.int64)
             new_solutions: list[tuple[tuple[int, ...], ...]] = []
             for index, position in enumerate(new_positions):
                 solution = self.decoder.decode(position)
                 new_solutions.append(solution)
+                unique_solutions.add(canonical_solution_key(solution))
                 new_fitness[index] = self.evaluator.evaluate(solution).total_tardiness
                 self.n_evals += 1
 
@@ -195,4 +204,8 @@ class RandomKeyGWO:
             generations=self.generations,
             history=tuple(history),
             best_position=tuple(float(value) for value in leader_positions[0]),
+            unique_decoded_solutions=len(unique_solutions),
+            coordinate_saturation_fraction=(
+                saturated_coordinates / generated_coordinates if generated_coordinates else 0.0
+            ),
         )
