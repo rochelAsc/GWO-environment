@@ -55,6 +55,6 @@ A comparação dos hashes também mostrou que cada família Large mantém uma ú
 ## Limites da auditoria
 
 - A auditoria verifica sintaxe e consistência interna; não prova, por si só, a formulação matemática do problema.
-- O segundo inteiro do cabeçalho não recebe interpretação sem documentação da fonte do dataset.
+- O segundo inteiro do cabeçalho representa o número de fábricas (F), conforme documentado por Gogos (2023), seção 2.1. A auditoria estrutural confirma a consistência desse campo com os nomes dos arquivos; a validação semântica completa do parser do DPFSP-DD permanece uma etapa separada.
 - A validação estrutural não demonstra que o motor legado implementa DPFSP-DD. Essa compatibilidade exige uma implementação/validação do modelo distribuído, incluindo atribuição de jobs às fábricas e cálculo do objetivo.
 - Os resultados desta auditoria não alteram os arquivos originais nem os resultados experimentais históricos.
