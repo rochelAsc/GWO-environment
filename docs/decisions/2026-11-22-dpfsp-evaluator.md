@@ -30,13 +30,16 @@ Jobs ausentes, duplicados, fora do intervalo, índices negativos e quantidade in
 ### DEC-DPFSP-007 — saída auditável
 Além de Total Tardiness, o resultado inclui conclusão e tardiness por job, fábrica/posição de cada job e tempos de conclusão de todas as operações por fábrica, posição e máquina.
 
+### DEC-DPFSP-008 — separar erros de dados de erros de programação no validador
+O script de validação registra apenas erros esperados de entrada: texto que não seja UTF-8 válido e `ValueError` emitido pelo parser para dados malformados. Exceções inesperadas, como `TypeError` causado por defeito interno ou erros de leitura do ZIP, propagam-se e interrompem a execução. Essa escolha evita que bugs sejam apresentados como simples instâncias inválidas. O script também falha explicitamente se não encontrar nenhum arquivo candidato.
+
 ## Validação e pendências
 
 - Os testes cobrem os quatro casos manuais da especificação, entradas inválidas e parser sintético com pares de máquinas fora de ordem.
 - Foi incluída uma referência independente baseada em uma grade de conclusão e enumeração exaustiva das atribuições e permutações de uma instância pequena (4 jobs, 2 fábricas); o teste compara os valores objetivos de todos os cronogramas enumerados.
-- Foi criado `scripts/validate_dpfsp_parser.py`, que percorre as entradas do ZIP sem extraí-las, aplica o parser de produção e registra distribuições de jobs, máquinas e fábricas, além de falhas.
-- **Pendente de execução no ambiente com o ZIP disponível:** executar `python scripts/validate_dpfsp_parser.py data/instances/DPFSP_DD.zip` e guardar o JSON produzido. Não declarar o parser validado contra o dataset real antes desse resultado.
-- **Pendente:** executar `python -m pytest -q tests/test_dpfsp_dd.py` em ambiente Python com pytest instalado e registrar a saída. A enumeração exaustiva foi adicionada ao conjunto de testes, mas não foi executada por esta sessão.
+- O parser foi executado em todas as entradas candidatas do ZIP real. O relatório versionado em `results/parser_validation/summary.json` registra **1.140 arquivos candidatos, 1.140 interpretações bem-sucedidas e zero falhas**. As distribuições de jobs, máquinas e fábricas coincidem com a auditoria estrutural anterior.
+- **Pendente:** executar `python -m pytest -q tests/test_dpfsp_dd.py` em ambiente Python com pytest instalado e registrar a saída. A presença dos testes no repositório não significa que tenham sido executados.
+- A validação do parser no ZIP comprova a leitura estrutural do dataset, mas não substitui os testes matemáticos do avaliador.
 - Nenhum resultado experimental foi produzido por esta alteração.
 
 ## Próxima etapa metodológica
