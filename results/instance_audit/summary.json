@@ -11,8 +11,8 @@
   "duplicate_content_examples": [],
   "families": {
     "total": 204,
-    "complete": 84,
-    "with_warnings": 120,
+    "complete": 204,
+    "with_warnings": 0,
     "by_folder": {
       "Large": 120,
       "Small": 84
@@ -72,13 +72,9 @@
       }
     }
   },
-  "issue_counts": {
-    "FAMILY_INCONSISTENCY": 120
-  },
-  "issue_severity_counts": {
-    "warning": 120
-  },
-  "issues_total": 120,
+  "issue_counts": {},
+  "issue_severity_counts": {},
+  "issues_total": 0,
   "outputs": {
     "instances": "results\\instance_audit\\instances_audit.csv",
     "families": "results\\instance_audit\\families.csv",
