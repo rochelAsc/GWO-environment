@@ -33,8 +33,10 @@ Além de Total Tardiness, o resultado inclui conclusão e tardiness por job, fá
 ## Validação e pendências
 
 - Os testes cobrem os quatro casos manuais da especificação, entradas inválidas e parser sintético com pares de máquinas fora de ordem.
-- **Pendente:** executar os testes com exemplos reais extraídos de DPFSP_DD.zip e conferir manualmente um Small e um Large, incluindo F, matriz P e vetor d.
-- **Pendente:** comparar o avaliador com implementação independente ou enumeração exaustiva em instâncias minúsculas antes de liberar experimentos.
+- Foi incluída uma referência independente baseada em uma grade de conclusão e enumeração exaustiva das atribuições e permutações de uma instância pequena (4 jobs, 2 fábricas); o teste compara os valores objetivos de todos os cronogramas enumerados.
+- Foi criado `scripts/validate_dpfsp_parser.py`, que percorre as entradas do ZIP sem extraí-las, aplica o parser de produção e registra distribuições de jobs, máquinas e fábricas, além de falhas.
+- **Pendente de execução no ambiente com o ZIP disponível:** executar `python scripts/validate_dpfsp_parser.py data/instances/DPFSP_DD.zip` e guardar o JSON produzido. Não declarar o parser validado contra o dataset real antes desse resultado.
+- **Pendente:** executar `python -m pytest -q tests/test_dpfsp_dd.py` em ambiente Python com pytest instalado e registrar a saída. A enumeração exaustiva foi adicionada ao conjunto de testes, mas não foi executada por esta sessão.
 - Nenhum resultado experimental foi produzido por esta alteração.
 
 ## Próxima etapa metodológica
