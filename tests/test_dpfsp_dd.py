@@ -1,3 +1,5 @@
+import itertools
+
 import pytest
 
 from scripts.dpfsp_dd import DPFSPInstance, DPFSPEvaluator, parse_dpfsp_instance_text
@@ -90,4 +92,47 @@ def test_parser_rejects_missing_due_date():
 Duedate
 """
     with pytest.raises(ValueError, match="expected 1 due-date rows"):
+        parse_dpfsp_instance_text(raw)
+
+
+def _independent_reference(instance, solution):
+    """Test-only direct grid recurrence, separate from production code."""
+    total = 0
+    completions = {}
+    for sequence in solution:
+        grid = [[0] * instance.machines for _ in sequence]
+        for row, job in enumerate(sequence):
+            for machine in range(instance.machines):
+                above = grid[row - 1][machine] if row else 0
+                left = grid[row][machine - 1] if machine else 0
+                grid[row][machine] = max(above, left) + instance.processing_times[job][machine]
+            completions[job] = grid[row][-1]
+            total += max(0, grid[row][-1] - instance.due_dates[job])
+    return total, completions
+
+
+def test_exhaustive_small_schedules_match_independent_reference():
+    instance = DPFSPInstance(((2, 3), (1, 4), (3, 2), (2, 1)), (4, 8, 5, 7), 2)
+    evaluator = DPFSPEvaluator(instance)
+    checked = 0
+    for assignment in itertools.product(range(2), repeat=instance.jobs):
+        groups = [[job for job in range(instance.jobs) if assignment[job] == factory]
+                  for factory in range(2)]
+        for first in itertools.permutations(groups[0]):
+            for second in itertools.permutations(groups[1]):
+                solution = [list(first), list(second)]
+                expected, _ = _independent_reference(instance, solution)
+                assert evaluator.evaluate(solution).total_tardiness == expected
+                checked += 1
+    assert checked == 120
+
+
+def test_parser_rejects_nonpositive_processing_time():
+    raw = """1 1
+1
+0 0
+Duedate
+10
+"""
+    with pytest.raises(ValueError, match="must be >= 1"):
         parse_dpfsp_instance_text(raw)
