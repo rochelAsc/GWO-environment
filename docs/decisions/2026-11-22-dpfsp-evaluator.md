@@ -33,14 +33,25 @@ Além de Total Tardiness, o resultado inclui conclusão e tardiness por job, fá
 ### DEC-DPFSP-008 — separar erros de dados de erros de programação no validador
 O script de validação registra apenas erros esperados de entrada: texto que não seja UTF-8 válido e `ValueError` emitido pelo parser para dados malformados. Exceções inesperadas, como `TypeError` causado por defeito interno ou erros de leitura do ZIP, propagam-se e interrompem a execução. Essa escolha evita que bugs sejam apresentados como simples instâncias inválidas. O script também falha explicitamente se não encontrar nenhum arquivo candidato.
 
-## Validação e pendências
+## Evidências de validação
 
-- Os testes cobrem os quatro casos manuais da especificação, entradas inválidas e parser sintético com pares de máquinas fora de ordem.
-- Foi incluída uma referência independente baseada em uma grade de conclusão e enumeração exaustiva das atribuições e permutações de uma instância pequena (4 jobs, 2 fábricas); o teste compara os valores objetivos de todos os cronogramas enumerados.
-- O parser foi executado em todas as entradas candidatas do ZIP real. O relatório versionado em `results/parser_validation/summary.json` registra **1.140 arquivos candidatos, 1.140 interpretações bem-sucedidas e zero falhas**. As distribuições de jobs, máquinas e fábricas coincidem com a auditoria estrutural anterior.
-- **Pendente:** executar `python -m pytest -q tests/test_dpfsp_dd.py` em ambiente Python com pytest instalado e registrar a saída. A presença dos testes no repositório não significa que tenham sido executados.
-- A validação do parser no ZIP comprova a leitura estrutural do dataset, mas não substitui os testes matemáticos do avaliador.
-- Nenhum resultado experimental foi produzido por esta alteração.
+### Testes automatizados
+Execução reportada pelo usuário em Windows, com Python 3.14 e pytest 9.2.0:
+
+```text
+.................... [100%]
+20 passed, 1 warning in 0.04s
+```
+
+Os 20 testes passaram, incluindo os quatro casos manuais, entradas inválidas, parser sintético e enumeração exaustiva dos 120 cronogramas da instância pequena. O único aviso vem do plugin `anyio`, que importa o alias `CallSpec2` do pytest; é um aviso de compatibilidade/depreciação do plugin, não uma falha dos testes do projeto.
+
+### Dataset real
+O parser foi executado em todas as entradas candidatas do ZIP real. O relatório versionado em `results/parser_validation/summary.json` registra **1.140 arquivos candidatos, 1.140 interpretações bem-sucedidas e zero falhas**. As distribuições de jobs, máquinas e fábricas coincidem com a auditoria estrutural anterior.
+
+### Interpretação e limites
+As evidências atuais sustentam que os testes implementados passam no ambiente reportado e que o parser interpreta estruturalmente todas as instâncias candidatas do ZIP. Isso não substitui uma revisão da formulação matemática contra a literatura, nem constitui validação de qualquer algoritmo GWO. A especificação DPFSP-DD continua em rascunho para revisão.
+
+Nenhum resultado experimental de otimização foi produzido por esta etapa.
 
 ## Próxima etapa metodológica
 
