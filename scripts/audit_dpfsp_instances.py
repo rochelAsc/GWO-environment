@@ -275,8 +275,9 @@ def family_reports(rows):
             problems.append("duplicate variants: " + ",".join(map(str, duplicates)))
         if len(jobs) > 1 or len(machines) > 1:
             problems.append("inconsistent dimensions within family")
-        if len(second_fields) > 1:
-            problems.append("inconsistent second header within family")
+        # The second header is a per-variant field for Large families, not a
+        # family-constant field. parse_instance() already checks that it matches
+        # the filename suffix for each Large member; do not flag its variation.
         reports.append({
             "folder": folder,
             "family": family,
