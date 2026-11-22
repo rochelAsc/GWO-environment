@@ -73,6 +73,8 @@ def test_gwo_respects_exact_population_batch_budget():
     assert result.evaluations == 12
     assert result.generations == 2
     assert len(result.history) == 3
+    assert result.unique_decoded_solutions >= 1
+    assert 0.0 <= result.coordinate_saturation_fraction <= 1.0
 
 
 def test_gwo_does_not_run_partial_final_generation():
