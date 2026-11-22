@@ -1,0 +1,38 @@
+{
+  "archive": "data\\instances\\DPFSP_DD.zip",
+  "candidate_files": 1140,
+  "parsed_successfully": 1140,
+  "failed": 0,
+  "jobs_distribution": {
+    "4": 60,
+    "6": 60,
+    "8": 60,
+    "10": 60,
+    "12": 60,
+    "14": 60,
+    "16": 60,
+    "20": 180,
+    "50": 180,
+    "100": 180,
+    "200": 120,
+    "500": 60
+  },
+  "machines_distribution": {
+    "2": 105,
+    "3": 105,
+    "4": 105,
+    "5": 285,
+    "10": 240,
+    "20": 300
+  },
+  "factories_distribution": {
+    "2": 260,
+    "3": 260,
+    "4": 260,
+    "5": 120,
+    "6": 120,
+    "7": 120
+  },
+  "failures": [],
+  "note": "All entries were parsed directly from the ZIP; no extraction or archive modification occurred."
+}
