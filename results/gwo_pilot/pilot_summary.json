@@ -1,0 +1,204 @@
+{
+  "archive_path": "data\\instances\\DPFSP_DD.zip",
+  "archive_sha256": "eda8e66fd5799d1ddfca344a10c7c32f0f462db62cf21d476ce864d17ff1e810",
+  "budget_per_run": 990,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "configurations": [
+    {
+      "id": "GWO-30-L",
+      "wolves": 30,
+      "a_decay": "linear"
+    },
+    {
+      "id": "GWO-30-Q",
+      "wolves": 30,
+      "a_decay": "quadratic"
+    },
+    {
+      "id": "GWO-55-L",
+      "wolves": 55,
+      "a_decay": "linear"
+    },
+    {
+      "id": "GWO-55-Q",
+      "wolves": 55,
+      "a_decay": "quadratic"
+    }
+  ],
+  "instances": [
+    {
+      "label": "small",
+      "path": "DPFSP_DD/Small/I_2_4_2_1.txt",
+      "sha256": "855b6dd4a53da2d7af7c3804b02d745125aac0ecd18f241bd9869108112ea8ba",
+      "jobs": 4,
+      "machines": 2,
+      "factories": 2
+    },
+    {
+      "label": "intermediate",
+      "path": "DPFSP_DD/Large/Ta041_2.txt",
+      "sha256": "1a66b132cffb418a5a7a2f390fc22a6c4631a754a47b0ddfc1493a0514c53c60",
+      "jobs": 50,
+      "machines": 10,
+      "factories": 2
+    },
+    {
+      "label": "large",
+      "path": "DPFSP_DD/Large/Ta111_2.txt",
+      "sha256": "e0f86d66d8824b4408673e999a37a6b276d5d0c4630e8c47d872f99fb20506f7",
+      "jobs": 500,
+      "machines": 20,
+      "factories": 2
+    }
+  ],
+  "environment": {
+    "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "2.5.1"
+  },
+  "total_runs": 36,
+  "summary": [
+    {
+      "instance_label": "intermediate",
+      "configuration": "GWO-30-L",
+      "runs": 3,
+      "mean_total_tardiness": 13949.333333333334,
+      "median_total_tardiness": 14768,
+      "stdev_total_tardiness": 1588.0498522821422,
+      "mean_elapsed_seconds": 0.18573900000000002,
+      "mean_unique_decoded_solutions": 982.3333333333334,
+      "mean_coordinate_saturation_fraction": 0.0747361111111111
+    },
+    {
+      "instance_label": "intermediate",
+      "configuration": "GWO-30-Q",
+      "runs": 3,
+      "mean_total_tardiness": 15494.333333333334,
+      "median_total_tardiness": 14589,
+      "stdev_total_tardiness": 1718.3021658990403,
+      "mean_elapsed_seconds": 0.18803033333333333,
+      "mean_unique_decoded_solutions": 989.6666666666666,
+      "mean_coordinate_saturation_fraction": 0.12659375
+    },
+    {
+      "instance_label": "intermediate",
+      "configuration": "GWO-55-L",
+      "runs": 3,
+      "mean_total_tardiness": 16260,
+      "median_total_tardiness": 15865,
+      "stdev_total_tardiness": 1426.1342854023248,
+      "mean_elapsed_seconds": 0.184345,
+      "mean_unique_decoded_solutions": 989.3333333333334,
+      "mean_coordinate_saturation_fraction": 0.08854188948306595
+    },
+    {
+      "instance_label": "intermediate",
+      "configuration": "GWO-55-Q",
+      "runs": 3,
+      "mean_total_tardiness": 15556.333333333334,
+      "median_total_tardiness": 15301,
+      "stdev_total_tardiness": 499.6001734720809,
+      "mean_elapsed_seconds": 0.18675066666666668,
+      "mean_unique_decoded_solutions": 990,
+      "mean_coordinate_saturation_fraction": 0.12029590017825312
+    },
+    {
+      "instance_label": "large",
+      "configuration": "GWO-30-L",
+      "runs": 3,
+      "mean_total_tardiness": 2803177,
+      "median_total_tardiness": 2791640,
+      "stdev_total_tardiness": 20975.92593903783,
+      "mean_elapsed_seconds": 2.2821833333333332,
+      "mean_unique_decoded_solutions": 990,
+      "mean_coordinate_saturation_fraction": 0.07423819444444445
+    },
+    {
+      "instance_label": "large",
+      "configuration": "GWO-30-Q",
+      "runs": 3,
+      "mean_total_tardiness": 2827916.6666666665,
+      "median_total_tardiness": 2821461,
+      "stdev_total_tardiness": 26156.96810284658,
+      "mean_elapsed_seconds": 2.25502,
+      "mean_unique_decoded_solutions": 990,
+      "mean_coordinate_saturation_fraction": 0.11200937500000001
+    },
+    {
+      "instance_label": "large",
+      "configuration": "GWO-55-L",
+      "runs": 3,
+      "mean_total_tardiness": 2864217.3333333335,
+      "median_total_tardiness": 2874939,
+      "stdev_total_tardiness": 25445.14476935302,
+      "mean_elapsed_seconds": 2.224666,
+      "mean_unique_decoded_solutions": 990,
+      "mean_coordinate_saturation_fraction": 0.07414509803921569
+    },
+    {
+      "instance_label": "large",
+      "configuration": "GWO-55-Q",
+      "runs": 3,
+      "mean_total_tardiness": 2838543.3333333335,
+      "median_total_tardiness": 2860279,
+      "stdev_total_tardiness": 40266.22684500416,
+      "mean_elapsed_seconds": 2.228972333333333,
+      "mean_unique_decoded_solutions": 990,
+      "mean_coordinate_saturation_fraction": 0.11002495543672014
+    },
+    {
+      "instance_label": "small",
+      "configuration": "GWO-30-L",
+      "runs": 3,
+      "mean_total_tardiness": 27,
+      "median_total_tardiness": 27,
+      "stdev_total_tardiness": 0.0,
+      "mean_elapsed_seconds": 0.04579066666666667,
+      "mean_unique_decoded_solutions": 42.333333333333336,
+      "mean_coordinate_saturation_fraction": 0.13880208333333333
+    },
+    {
+      "instance_label": "small",
+      "configuration": "GWO-30-Q",
+      "runs": 3,
+      "mean_total_tardiness": 27,
+      "median_total_tardiness": 27,
+      "stdev_total_tardiness": 0.0,
+      "mean_elapsed_seconds": 0.04041366666666667,
+      "mean_unique_decoded_solutions": 44.333333333333336,
+      "mean_coordinate_saturation_fraction": 0.17213541666666665
+    },
+    {
+      "instance_label": "small",
+      "configuration": "GWO-55-L",
+      "runs": 3,
+      "mean_total_tardiness": 27,
+      "median_total_tardiness": 27,
+      "stdev_total_tardiness": 0.0,
+      "mean_elapsed_seconds": 0.04076466666666667,
+      "mean_unique_decoded_solutions": 45.666666666666664,
+      "mean_coordinate_saturation_fraction": 0.08016934046345811
+    },
+    {
+      "instance_label": "small",
+      "configuration": "GWO-55-Q",
+      "runs": 3,
+      "mean_total_tardiness": 27,
+      "median_total_tardiness": 27,
+      "stdev_total_tardiness": 0.0,
+      "mean_elapsed_seconds": 0.03934466666666667,
+      "mean_unique_decoded_solutions": 49.333333333333336,
+      "mean_coordinate_saturation_fraction": 0.11096256684491979
+    }
+  ],
+  "notes": [
+    "Reduced-budget technical pilot; not part of the confirmatory benchmark.",
+    "Only the four GWO population/schedule combinations are included.",
+    "Fuzzy and Surrogate are excluded until their DPFSP-DD adaptations are implemented.",
+    "No partial population batches are run."
+  ]
+}
