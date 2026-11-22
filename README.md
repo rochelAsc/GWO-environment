@@ -32,6 +32,14 @@ python -m pytest -q tests/test_dpfsp_dd.py tests/test_discrete_gwo_dpfsp.py
 
 A nova implementação usa NumPy e mantém o GWO separado do avaliador. Ela não altera o notebook nem os resultados históricos.
 
+Para executar o piloto técnico reduzido (3 instâncias, 4 configurações, 3 sementes, 990 avaliações reais por execução):
+
+```bash
+python -m scripts.run_gwo_pilot data/instances/DPFSP_DD.zip
+```
+
+Os arquivos `pilot_runs.csv` e `pilot_summary.json` serão gravados em `results/gwo_pilot/`. O piloto seleciona deterministicamente uma instância de 4 jobs, uma próxima de 50 jobs e uma próxima de 500 jobs. Ele cobre Baseline e as três combinações fatoriais de população/decaimento; Fuzzy e Surrogate ficam fora até suas adaptações estarem implementadas.
+
 ## Rastreabilidade
 
 Decisões técnicas e metodológicas devem ser registradas em `docs/decisions/`, incluindo alternativas consideradas, justificativa, consequências e evidências de validação. Protocolos experimentais congelados devem ter versão e não devem ser sobrescritos retroativamente.
