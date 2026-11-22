@@ -1,7 +1,7 @@
 # Decisão técnica — adaptação do GWO ao DPFSP-DD
 
 - **Data:** 2026-11-22
-- **Status:** decisão inicial para implementação e piloto; não é ainda uma validação de desempenho.
+- **Status:** implementação inicial aprovada em 36 testes; piloto técnico ainda pendente. A aprovação dos testes não valida desempenho de otimização.
 - **Referência canônica:** Mirjalili, Mirjalili e Lewis (2014), *Grey Wolf Optimizer*, Advances in Engineering Software, 69, 46–61. DOI: https://doi.org/10.1016/j.advengsoft.2013.12.007.
 - **Escopo:** codificação, decodificação e dinâmica de busca do GWO para o DPFSP-DD; o avaliador independente em `scripts/dpfsp_dd.py` permanece inalterado.
 
@@ -125,3 +125,12 @@ A aprovação dos testes de software não demonstra qualidade de otimização. A
 ## 10. Referência primária
 
 Mirjalili, S.; Mirjalili, S. M.; Lewis, A. (2014). Grey Wolf Optimizer. *Advances in Engineering Software*, 69, 46–61. https://doi.org/10.1016/j.advengsoft.2013.12.007.
+
+
+## 11. Piloto técnico reduzido
+
+O runner `scripts/run_gwo_pilot.py` seleciona deterministicamente três instâncias do ZIP: uma Small próxima de 4 jobs, uma Large próxima de 50 jobs e uma Large próxima de 500 jobs. Executa as quatro combinações GWO-30-L, GWO-30-Q, GWO-55-L e GWO-55-Q, com sementes 0, 1 e 2 e orçamento reduzido de 990 avaliações reais por execução. O orçamento é divisível por 30 e 55, sem geração parcial. O piloto totaliza 36 execuções e não substitui a bateria principal de 5.940 avaliações/execução. Fuzzy e Surrogate não entram nesta etapa porque suas adaptações ainda não foram implementadas.
+
+O CSV registra cada execução e histórico de convergência. O JSON registra hashes das instâncias, ambiente, configurações e resumo por instância/configuração. Também são monitorados número de soluções decodificadas únicas (canonizadas por rótulo de fábrica) e fração de coordenadas que atingem os limites após clipping. Esses indicadores são diagnósticos, não métricas de qualidade isoladas.
+
+Comando: `python -m scripts.run_gwo_pilot data/instances/DPFSP_DD.zip`.
