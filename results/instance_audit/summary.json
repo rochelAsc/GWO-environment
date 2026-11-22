@@ -1,0 +1,100 @@
+{
+  "archive": "data\\instances\\DPFSP_DD.zip",
+  "archive_bytes": 2937759,
+  "archive_sha256": "eda8e66fd5799d1ddfca344a10c7c32f0f462db62cf21d476ce864d17ff1e810",
+  "total_zip_entries": 1140,
+  "candidate_instance_files": 1140,
+  "files_valid": 1140,
+  "files_valid_with_warnings": 0,
+  "files_invalid": 0,
+  "exact_duplicate_content_groups": 0,
+  "duplicate_content_examples": [],
+  "families": {
+    "total": 204,
+    "complete": 84,
+    "with_warnings": 120,
+    "by_folder": {
+      "Large": 120,
+      "Small": 84
+    }
+  },
+  "by_folder": {
+    "Large": {
+      "files": 720,
+      "valid": 720,
+      "valid_with_warnings": 0,
+      "invalid": 0,
+      "jobs_distribution": {
+        "20": 180,
+        "50": 180,
+        "100": 180,
+        "200": 120,
+        "500": 60
+      },
+      "machines_distribution": {
+        "5": 180,
+        "10": 240,
+        "20": 300
+      },
+      "second_line_integer_distribution": {
+        "2": 120,
+        "3": 120,
+        "4": 120,
+        "5": 120,
+        "6": 120,
+        "7": 120
+      }
+    },
+    "Small": {
+      "files": 420,
+      "valid": 420,
+      "valid_with_warnings": 0,
+      "invalid": 0,
+      "jobs_distribution": {
+        "10": 60,
+        "12": 60,
+        "14": 60,
+        "16": 60,
+        "4": 60,
+        "6": 60,
+        "8": 60
+      },
+      "machines_distribution": {
+        "2": 105,
+        "3": 105,
+        "4": 105,
+        "5": 105
+      },
+      "second_line_integer_distribution": {
+        "2": 140,
+        "3": 140,
+        "4": 140
+      }
+    }
+  },
+  "issue_counts": {
+    "FAMILY_INCONSISTENCY": 120
+  },
+  "issue_severity_counts": {
+    "warning": 120
+  },
+  "issues_total": 120,
+  "outputs": {
+    "instances": "results\\instance_audit\\instances_audit.csv",
+    "families": "results\\instance_audit\\families.csv",
+    "issues": "results\\instance_audit\\issues.csv"
+  },
+  "validation_rules": [
+    "UTF-8 text with two non-empty header lines",
+    "first header: exactly two positive integers (jobs, machines)",
+    "second header: exactly one positive integer (semantics not assumed)",
+    "exactly one Duedate marker",
+    "exactly jobs processing rows before Duedate",
+    "each processing row: one machine-index/time pair per machine",
+    "machine indices in each row must be exactly 0..machines-1",
+    "processing times must be positive integers",
+    "exactly jobs due-date lines after Duedate, one non-negative integer per line",
+    "filename metadata and family variants checked separately from structural validity"
+  ],
+  "note": "Every candidate file was read and checked in memory. No ZIP entries were extracted, modified, or written back to the archive. The second header integer is reported without assigning it a semantic meaning."
+}

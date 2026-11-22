@@ -1,0 +1,205 @@
+folder,family,files_found,expected_variants,present_variants,missing_variants,unexpected_variants,duplicate_variants,jobs_values,machines_values,second_line_values,distinct_processing_matrices,distinct_due_date_vectors,family_status,notes
+Large,Ta001,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta002,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta003,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta004,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta005,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta006,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta007,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta008,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta009,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta010,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta011,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta012,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta013,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta014,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta015,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta016,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta017,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta018,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta019,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta020,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta021,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta022,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta023,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta024,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta025,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta026,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta027,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta028,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta029,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta030,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,20,20,"2,3,4,5,6,7",1,5,warning,inconsistent second header within family
+Large,Ta031,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta032,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta033,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta034,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta035,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta036,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta037,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta038,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta039,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta040,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta041,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta042,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta043,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta044,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta045,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta046,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta047,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta048,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta049,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta050,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta051,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta052,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta053,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta054,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta055,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta056,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta057,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta058,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta059,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta060,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,50,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta061,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta062,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta063,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta064,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta065,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta066,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta067,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta068,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta069,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta070,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,5,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta071,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta072,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta073,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta074,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta075,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta076,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta077,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta078,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta079,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta080,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta081,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta082,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta083,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta084,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta085,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta086,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta087,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta088,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta089,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta090,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,100,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta091,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta092,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta093,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta094,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta095,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta096,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta097,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta098,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta099,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta100,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,10,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta101,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta102,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta103,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta104,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta105,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta106,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta107,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta108,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta109,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta110,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,200,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta111,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta112,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta113,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta114,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta115,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta116,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta117,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta118,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta119,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Large,Ta120,6,"2,3,4,5,6,7","2,3,4,5,6,7",,,,500,20,"2,3,4,5,6,7",1,6,warning,inconsistent second header within family
+Small,I_2_10_2,5,"1,2,3,4,5","1,2,3,4,5",,,,10,2,2,5,5,complete,
+Small,I_2_10_3,5,"1,2,3,4,5","1,2,3,4,5",,,,10,3,2,5,5,complete,
+Small,I_2_10_4,5,"1,2,3,4,5","1,2,3,4,5",,,,10,4,2,5,5,complete,
+Small,I_2_10_5,5,"1,2,3,4,5","1,2,3,4,5",,,,10,5,2,5,5,complete,
+Small,I_2_12_2,5,"1,2,3,4,5","1,2,3,4,5",,,,12,2,2,5,5,complete,
+Small,I_2_12_3,5,"1,2,3,4,5","1,2,3,4,5",,,,12,3,2,5,5,complete,
+Small,I_2_12_4,5,"1,2,3,4,5","1,2,3,4,5",,,,12,4,2,5,5,complete,
+Small,I_2_12_5,5,"1,2,3,4,5","1,2,3,4,5",,,,12,5,2,5,5,complete,
+Small,I_2_14_2,5,"1,2,3,4,5","1,2,3,4,5",,,,14,2,2,5,5,complete,
+Small,I_2_14_3,5,"1,2,3,4,5","1,2,3,4,5",,,,14,3,2,5,5,complete,
+Small,I_2_14_4,5,"1,2,3,4,5","1,2,3,4,5",,,,14,4,2,5,5,complete,
+Small,I_2_14_5,5,"1,2,3,4,5","1,2,3,4,5",,,,14,5,2,5,5,complete,
+Small,I_2_16_2,5,"1,2,3,4,5","1,2,3,4,5",,,,16,2,2,5,5,complete,
+Small,I_2_16_3,5,"1,2,3,4,5","1,2,3,4,5",,,,16,3,2,5,5,complete,
+Small,I_2_16_4,5,"1,2,3,4,5","1,2,3,4,5",,,,16,4,2,5,5,complete,
+Small,I_2_16_5,5,"1,2,3,4,5","1,2,3,4,5",,,,16,5,2,5,5,complete,
+Small,I_2_4_2,5,"1,2,3,4,5","1,2,3,4,5",,,,4,2,2,5,5,complete,
+Small,I_2_4_3,5,"1,2,3,4,5","1,2,3,4,5",,,,4,3,2,5,5,complete,
+Small,I_2_4_4,5,"1,2,3,4,5","1,2,3,4,5",,,,4,4,2,5,5,complete,
+Small,I_2_4_5,5,"1,2,3,4,5","1,2,3,4,5",,,,4,5,2,5,5,complete,
+Small,I_2_6_2,5,"1,2,3,4,5","1,2,3,4,5",,,,6,2,2,5,5,complete,
+Small,I_2_6_3,5,"1,2,3,4,5","1,2,3,4,5",,,,6,3,2,5,5,complete,
+Small,I_2_6_4,5,"1,2,3,4,5","1,2,3,4,5",,,,6,4,2,5,5,complete,
+Small,I_2_6_5,5,"1,2,3,4,5","1,2,3,4,5",,,,6,5,2,5,5,complete,
+Small,I_2_8_2,5,"1,2,3,4,5","1,2,3,4,5",,,,8,2,2,5,5,complete,
+Small,I_2_8_3,5,"1,2,3,4,5","1,2,3,4,5",,,,8,3,2,5,5,complete,
+Small,I_2_8_4,5,"1,2,3,4,5","1,2,3,4,5",,,,8,4,2,5,5,complete,
+Small,I_2_8_5,5,"1,2,3,4,5","1,2,3,4,5",,,,8,5,2,5,5,complete,
+Small,I_3_10_2,5,"1,2,3,4,5","1,2,3,4,5",,,,10,2,3,5,5,complete,
+Small,I_3_10_3,5,"1,2,3,4,5","1,2,3,4,5",,,,10,3,3,5,5,complete,
+Small,I_3_10_4,5,"1,2,3,4,5","1,2,3,4,5",,,,10,4,3,5,5,complete,
+Small,I_3_10_5,5,"1,2,3,4,5","1,2,3,4,5",,,,10,5,3,5,5,complete,
+Small,I_3_12_2,5,"1,2,3,4,5","1,2,3,4,5",,,,12,2,3,5,5,complete,
+Small,I_3_12_3,5,"1,2,3,4,5","1,2,3,4,5",,,,12,3,3,5,5,complete,
+Small,I_3_12_4,5,"1,2,3,4,5","1,2,3,4,5",,,,12,4,3,5,5,complete,
+Small,I_3_12_5,5,"1,2,3,4,5","1,2,3,4,5",,,,12,5,3,5,5,complete,
+Small,I_3_14_2,5,"1,2,3,4,5","1,2,3,4,5",,,,14,2,3,5,5,complete,
+Small,I_3_14_3,5,"1,2,3,4,5","1,2,3,4,5",,,,14,3,3,5,5,complete,
+Small,I_3_14_4,5,"1,2,3,4,5","1,2,3,4,5",,,,14,4,3,5,5,complete,
+Small,I_3_14_5,5,"1,2,3,4,5","1,2,3,4,5",,,,14,5,3,5,5,complete,
+Small,I_3_16_2,5,"1,2,3,4,5","1,2,3,4,5",,,,16,2,3,5,5,complete,
+Small,I_3_16_3,5,"1,2,3,4,5","1,2,3,4,5",,,,16,3,3,5,5,complete,
+Small,I_3_16_4,5,"1,2,3,4,5","1,2,3,4,5",,,,16,4,3,5,5,complete,
+Small,I_3_16_5,5,"1,2,3,4,5","1,2,3,4,5",,,,16,5,3,5,5,complete,
+Small,I_3_4_2,5,"1,2,3,4,5","1,2,3,4,5",,,,4,2,3,5,5,complete,
+Small,I_3_4_3,5,"1,2,3,4,5","1,2,3,4,5",,,,4,3,3,5,5,complete,
+Small,I_3_4_4,5,"1,2,3,4,5","1,2,3,4,5",,,,4,4,3,5,5,complete,
+Small,I_3_4_5,5,"1,2,3,4,5","1,2,3,4,5",,,,4,5,3,5,5,complete,
+Small,I_3_6_2,5,"1,2,3,4,5","1,2,3,4,5",,,,6,2,3,5,5,complete,
+Small,I_3_6_3,5,"1,2,3,4,5","1,2,3,4,5",,,,6,3,3,5,5,complete,
+Small,I_3_6_4,5,"1,2,3,4,5","1,2,3,4,5",,,,6,4,3,5,5,complete,
+Small,I_3_6_5,5,"1,2,3,4,5","1,2,3,4,5",,,,6,5,3,5,5,complete,
+Small,I_3_8_2,5,"1,2,3,4,5","1,2,3,4,5",,,,8,2,3,5,5,complete,
+Small,I_3_8_3,5,"1,2,3,4,5","1,2,3,4,5",,,,8,3,3,5,5,complete,
+Small,I_3_8_4,5,"1,2,3,4,5","1,2,3,4,5",,,,8,4,3,5,5,complete,
+Small,I_3_8_5,5,"1,2,3,4,5","1,2,3,4,5",,,,8,5,3,5,5,complete,
+Small,I_4_10_2,5,"1,2,3,4,5","1,2,3,4,5",,,,10,2,4,5,5,complete,
+Small,I_4_10_3,5,"1,2,3,4,5","1,2,3,4,5",,,,10,3,4,5,5,complete,
+Small,I_4_10_4,5,"1,2,3,4,5","1,2,3,4,5",,,,10,4,4,5,5,complete,
+Small,I_4_10_5,5,"1,2,3,4,5","1,2,3,4,5",,,,10,5,4,5,5,complete,
+Small,I_4_12_2,5,"1,2,3,4,5","1,2,3,4,5",,,,12,2,4,5,5,complete,
+Small,I_4_12_3,5,"1,2,3,4,5","1,2,3,4,5",,,,12,3,4,5,5,complete,
+Small,I_4_12_4,5,"1,2,3,4,5","1,2,3,4,5",,,,12,4,4,5,5,complete,
+Small,I_4_12_5,5,"1,2,3,4,5","1,2,3,4,5",,,,12,5,4,5,5,complete,
+Small,I_4_14_2,5,"1,2,3,4,5","1,2,3,4,5",,,,14,2,4,5,5,complete,
+Small,I_4_14_3,5,"1,2,3,4,5","1,2,3,4,5",,,,14,3,4,5,5,complete,
+Small,I_4_14_4,5,"1,2,3,4,5","1,2,3,4,5",,,,14,4,4,5,5,complete,
+Small,I_4_14_5,5,"1,2,3,4,5","1,2,3,4,5",,,,14,5,4,5,5,complete,
+Small,I_4_16_2,5,"1,2,3,4,5","1,2,3,4,5",,,,16,2,4,5,5,complete,
+Small,I_4_16_3,5,"1,2,3,4,5","1,2,3,4,5",,,,16,3,4,5,5,complete,
+Small,I_4_16_4,5,"1,2,3,4,5","1,2,3,4,5",,,,16,4,4,5,5,complete,
+Small,I_4_16_5,5,"1,2,3,4,5","1,2,3,4,5",,,,16,5,4,5,5,complete,
+Small,I_4_4_2,5,"1,2,3,4,5","1,2,3,4,5",,,,4,2,4,5,5,complete,
+Small,I_4_4_3,5,"1,2,3,4,5","1,2,3,4,5",,,,4,3,4,5,5,complete,
+Small,I_4_4_4,5,"1,2,3,4,5","1,2,3,4,5",,,,4,4,4,5,5,complete,
+Small,I_4_4_5,5,"1,2,3,4,5","1,2,3,4,5",,,,4,5,4,5,5,complete,
+Small,I_4_6_2,5,"1,2,3,4,5","1,2,3,4,5",,,,6,2,4,5,5,complete,
+Small,I_4_6_3,5,"1,2,3,4,5","1,2,3,4,5",,,,6,3,4,5,5,complete,
+Small,I_4_6_4,5,"1,2,3,4,5","1,2,3,4,5",,,,6,4,4,5,5,complete,
+Small,I_4_6_5,5,"1,2,3,4,5","1,2,3,4,5",,,,6,5,4,5,5,complete,
+Small,I_4_8_2,5,"1,2,3,4,5","1,2,3,4,5",,,,8,2,4,5,5,complete,
+Small,I_4_8_3,5,"1,2,3,4,5","1,2,3,4,5",,,,8,3,4,5,5,complete,
+Small,I_4_8_4,5,"1,2,3,4,5","1,2,3,4,5",,,,8,4,4,5,5,complete,
+Small,I_4_8_5,5,"1,2,3,4,5","1,2,3,4,5",,,,8,5,4,5,5,complete,
