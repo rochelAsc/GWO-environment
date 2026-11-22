@@ -1,0 +1,5 @@
+Configuracao,Media,Mediana,Desvio,Melhor,Tempo_Medio_s
+"Ablação (n=30, exp)",569.95,560.0,308.5,173.0,0.38
+"Ablação (n=55, linear)",569.57,560.0,308.08,173.0,0.71
+"Baseline (n=30, linear)",570.24,560.0,308.69,173.0,0.39
+"Tunado (n=55, exp)",569.29,560.0,307.74,173.0,0.71
