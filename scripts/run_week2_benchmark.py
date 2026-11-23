@@ -29,7 +29,7 @@ def run(instances: list[Path], output: Path, seeds: int, wolves: int, iterations
     run_rows = []
     convergence_rows = []
     metadata = {
-        "protocol": "week2_taillard_pfsp_gwo_v1",
+        "protocol": "week2_taillard_pfsp_gwo_v2",
         "python": sys.version,
         "platform": platform.platform(),
         "numpy": np.__version__,
@@ -37,7 +37,7 @@ def run(instances: list[Path], output: Path, seeds: int, wolves: int, iterations
         "iterations": iterations,
         "seeds": list(range(seeds)),
         "evaluations_per_run_expected": wolves * (iterations + 1),
-        "update_semantics": "synchronous_frozen_alpha_beta_delta",
+        "update_semantics": "synchronous_population_replacement_with_elite_alpha_beta_delta_archive",
         "encoding": "random_keys_[0,1]_stable_argsort",
         "a_schedule": "linear_2_to_0",
         "objective": "makespan",
@@ -132,7 +132,7 @@ def main():
         Path("data/benchmarks/taillard/ta001.txt"),
         Path("data/benchmarks/taillard/ta011.txt"),
     ])
-    parser.add_argument("--output", type=Path, default=Path("results/week2_baseline_v1"))
+    parser.add_argument("--output", type=Path, default=Path("results/week2_baseline_v2"))
     parser.add_argument("--seeds", type=int, default=30)
     parser.add_argument("--wolves", type=int, default=30)
     parser.add_argument("--iterations", type=int, default=500)
