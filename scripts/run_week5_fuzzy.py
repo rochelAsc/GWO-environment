@@ -62,13 +62,13 @@ def paired_summary(fuzzy: list[float], reference: list[float]) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--instances", nargs="+", type=Path, default=DEFAULT_INSTANCES)
-    parser.add_argument("--baseline", type=Path, default=Path("results/week2_baseline_v1/runs.csv"))
-    parser.add_argument("--tuned", type=Path, default=Path("results/week3_optuna_v1/final_runs.csv"))
+    parser.add_argument("--baseline", type=Path, default=Path("results/week2_baseline_v2/runs.csv"))
+    parser.add_argument("--tuned", type=Path, default=Path("results/week3_optuna_v2/final_runs.csv"))
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(30)))
     parser.add_argument("--wolves", type=int, default=30)
     parser.add_argument("--budget", type=int, default=BUDGET)
     parser.add_argument("--stagnation-window", type=int, default=20)
-    parser.add_argument("--output", type=Path, default=Path("results/week5_fuzzy_v1"))
+    parser.add_argument("--output", type=Path, default=Path("results/week5_fuzzy_v2"))
     args = parser.parse_args()
     if args.wolves < 3 or args.budget <= 0 or args.budget % args.wolves:
         parser.error("--budget must be positive and divisible by --wolves (>=3)")
@@ -159,9 +159,10 @@ def main() -> None:
             writer.writerows(rows)
 
     metadata = {
-        "protocol": "week5_taillard_pfsp_fuzzy_gwo_v1",
+        "protocol": "week5_taillard_pfsp_fuzzy_gwo_v2",
         "objective": "makespan",
         "controller": "Mamdani min-max centroid",
+        "solver_version": "gwo_pfs_fuzzy_population_replacement_v2",
         "inputs": {
             "diversity": "mean pairwise absolute distance in random-key population",
             "stagnation": "consecutive generations without global-best improvement / window, clipped to [0,1]",
