@@ -92,3 +92,21 @@ python -m scripts.run_week4_surrogate --samples 2000 --output results/week4_surr
 ```
 
 O script grava dataset por instância, modelo serializado, métricas de treino/teste, tempos, análise de seleção e gráficos. O tempo de geração dos rótulos exatos, treinamento e inferência é reportado separadamente. Não interprete fitness previsto como resultado real: candidatos selecionados pelo modelo são conferidos com makespan exato.
+
+## Semana 5 — GWO com controlador Fuzzy
+
+A reconstrução da Semana 5 aplica um controlador Mamdani ao parâmetro de exploração `a` do GWO no mesmo PFSP/Taillard das Semanas 2–4. O CSV Fuzzy histórico é preservado, mas não contém as entradas, pertinências ou regras necessárias para reproduzir o controlador original. A implementação atual é uma reconstrução documentada; consulte [o protocolo](docs/reports/week5_fuzzy_protocol.md).
+
+Execute primeiro o piloto pareado (3 seeds) e confira os artefatos:
+
+```bash
+python -m scripts.run_week5_fuzzy --seeds 0 1 2 --output results/week5_fuzzy_pilot
+```
+
+Depois, se o piloto estiver íntegro, execute as 30 seeds:
+
+```bash
+python -m scripts.run_week5_fuzzy
+```
+
+O padrão compara 30 lobos, 500 iterações e 15.030 avaliações por execução com os resultados congelados das Semanas 2 e 3, nas instâncias `ta001` e `ta011`. Os resultados incluem execuções, convergência, traço temporal Fuzzy e comparações pareadas. Não misture esta reconstrução com o histórico de PFS/tardiness nem com DPFSP-DD.
