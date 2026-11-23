@@ -28,11 +28,11 @@ def describe(values):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, default=Path("results/week3_optuna_v1/best_params.json"))
-    parser.add_argument("--baseline", type=Path, default=Path("results/week2_baseline_v1/runs.csv"))
+    parser.add_argument("--config", type=Path, default=Path("results/week3_optuna_v2/best_params.json"))
+    parser.add_argument("--baseline", type=Path, default=Path("results/week2_baseline_v2/runs.csv"))
     parser.add_argument("--instances", nargs="+", type=Path, default=DEFAULT_INSTANCES)
     parser.add_argument("--seeds", nargs="+", type=int, default=list(range(30)))
-    parser.add_argument("--output", type=Path, default=Path("results/week3_optuna_v1"))
+    parser.add_argument("--output", type=Path, default=Path("results/week3_optuna_v2"))
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
     params = config["best_params"]
@@ -98,8 +98,8 @@ def main():
             writer.writeheader()
             writer.writerows(rows)
     metadata = {
-        "protocol": "week3_pfsp_optuna_evaluation_v1", "objective": "makespan",
-        "frozen_best_params": params, "iterations_derived": iterations,
+        "protocol": "week3_pfsp_optuna_evaluation_v2", "objective": "makespan",
+        "frozen_best_params": params, "solver_version": "gwo_pfs_population_replacement_v2", "iterations_derived": iterations,
         "evaluation_budget_per_run": BUDGET, "seeds": args.seeds,
         "baseline_file": str(args.baseline), "comparison": comparisons,
         "python": sys.version, "platform": platform.platform(), "numpy": np.__version__,
