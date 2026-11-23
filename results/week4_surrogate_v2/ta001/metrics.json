@@ -1,0 +1,96 @@
+{
+  "protocol": "week4_taillard_pfsp_surrogate_v2",
+  "instance": "ta001",
+  "instance_path": "data\\benchmarks\\taillard\\ta001.txt",
+  "instance_sha256": "fa586022d3a4a759f2d26c4b61c5267e71c00e4016f3307bbe706982df2b42c3",
+  "jobs": 20,
+  "machines": 5,
+  "published_upper_bound": 1278,
+  "published_lower_bound": 1232,
+  "sample_count_requested": 2000,
+  "unique_permutations": 2000,
+  "duplicate_rate": 0.0,
+  "train_samples": 1600,
+  "test_samples": 400,
+  "seed": 20261123,
+  "feature_encoding": "normalized_job_rank_permutation",
+  "sampling": "scipy_qmc_latin_hypercube_on_random_keys_then_stable_argsort",
+  "model": {
+    "class": "sklearn.neural_network.MLPRegressor",
+    "hidden_layer_sizes": [
+      64,
+      64
+    ],
+    "activation": "relu",
+    "solver": "adam",
+    "alpha": 0.0001,
+    "learning_rate_init": 0.001,
+    "max_iter": 1000,
+    "early_stopping": true,
+    "n_iter_no_change": 30,
+    "n_iter_actual": 52,
+    "random_state": 20261123
+  },
+  "metrics": {
+    "train": {
+      "mse": 1433.6278429540973,
+      "rmse": 37.86327829116355,
+      "mae": 30.469955945368582,
+      "r2": 0.6818792913050798,
+      "spearman_rho": 0.8145155068278418
+    },
+    "test": {
+      "mse": 1866.9511447438895,
+      "rmse": 43.20823005798652,
+      "mae": 34.10183627146632,
+      "r2": 0.5729696911380979,
+      "spearman_rho": 0.7584811985793666
+    }
+  },
+  "timing": {
+    "dataset_generation_and_exact_labels_seconds": 0.14166600001044571,
+    "training_seconds": 0.2646591999800876,
+    "exact": {
+      "median_seconds_per_prediction": 5.025849997764454e-05,
+      "mean_seconds_per_prediction": 5.1815833333724486e-05,
+      "std_seconds_per_prediction": 5.149564566679322e-06,
+      "min_seconds_per_prediction": 4.888324998319149e-05,
+      "max_seconds_per_prediction": 7.591099973069503e-05,
+      "repeats": 30
+    },
+    "surrogate_batch": {
+      "median_seconds_per_prediction": 1.5164000069489701e-05,
+      "mean_seconds_per_prediction": 1.5362508342756577e-05,
+      "std_seconds_per_prediction": 9.107390776808496e-07,
+      "min_seconds_per_prediction": 1.4377000043168665e-05,
+      "max_seconds_per_prediction": 1.9067499961238356e-05,
+      "repeats": 30
+    },
+    "surrogate_single": {
+      "median_seconds_per_prediction": 0.00036889849987346683,
+      "mean_seconds_per_prediction": 0.0003727389249446181,
+      "std_seconds_per_prediction": 1.5326827783359164e-05,
+      "min_seconds_per_prediction": 0.00035533674992620944,
+      "max_seconds_per_prediction": 0.0004145477499696426,
+      "repeats": 30
+    },
+    "speedup_vs_exact": {
+      "surrogate_batch": 3.314329975424211,
+      "surrogate_single": 0.1362393720627309
+    },
+    "comparison_basis": "same held-out raw random_keys; exact=decode+makespan; surrogate=decode+feature_encoding+predict"
+  },
+  "selection_check": {
+    "top_k_by_predicted_makespan": 10,
+    "best_predicted_makespan": 1384.5331217068072,
+    "best_exact_makespan_among_selected": 1378,
+    "mean_exact_makespan_among_selected": 1434.7
+  },
+  "environment": {
+    "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "scikit_learn": "1.9.0"
+  }
+}
