@@ -1,3 +1,5 @@
+> **REVISÃO CRÍTICA — resultados v1 invalidados como evidência de GWO iterativo.** A auditoria original abaixo descreve fielmente o que foi executado na época, mas o solver tinha um defeito: `new_positions` não era atribuída a `positions`. Portanto, a população inicial era reutilizada em todas as gerações. Os CSVs e metadados v1 permanecem preservados, mas suas conclusões de desempenho não devem ser apresentadas como resultado de um GWO com população evolutiva. A versão corrigida v2 está implementada; a nova bateria de 30 seeds ainda precisa ser executada e auditada. Nova saída: `results/week2_baseline_v2/`.
+
 # Semana 2 — estado da reconstrução experimental
 
 **Data da atualização:** 2026-11-23  
