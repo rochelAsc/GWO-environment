@@ -22,6 +22,26 @@ python -m pytest -q
 
 O CI executa a suíte em Python 3.12. A suíte também foi executada localmente em Python 3.14: 63 testes passaram. Um aviso de depreciação vem do plugin AnyIO instalado no ambiente, não do código do projeto.
 
+## Semana 2 — reconstrução do baseline Taillard/PFSP
+
+A reconstrução versionada da Semana 2 usa instâncias Taillard de PFSP e minimiza makespan. Ela é independente dos experimentos históricos com tardiness e do solver DPFSP-DD. O protocolo completo está em [`docs/reports/week2_reconstruction_protocol.md`](docs/reports/week2_reconstruction_protocol.md).
+
+Execute primeiro um piloto curto para estimar o custo no seu computador:
+
+```bash
+python -m scripts.run_week2_benchmark --seeds 3 --wolves 10 --iterations 50 --output results/week2_pilot
+```
+
+Depois da validação do piloto, execute o protocolo de 30 seeds:
+
+```bash
+python -m scripts.run_week2_benchmark
+python -m pip install matplotlib
+python -m scripts.plot_week2_convergence
+```
+
+Os padrões são 30 lobos, 500 iterações e seeds 0–29, nas instâncias `ta001` e `ta011`. O script gera `runs.csv`, `convergence.csv` e `metadata.json`; os gráficos são gravados em `results/week2_baseline_v1/figures/`. Não execute a bateria completa antes de conferir o tempo do piloto. Os resultados são novos e não substituem os arquivos históricos.
+
 ## DPFSP-DD
 
 O avaliador independente do Distributed Permutation Flow Shop com due dates está em [`scripts/dpfsp_dd.py`](scripts/dpfsp_dd.py). Seu contrato e exemplo estão em [`docs/guides/dpfsp_dd_evaluator.md`](docs/guides/dpfsp_dd_evaluator.md).
