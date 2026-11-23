@@ -92,12 +92,13 @@ def build_model(seed: int) -> Pipeline:
 
 
 def regression_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
+    rho = float(spearmanr(y_true, y_pred).statistic)
     return {
         "mse": float(mean_squared_error(y_true, y_pred)),
         "rmse": float(np.sqrt(mean_squared_error(y_true, y_pred))),
         "mae": float(mean_absolute_error(y_true, y_pred)),
         "r2": float(r2_score(y_true, y_pred)),
-        "spearman_rho": float(spearmanr(y_true, y_pred).statistic),
+        "spearman_rho": rho if np.isfinite(rho) else None,
     }
 
 
@@ -139,15 +140,21 @@ def evaluate_instance(instance_path: Path, output: Path, sample_count: int, seed
             makespan(p, permutation)
     exact_elapsed = time.perf_counter() - exact_start
 
+    # Include the same permutation-to-feature conversion in both timing paths.
     inference_start = time.perf_counter()
     for _ in range(repeats):
-        model.predict(X_test)
+        encoded = np.vstack([
+            permutation_features(np.argsort(row, kind="stable"))
+            for row in X_test
+        ])
+        model.predict(encoded)
     batch_elapsed = time.perf_counter() - inference_start
 
     single_start = time.perf_counter()
     for _ in range(repeats):
         for row in X_test:
-            model.predict(row.reshape(1, -1))
+            encoded = permutation_features(np.argsort(row, kind="stable"))
+            model.predict(encoded.reshape(1, -1))
     single_elapsed = time.perf_counter() - single_start
 
     # The test targets are exact labels; report the best predicted candidate only
