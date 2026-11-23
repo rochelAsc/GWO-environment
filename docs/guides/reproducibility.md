@@ -74,7 +74,7 @@ Arquivo de entrada: `notebooks/Sistemas_Inteligentes_Entregavel.ipynb`.
 
 O notebook usa `google.colab.files`, upload/download interativo e comandos mágicos `!pip`. Por isso, não é um fluxo de execução local convencional. O arquivo `scripts/sistemas_inteligentes_entregavel.py` é um export textual do notebook e também contém magics/imports exclusivos do Colab; não execute com `python scripts/sistemas_inteligentes_entregavel.py`.
 
-**Limitação de dados:** as instâncias PFS exatas usadas nos experimentos históricos não foram recuperadas. O arquivo `DPFSP_DD.zip` não é substituto: contém instâncias DPFSP-DD, com atribuição de fábricas e due dates, enquanto o motor legado modela PFS de uma única sequência compartilhada entre máquinas. Assim, o notebook e o motor podem ser testados com fixtures sintéticas dos testes, mas a reprodução dos resultados PFS históricos depende da recuperação das instâncias originais ou de um conjunto PFS compatível, com proveniência registrada.
+**Limitação de dados:** as instâncias PFS exatas usadas nos experimentos históricos não foram recuperadas. O arquivo `DPFSP_DD.zip` não é substituto: contém instâncias DPFSP-DD, com atribuição de fábricas e due dates, enquanto o motor legado modela PFS de uma única sequência compartilhada entre máquinas. Assim, o parser e o motor são testados com fixtures sintéticas; isso não equivale a uma execução ponta a ponta do notebook. A reprodução dos resultados PFS históricos depende da recuperação das instâncias originais ou de um conjunto PFS compatível, com proveniência registrada.
 
 ## 5. O que está e o que não está reproduzível
 
