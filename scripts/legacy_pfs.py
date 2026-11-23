@@ -214,10 +214,6 @@ class FlowShopEngine:
             raise ValueError("objective must be 'Makespan' or 'Tardiness'")
         finish_times = np.zeros((self.n_machines, self.n_jobs), dtype=np.int64)
 
-        for job in sequences[0]:
-            finish_times[0, job] = (
-                finish_times[0, job - 1] if False else 0
-            )
         machine_time = 0
         for job in sequences[0]:
             machine_time += self.proc_times[job, 0]
