@@ -1,5 +1,9 @@
 # Semana 3 — Sintonia de hiperparâmetros com Optuna
 
+## Versão corrigida do solver (v2)
+
+A primeira reconstrução v1 herdou um defeito no motor GWO: as posições calculadas em uma geração não eram atribuídas à população usada na geração seguinte. Por isso, as baterias v1 de baseline, tuning e avaliação são preservadas como histórico, mas invalidadas como evidência de uma trajetória GWO iterativa. A versão v2 corrige a substituição da população e deve usar exclusivamente `results/week2_baseline_v2/runs.csv` como baseline. Os novos artefatos são gravados em `results/week3_optuna_v2/`.
+
 ## Escopo e compatibilidade
 
 Esta reconstrução aplica Optuna à mesma formulação da Semana 2: PFSP de uma fábrica, sem datas de entrega, com minimização do makespan, usando ta001 e ta011.
@@ -8,7 +12,7 @@ O experimento histórico de Optuna pertence a outro problema: PFS com datas de e
 
 ## Baseline e orçamento
 
-A baseline congelada é week2_baseline_v1: 30 lobos, 500 iterações, schedule linear de a=2 a a=0, seeds 0–29 e 15.030 avaliações por execução.
+A baseline congelada é week2_baseline_v2: 30 lobos, 500 iterações, schedule linear de a=2 a a=0, seeds 0–29 e 15.030 avaliações por execução.
 
 O orçamento por execução da sintonia e da avaliação final também será exatamente 15.030 avaliações. A população é escolhida entre divisores inteiros desse orçamento:
 
