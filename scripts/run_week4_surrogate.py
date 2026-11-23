@@ -55,23 +55,37 @@ def permutation_features(permutation: np.ndarray) -> np.ndarray:
     return ranks
 
 
-def generate_dataset(processing_times: np.ndarray, sample_count: int, seed: int):
-    """Generate LHS random keys, deduplicate decoded permutations, and label exactly."""
+def random_keys_features(random_keys: np.ndarray) -> np.ndarray:
+    """Apply the same stable random-key decoder and feature encoder to raw keys."""
+    keys = np.asarray(random_keys, dtype=np.float64)
+    if keys.ndim != 1 or keys.size == 0 or not np.all(np.isfinite(keys)):
+        raise ValueError("random_keys must be a finite, non-empty vector")
+    permutation = np.argsort(keys, kind="stable")
+    return permutation_features(permutation)
+
+
+def generate_dataset(
+    processing_times: np.ndarray, sample_count: int, seed: int
+) -> tuple[np.ndarray, np.ndarray, int, np.ndarray]:
+    """Generate LHS keys, deduplicate by decoded permutation, and label exactly."""
     if sample_count < 20:
         raise ValueError("sample_count must be at least 20")
     n_jobs = processing_times.shape[0]
     sampler = qmc.LatinHypercube(d=n_jobs, seed=seed)
-    keys = sampler.random(n=sample_count)
+    sampled_keys = sampler.random(n=sample_count)
     unique: dict[tuple[int, ...], tuple[np.ndarray, int]] = {}
-    for vector in keys:
-        permutation = np.argsort(vector, kind="stable")
-        key = tuple(int(x) for x in permutation)
-        if key not in unique:
-            unique[key] = (permutation, makespan(processing_times, permutation))
-    permutations = list(unique.keys())
-    features = np.vstack([permutation_features(np.asarray(p)) for p in permutations])
-    targets = np.asarray([unique[p][1] for p in permutations], dtype=np.float64)
-    return features, targets, len(permutations)
+    for keys in sampled_keys:
+        permutation = np.argsort(keys, kind="stable")
+        permutation_id = tuple(int(x) for x in permutation)
+        if permutation_id not in unique:
+            unique[permutation_id] = (
+                keys.copy(),
+                makespan(processing_times, permutation),
+            )
+    keys = np.vstack([item[0] for item in unique.values()])
+    targets = np.asarray([item[1] for item in unique.values()], dtype=np.float64)
+    features = np.vstack([random_keys_features(row) for row in keys])
+    return features, targets, len(unique), keys
 
 
 def build_model(seed: int) -> Pipeline:
@@ -107,13 +121,85 @@ def regression_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     }
 
 
+def benchmark_latency(
+    processing_times: np.ndarray,
+    model: Pipeline,
+    test_keys: np.ndarray,
+    repeats: int = 30,
+) -> dict:
+    """Compare exact and surrogate paths from identical raw random-key vectors."""
+    if test_keys.ndim != 2 or len(test_keys) == 0:
+        raise ValueError("test_keys must be a non-empty 2D array")
+
+    def exact_pass():
+        for keys in test_keys:
+            makespan(processing_times, np.argsort(keys, kind="stable"))
+
+    def surrogate_batch_pass():
+        features = np.vstack([random_keys_features(keys) for keys in test_keys])
+        model.predict(features)
+
+    def surrogate_single_pass():
+        for keys in test_keys:
+            features = random_keys_features(keys)
+            model.predict(features.reshape(1, -1))
+
+    # Warm-up both paths before collecting repeated measurements.
+    exact_pass()
+    surrogate_batch_pass()
+    surrogate_single_pass()
+
+    measurements = {"exact": [], "surrogate_batch": [], "surrogate_single": []}
+    passes = {
+        "exact": exact_pass,
+        "surrogate_batch": surrogate_batch_pass,
+        "surrogate_single": surrogate_single_pass,
+    }
+    for _ in range(repeats):
+        for name, operation in passes.items():
+            start = time.perf_counter()
+            operation()
+            elapsed = time.perf_counter() - start
+            measurements[name].append(elapsed / len(test_keys))
+
+    summary = {}
+    for name, values in measurements.items():
+        values_array = np.asarray(values, dtype=np.float64)
+        summary[name] = {
+            "median_seconds_per_prediction": float(np.median(values_array)),
+            "mean_seconds_per_prediction": float(np.mean(values_array)),
+            "std_seconds_per_prediction": float(np.std(values_array, ddof=1)),
+            "min_seconds_per_prediction": float(np.min(values_array)),
+            "max_seconds_per_prediction": float(np.max(values_array)),
+            "repeats": repeats,
+        }
+    exact_median = summary["exact"]["median_seconds_per_prediction"]
+    summary["speedup_vs_exact"] = {
+        "surrogate_batch": (
+            exact_median
+            / summary["surrogate_batch"]["median_seconds_per_prediction"]
+        ),
+        "surrogate_single": (
+            exact_median
+            / summary["surrogate_single"]["median_seconds_per_prediction"]
+        ),
+    }
+    summary["comparison_basis"] = (
+        "same held-out raw random_keys; exact=decode+makepsan; "
+        "surrogate=decode+feature_encoding+predict"
+    )
+    return summary
+
+
 def evaluate_instance(instance_path: Path, output: Path, sample_count: int, seed: int):
     output.mkdir(parents=True, exist_ok=True)
     instance = load_taillard_instance(instance_path)
-    p = instance.processing_times
+    processing_times = instance.processing_times
 
     generation_start = time.perf_counter()
-    X, y, unique_count = generate_dataset(p, sample_count, seed)
+    X, y, unique_count, random_keys = generate_dataset(
+        processing_times, sample_count, seed
+    )
     dataset_generation_seconds = time.perf_counter() - generation_start
     indices = np.arange(len(y))
     train_idx, test_idx = train_test_split(
@@ -121,6 +207,7 @@ def evaluate_instance(instance_path: Path, output: Path, sample_count: int, seed
     )
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
+    keys_test = random_keys[test_idx]
 
     model = build_model(seed)
     train_start = time.perf_counter()
@@ -134,47 +221,28 @@ def evaluate_instance(instance_path: Path, output: Path, sample_count: int, seed
         "test": regression_metrics(y_test, pred_test),
     }
 
-    # Compare exact and surrogate latency on identical held-out permutations.
-    repeats = 20
-    exact_start = time.perf_counter()
-    for _ in range(repeats):
-        for features, target in zip(X_test, y_test):
-            # Reconstruct a permutation from its rank representation.
-            permutation = np.argsort(features, kind="stable")
-            # Features are indexed by job, so argsort gives jobs in processing order.
-            makespan(p, permutation)
-    exact_elapsed = time.perf_counter() - exact_start
+    timing = benchmark_latency(processing_times, model, keys_test, repeats=30)
 
-    # Include the same permutation-to-feature conversion in both timing paths.
-    inference_start = time.perf_counter()
-    for _ in range(repeats):
-        encoded = np.vstack([
-            permutation_features(np.argsort(row, kind="stable"))
-            for row in X_test
-        ])
-        model.predict(encoded)
-    batch_elapsed = time.perf_counter() - inference_start
-
-    single_start = time.perf_counter()
-    for _ in range(repeats):
-        for row in X_test:
-            encoded = permutation_features(np.argsort(row, kind="stable"))
-            model.predict(encoded.reshape(1, -1))
-    single_elapsed = time.perf_counter() - single_start
-
-    # The test targets are exact labels; report the best predicted candidate only
-    # after retrieving its exact held-out makespan.
     top_k = min(10, len(test_idx))
-    best_predicted_indices = np.argsort(pred_test)[:top_k]
-    selected_exact = y_test[best_predicted_indices]
-    selected_predicted = pred_test[best_predicted_indices]
+    selected_indices = np.argsort(pred_test)[:top_k]
+    selected_exact = y_test[selected_indices]
+    selected_predicted = pred_test[selected_indices]
 
     with (output / "dataset.csv").open("w", newline="", encoding="utf-8") as stream:
         writer = csv.writer(stream)
-        writer.writerow(["sample_id", *[f"job_{j}_rank" for j in range(p.shape[0])], "exact_makespan", "split"])
+        writer.writerow([
+            "sample_id",
+            *[f"job_{j}_random_key" for j in range(processing_times.shape[0])],
+            *[f"job_{j}_rank" for j in range(processing_times.shape[0])],
+            "exact_makespan",
+            "split",
+        ])
         train_set = set(train_idx.tolist())
-        for i, (features, target) in enumerate(zip(X, y)):
-            writer.writerow([i, *features.tolist(), int(target), "train" if i in train_set else "test"])
+        for i, (keys, features, target) in enumerate(zip(random_keys, X, y)):
+            writer.writerow([
+                i, *keys.tolist(), *features.tolist(), int(target),
+                "train" if i in train_set else "test",
+            ])
 
     joblib.dump(model, output / "surrogate.joblib")
     plt.figure()
@@ -200,7 +268,7 @@ def evaluate_instance(instance_path: Path, output: Path, sample_count: int, seed
     plt.close()
 
     metadata = {
-        "protocol": "week4_taillard_pfsp_surrogate_v1",
+        "protocol": "week4_taillard_pfsp_surrogate_v2",
         "instance": instance.name,
         "instance_path": str(instance_path),
         "instance_sha256": sha256(instance_path),
@@ -226,20 +294,16 @@ def evaluate_instance(instance_path: Path, output: Path, sample_count: int, seed
             "max_iter": 1000,
             "early_stopping": True,
             "n_iter_no_change": 30,
-            "n_iter_actual": int(model.named_steps["regressor"].regressor_.n_iter_),
+            "n_iter_actual": int(
+                model.named_steps["regressor"].regressor_.n_iter_
+            ),
             "random_state": seed,
         },
         "metrics": metrics,
         "timing": {
             "dataset_generation_and_exact_labels_seconds": dataset_generation_seconds,
             "training_seconds": training_seconds,
-            "test_exact_total_seconds": exact_elapsed,
-            "test_exact_seconds_per_prediction": exact_elapsed / (repeats * len(test_idx)),
-            "surrogate_batch_total_seconds": batch_elapsed,
-            "surrogate_batch_seconds_per_prediction": batch_elapsed / (repeats * len(test_idx)),
-            "surrogate_single_total_seconds": single_elapsed,
-            "surrogate_single_seconds_per_prediction": single_elapsed / (repeats * len(test_idx)),
-            "timing_repeats": repeats,
+            **timing,
         },
         "selection_check": {
             "top_k_by_predicted_makespan": top_k,
@@ -274,9 +338,11 @@ def main():
         Path("data/benchmarks/taillard/ta001.txt"),
         Path("data/benchmarks/taillard/ta011.txt"),
     ])
-    parser.add_argument("--samples", type=int, default=2000)
+    parser.add_argument("--samples", type=int, default=300)
     parser.add_argument("--seed", type=int, default=20261123)
-    parser.add_argument("--output", type=Path, default=Path("results/week4_surrogate_v1"))
+    parser.add_argument(
+        "--output", type=Path, default=Path("results/week4_surrogate_pilot_v2")
+    )
     args = parser.parse_args()
     if args.samples < 20:
         parser.error("--samples must be >= 20")
