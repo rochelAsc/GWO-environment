@@ -1,3 +1,5 @@
+> **Nota de validade:** esta análise descreve a execução `week2_baseline_v1`, posteriormente identificada como afetada por um bug de população congelada no GWO. Os números abaixo são mantidos para rastreabilidade, mas não devem ser usados como resultados de um GWO iterativo. A reexecução corrigida está versionada separadamente em `results/week2_baseline_v2/` e deverá receber uma análise própria.
+
 # Week 2 — Taillard PFSP GWO baseline results
 
 **Protocol:** `week2_taillard_pfsp_gwo_v1`  
