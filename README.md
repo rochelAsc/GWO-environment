@@ -74,3 +74,21 @@ Consulte [`docs/guides/reproducibility.md`](docs/guides/reproducibility.md) para
 ## Rastreabilidade
 
 Decisões técnicas e metodológicas são registradas em `docs/decisions/`; auditorias e proveniência estão em `docs/audits/`. Protocolos e resultados históricos devem permanecer identificados separadamente e não ser sobrescritos retroativamente.
+
+## Semana 4 — Surrogate para PFSP/Taillard
+
+A reconstrução da Semana 4 treina um modelo substituto independente para cada instância Taillard, usando LHS sobre random keys, features de posição dos jobs e rótulos calculados pelo avaliador exato de makespan. O protocolo, as métricas e as limitações estão em [`docs/reports/week4_surrogate_protocol.md`](docs/reports/week4_surrogate_protocol.md).
+
+Execute primeiro um piloto com poucas amostras para estimar custo e qualidade:
+
+```bash
+python -m scripts.run_week4_surrogate --samples 300 --output results/week4_surrogate_pilot
+```
+
+Se o piloto concluir e os artefatos estiverem íntegros, execute a configuração inicial:
+
+```bash
+python -m scripts.run_week4_surrogate --samples 2000 --output results/week4_surrogate_v1
+```
+
+O script grava dataset por instância, modelo serializado, métricas de treino/teste, tempos, análise de seleção e gráficos. O tempo de geração dos rótulos exatos, treinamento e inferência é reportado separadamente. Não interprete fitness previsto como resultado real: candidatos selecionados pelo modelo são conferidos com makespan exato.
