@@ -1,28 +1,29 @@
 # Semana 2 — estado da reconstrução experimental
 
-**Data:** 2026-11-23  
-**Base:** reconstrução Taillard/PFSP adicionada à branch `main`.  
+**Data da atualização:** 2026-11-23  
+**Base:** reconstrução Taillard/PFSP na branch `main`.  
 **Relação com a auditoria inicial:** este documento complementa `2026-11-22-week2-implementation-review.md`; não altera a caracterização do código e dos resultados históricos.
 
 ## 1. Decisão
 
-A Semana 2 será refeita como experimento novo e versionado, pois os documentos antigos específicos não estão disponíveis. A ausência desses documentos não impede a reconstrução: o roteiro do professor, a implementação histórica, o repositório e o conjunto Taillard permitem definir um protocolo explícito.
+A Semana 2 foi refeita como experimento novo e versionado, pois os documentos antigos específicos não estão disponíveis. A ausência desses documentos não impediu a reconstrução: o roteiro do professor, a implementação histórica, o repositório e o conjunto Taillard permitiram definir um protocolo explícito.
 
 A reconstrução usa PFSP de uma fábrica, sem due dates, e minimiza makespan. Ela não substitui os experimentos PFS com tardiness nem os experimentos DPFSP-DD.
 
-## 2. Artefatos adicionados
+## 2. Artefatos
 
-- `data/benchmarks/taillard/ta001.txt`
-- `data/benchmarks/taillard/ta011.txt`
+- `data/benchmarks/taillard/ta001.txt` e `ta011.txt`: duas instâncias Taillard.
 - `scripts/pfs_taillard.py`: parser e avaliador de makespan.
 - `scripts/gwo_pfs.py`: GWO com random keys e atualização síncrona.
 - `scripts/run_week2_benchmark.py`: executor reproduzível com CSVs e metadados.
-- `scripts/plot_week2_convergence.py`: gráfico de média ± desvio padrão.
+- `scripts/plot_week2_convergence.py`: gráficos de média ± desvio padrão.
 - `tests/test_week2_pfs_gwo.py`: testes do parser, decoder, avaliador, determinismo e orçamento.
 - `docs/reports/week2_reconstruction_protocol.md`: formulação, parâmetros e orçamento.
-- README: comandos de piloto e execução completa.
+- `docs/reports/week2_results_analysis.md`: análise dos resultados completos.
+- `results/week2_pilot/`: piloto preservado.
+- `results/week2_baseline_v1/`: bateria completa, metadados, dados brutos e gráficos.
 
-## 3. Protocolo congelado para a nova bateria
+## 3. Protocolo executado
 
 | Parâmetro | Valor |
 |---|---:|
@@ -35,9 +36,9 @@ A reconstrução usa PFSP de uma fábrica, sem due dates, e minimiza makespan. E
 | Seeds | 0–29 |
 | Atualização | Síncrona, líderes congelados por geração |
 | Avaliações por execução | 15.030 |
-| Total previsto | 60 execuções; 901.800 avaliações |
+| Total | 60 execuções; 901.800 avaliações |
 
-Os UB/LB que acompanham as instâncias são registrados como referências publicadas. O gap em relação ao UB não será chamado de gap para o ótimo provado.
+Os UB/LB que acompanham as instâncias são referências publicadas. A diferença em relação ao UB não é chamada de gap para o ótimo provado.
 
 ## 4. Validação automatizada
 
@@ -49,28 +50,43 @@ O GitHub Actions executou a suíte completa na revisão `ac3fcbe6f03bb02a907d838
 
 Durante a reconstrução, o primeiro teste do parser identificou que o espelho Taillard armazena seed/UB/LB em comentário. O parser foi corrigido para ler essa metadata; a suíte subsequente passou. As falhas de CI nos commits intermediários pertencem a revisões anteriores à correção e permanecem no histórico do Actions.
 
-## 5. O que ainda falta para concluir a Semana 2
+## 5. Execução experimental concluída
 
-A suíte automatizada valida componentes e reprodutibilidade em pequena escala; ela não equivale à execução experimental de 30 seeds × 500 iterações.
+O piloto foi executado com 3 seeds, 10 lobos e 50 iterações. Em seguida, a bateria completa foi executada com 30 seeds, 30 lobos e 500 iterações.
 
-Etapas pendentes:
-1. Executar o piloto curto recomendado no README para medir tempo e verificar arquivos de saída na máquina local.
-2. Conferir os CSVs e o gráfico de convergência do piloto.
-3. Executar a bateria final de 30 seeds nas duas instâncias.
-4. Registrar os resultados brutos e metadados em `results/week2_baseline_v1/`.
-5. Atualizar a análise com média, mediana, desvio padrão, melhor/pior resultado, distância ao UB publicado e comportamento de convergência.
+Resultados agregados:
 
-Até que a bateria seja executada e os resultados sejam verificados, a reconstrução está **implementada e testada em CI, mas experimentalmente pendente**.
+| Métrica | ta001 | ta011 |
+|---|---:|---:|
+| Execuções | 30 | 30 |
+| Média | 1265,97 | 1628,53 |
+| Mediana | 1265 | 1626 |
+| Desvio padrão amostral | 3,55 | 8,22 |
+| Melhor | 1265 | 1596 |
+| Pior | 1279 | 1644 |
+| UB publicado | 1278 | 1582 |
+| Tempo médio por execução | 0,861 s | 1,351 s |
 
-## 6. Comandos
+Na ta001, 28 das 30 execuções atingiram makespan igual ou inferior ao UB publicado. Na ta011, nenhuma atingiu o UB; a melhor ficou 14 unidades acima dele. Portanto, o desempenho depende da instância e não deve ser apresentado como igualmente forte nas duas.
 
-Piloto:
-```bash
-python -m scripts.run_week2_benchmark --seeds 3 --wolves 10 --iterations 50 --output results/week2_pilot
-```
+A convergência média do melhor resultado por execução caiu de 1400,50 para 1265,97 na ta001 (redução de 9,61%) e de 1875,60 para 1628,53 na ta011 (redução de 13,17%). A média da ta001 alcançou o UB na geração 135; a média da ta011 não o alcançou em 500 iterações.
 
-Bateria:
-```bash
-python -m scripts.run_week2_benchmark
-python -m scripts.plot_week2_convergence
-```
+A análise detalhada, limitações e links para os artefatos estão em `docs/reports/week2_results_analysis.md`.
+
+## 6. Verificações dos artefatos
+
+- `runs.csv`: 60 registros, 30 por instância.
+- `convergence.csv`: 1.002 registros, 501 gerações por instância.
+- `metadata.json`: protocolo, ambiente, seeds, hashes, limites publicados e estatísticas.
+- Duas figuras de convergência.
+- Cada execução registrou 15.030 avaliações; total calculado: 901.800.
+- Os hashes das instâncias na bateria completa coincidem com os do piloto.
+- Os resultados do piloto foram preservados, sem sobrescrita.
+
+## 7. Conclusão e estado
+
+**Semana 2 concluída.** A reconstrução experimental foi implementada, testada em CI, executada em escala completa e registrada no repositório com dados brutos, metadados, convergência e análise.
+
+A conclusão deve manter a diferença observada entre as instâncias: resultado consistente em relação ao UB na ta001 e distância ainda não eliminada na ta011. O experimento é um baseline de PFSP/makespan e não substitui os resultados históricos de PFS/tardiness ou DPFSP-DD.
+
+A próxima etapa do roteiro poderá começar após a revisão desta análise, sem misturar os objetivos e protocolos das diferentes formulações.
