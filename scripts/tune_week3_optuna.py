@@ -44,6 +44,11 @@ def main():
         load_if_exists=False,
     )
 
+    # Include the exact Week 2 baseline as a reference candidate.
+    study.enqueue_trial({
+        "n_wolves": 30, "a_start": 2.0, "a_end": 0.0, "a_exponent": 1.0,
+    })
+
     def objective(trial):
         wolves = trial.suggest_categorical("n_wolves", WOLF_CHOICES)
         iterations = BUDGET // wolves - 1
