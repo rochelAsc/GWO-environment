@@ -31,7 +31,13 @@ def load_taillard_instance(path: str | Path) -> TaillardInstance:
         raise FileNotFoundError(path)
 
     lines = []
+    comment_numeric_rows = []
     for raw in path.read_text(encoding="utf-8-sig").splitlines():
+        if "#" in raw:
+            comment = raw.split("#", 1)[1]
+            numbers = [int(x) for x in re.findall(r"\\d+", comment)]
+            if len(numbers) >= 5:
+                comment_numeric_rows.append(numbers)
         line = raw.split("#", 1)[0].strip()
         if line:
             lines.append(line)
@@ -47,7 +53,15 @@ def load_taillard_instance(path: str | Path) -> TaillardInstance:
         data_lines = lines[1:]
     elif len(first) == 2:
         n_jobs, n_machines = first
-        seed = ub = lb = None
+        metadata_row = next(
+            (row for row in comment_numeric_rows
+             if row[0] == n_jobs and row[1] == n_machines),
+            None,
+        )
+        if metadata_row is not None:
+            _, _, seed, ub, lb = metadata_row[:5]
+        else:
+            seed = ub = lb = None
         data_lines = lines[1:]
     elif len(lines) >= 2:
         n_jobs, n_machines = int(lines[0]), int(lines[1])
