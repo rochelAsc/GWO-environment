@@ -2,7 +2,7 @@
 
 - **Data:** 2026-11-23
 - **Escopo:** inspiração bioinspirada, formulação matemática, representação, entradas/saídas, fitness e espaço de busca.
-- **Status:** revisão técnica inicial concluída; entregáveis acadêmicos originais da Semana 1 não comprovados no repositório.
+- **Status:** entregáveis da Semana 1 localizados e inspecionados; revisão técnica do material original e da transição de aplicação em andamento.
 - **Preservação:** documento aditivo; nenhum artefato histórico foi sobrescrito.
 
 ## 1. Exigências do roteiro
@@ -136,7 +136,20 @@ Diversidade populacional e estagnação não são variáveis obrigatórias do GW
 6. A população inicial também é avaliada. Com `N` lobos e `T` iterações completas, o legado realiza `N(T+1)` avaliações.
 7. O GWO random-key para DPFSP-DD é outro algoritmo aplicado a outro problema: usa (2n) chaves, codifica atribuição de fábricas e prioridades e atualiza a população sincronamente. Não confundir com o PFS.
 
-## 7. Checklist da Semana 1
+## 7. Materiais originais da Semana 1
+
+Foram localizados e lidos os dois arquivos adicionados à raiz do repositório:
+
+- `SI_Entregavel.md`: documento de formulação matemática e mapeamento do GWO, com três páginas extraídas. Apresenta hierarquia, etapas da caça, variáveis críticas, equações, representação, entradas/saídas, RMSE e espaço de busca de uma LSTM.
+- `SI_Entregavel_Slide.md`: conteúdo de uma apresentação de 15 slides, datada de 20 de outubro de 2026, com introdução, inspiração biológica, formulação, pseudocódigo, representação, fitness, integração GWO+LSTM e referências.
+
+Os arquivos comprovam que os entregáveis documentais da Semana 1 foram produzidos e estão versionados. A extração textual apresenta lacunas nas equações e elementos gráficos; para validar a qualidade visual e matemática dos PDFs originais, seria necessário inspecionar os arquivos renderizados, não apenas o Markdown convertido.
+
+### Mudança de aplicação
+
+Os materiais originais descrevem GWO para otimizar hiperparâmetros de uma LSTM na predição de notificações de dengue, com RMSE como fitness. O projeto atualmente auditado aplica GWO a problemas de sequenciamento de produção (PFS e DPFSP-DD), com Total Tardiness no PFS. Portanto, há uma mudança clara de domínio, representação e função objetivo. A fundamentação matemática do GWO é reaproveitável, mas a aplicação à dengue não deve ser apresentada como se fosse a aplicação experimental final do repositório. A cronologia e a justificativa da mudança precisam ser recuperadas dos registros/relatórios do trabalho.
+
+## 8. Checklist da Semana 1
 
 | Exigência | Evidência | Situação |
 |---|---|---|
@@ -146,21 +159,22 @@ Diversidade populacional e estagnação não são variáveis obrigatórias do GW
 | Entradas, saídas e representação | Mapeamento PFS registrado nesta revisão | Revisado |
 | Fitness e espaço de busca | Random keys, domínio e Total Tardiness confirmados no código | Atendido tecnicamente |
 | Variáveis críticas de estado | Líderes, posições e (a) identificados; diversidade/estagnação são extensões Fuzzy | Parcial |
-| Relatórios e roteiro em PDF | Foram localizados três PDFs em `docs/reports/`; a existência está confirmada, mas ainda é necessário conferir o conteúdo e mapear cada seção aos requisitos específicos da Semana 1 | Presente; conteúdo a validar |
+| Documento de formulação | `SI_Entregavel.md` | Localizado; conteúdo inspecionado |
+| Apresentação | `SI_Entregavel_Slide.md` (15 slides) | Localizada; conteúdo inspecionado |
+| Correspondência com a aplicação final | Materiais usam LSTM/dengue; projeto atual usa PFS/DPFSP-DD | Mudança de escopo a documentar |
 
-## 8. Pendências para fechar a Semana 1
+## 9. Pendências da revisão da Semana 1
 
-- Preparar apresentação PDF com hierarquia, cercamento, caça, exploração/explotação e fluxo do GWO.
-- Preparar o documento de duas páginas com equações, entradas/saídas, representação, fitness e espaço de busca.
-- Incluir referência bibliográfica completa e separar GWO canônico das adaptações.
-- Explicitar que diversidade e estagnação serão usadas pelo Fuzzy, não tratadas como variáveis nativas do GWO.
-- Confirmar se existe material da Semana 1 fora do repositório. Ausência no repositório não prova que nunca foi produzido.
+- Conferir visualmente os PDFs originais correspondentes, se disponíveis, pois o Markdown convertido perdeu partes de equações e imagens.
+- Documentar a transição da proposta LSTM/dengue para PFS/DPFSP-DD, sem apagar os materiais originais.
+- Separar claramente a formulação canônica do GWO das adaptações específicas do PFS e do DPFSP-DD.
+- Explicitar que diversidade e estagnação são entradas do Fuzzy, não variáveis nativas do GWO.
 
-## 9. Referência primária
+## 10. Referência primária
 
 MIRJALILI, S.; MIRJALILI, S. M.; LEWIS, A. Grey Wolf Optimizer. *Advances in Engineering Software*, v. 69, p. 46–61, 2014. DOI: [10.1016/j.advengsoft.2013.12.007](https://doi.org/10.1016/j.advengsoft.2013.12.007).
 
-## 10. Fontes internas examinadas
+## 11. Fontes internas examinadas
 
 - `sistemas_inteligentes_roteiro (1).md`
 - `scripts/sistemas_inteligentes_entregavel.py`
