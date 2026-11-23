@@ -55,7 +55,11 @@ def gwo_pfs(
 
     for iteration in range(iterations):
         progress = iteration / iterations
-        a = a_end + (a_start - a_end) * (1.0 - progress) ** a_exponent
+        if a_start == 2.0 and a_end == 0.0 and a_exponent == 1.0:
+            # Preserve the exact Week 2 arithmetic for bit-for-bit baseline compatibility.
+            a = 2.0 - 2.0 * iteration / iterations
+        else:
+            a = a_end + (a_start - a_end) * (1.0 - progress) ** a_exponent
         r1 = rng.random((3, n_wolves, n_jobs))
         r2 = rng.random((3, n_wolves, n_jobs))
         A = 2.0 * a * r1 - a
