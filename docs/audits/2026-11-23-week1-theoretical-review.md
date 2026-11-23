@@ -70,13 +70,13 @@ A posição seguinte é a média das três estimativas:
 \boxed{\mathbf{X}(t+1)=\frac{\mathbf{X}_1+\mathbf{X}_2+\mathbf{X}_3}{3}}.
 \]
 
-Na versão canônica, (a) decresce linearmente de 2 para 0. Quando \(|A|>1\), os movimentos podem favorecer exploração; quando \(|A|<1\), tendem a favorecer explotação ao redor dos líderes. Como (A) é vetorial, essa interpretação ocorre por coordenada. O schedule não garante encontrar o ótimo global.
+Na versão canônica, `a` decresce linearmente de 2 para 0. Quando \(|A|>1\), os movimentos podem favorecer exploração; quando \(|A|<1\), tendem a favorecer explotação ao redor dos líderes. Como `A` é vetorial, essa interpretação ocorre por coordenada. O schedule não garante encontrar o ótimo global.
 
 ## 4. Aplicação ao PFS do projeto
 
 O motor legado representa um Permutation Flow Shop (PFS) de uma fábrica: todos os jobs percorrem as máquinas na mesma ordem e compartilham uma permutação.
 
-Para (n) jobs, cada lobo é um vetor de chaves contínuas:
+Para `n` jobs, cada lobo é um vetor de chaves contínuas:
 
 \[
 \mathbf{X}_i\in[0,1]^n,\qquad D=n.
@@ -133,7 +133,7 @@ Diversidade populacional e estagnação não são variáveis obrigatórias do GW
 3. O objetivo é minimizar Total Tardiness calculado pelo motor PFS.
 4. O GWO legado atualiza lobos e líderes sequencialmente/in-place. Lobos posteriores podem usar líderes já alterados na mesma geração. Isso deve ser descrito como característica da implementação, não escondido sob uma descrição genérica de atualização síncrona.
 5. O schedule legado chamado `exponential` calcula (a(t)=2(1-(t/T)^2)), que é quadrático, não exponencial. Novos experimentos devem usar o nome `quadratic`; os dados antigos mantêm o nome original com ressalva.
-6. A população inicial também é avaliada. Com (N) lobos e (T) iterações completas, o legado realiza (N(T+1)) avaliações.
+6. A população inicial também é avaliada. Com `N` lobos e `T` iterações completas, o legado realiza `N(T+1)` avaliações.
 7. O GWO random-key para DPFSP-DD é outro algoritmo aplicado a outro problema: usa (2n) chaves, codifica atribuição de fábricas e prioridades e atualiza a população sincronamente. Não confundir com o PFS.
 
 ## 7. Checklist da Semana 1
