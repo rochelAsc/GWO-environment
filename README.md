@@ -82,13 +82,13 @@ A reconstrução da Semana 4 treina um modelo substituto independente para cada 
 Execute primeiro um piloto com poucas amostras para estimar custo e qualidade:
 
 ```bash
-python -m scripts.run_week4_surrogate --samples 300 --output results/week4_surrogate_pilot
+python -m scripts.run_week4_surrogate --samples 300 --output results/week4_surrogate_pilot_v2
 ```
 
-Se o piloto concluir e os artefatos estiverem íntegros, execute a configuração inicial:
+Após revisar o piloto corrigido (incluindo estabilidade dos tempos e métricas de teste), e somente se ele estiver íntegro, execute a ampliação:
 
 ```bash
-python -m scripts.run_week4_surrogate --samples 2000 --output results/week4_surrogate_v1
+python -m scripts.run_week4_surrogate --samples 2000 --output results/week4_surrogate_v2
 ```
 
 O script grava dataset por instância, modelo serializado, métricas de treino/teste, tempos, análise de seleção e gráficos. O tempo de geração dos rótulos exatos, treinamento e inferência é reportado separadamente. Não interprete fitness previsto como resultado real: candidatos selecionados pelo modelo são conferidos com makespan exato.
