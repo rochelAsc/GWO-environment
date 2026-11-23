@@ -1,5 +1,11 @@
 # Semana 2 — Reconstrução experimental do GWO baseline
 
+## Versão corrigida do solver (v2)
+
+A implementação original usada nas baterias `week2_baseline_v1`, `week3_optuna_v1` e `week5_fuzzy_v1` continha um erro: calculava e avaliava `new_positions`, mas não substituía a população `positions`. Assim, todas as gerações voltavam a evoluir a população inicial, embora o arquivo de líderes fosse atualizado. A versão corrigida faz a substituição da população a cada geração e mantém alpha/beta/delta em um arquivo de elite separado. Os resultados v1 são preservados, mas não representam a dinâmica iterativa pretendida e não devem ser usados como resultados válidos do GWO.
+
+A nova execução deve ser salva em `results/week2_baseline_v2/`. A métrica de qualidade e o orçamento permanecem iguais; a versão do solver e os resultados são distintos. O `GWOResult` expõe a população final para permitir teste de regressão sem acrescentar custo quadrático de diagnóstico ao loop.
+
 ## Objetivo
 
 Reconstruir a etapa de implementação e validação do solver usando o problema originalmente especificado no roteiro: Permutation Flow Shop Problem (PFSP), com instâncias Taillard e minimização de makespan. Esta reconstrução é uma nova execução versionada; não substitui nem reescreve resultados históricos de PFS com datas de entrega ou de DPFSP-DD.
@@ -40,7 +46,7 @@ O indivíduo é um vetor contínuo de (n) random keys em ([0,1]). A permutação
 - 30 lobos;
 - 500 iterações;
 - parâmetro (a(t)=2-2t/T);
-- atualização síncrona: todos os lobos usam os mesmos líderes congelados no início da geração;
+- atualização síncrona: todos os lobos usam os mesmos líderes congelados no início da geração, e a população inteira é substituída pelas novas posições ao final da geração;
 - clipping das posições para ([0,1]);
 - 30 seeds independentes (0 a 29).
 
@@ -58,7 +64,7 @@ por execução e instância. Para duas instâncias e 30 seeds: 60 execuções e 
 
 ## Artefatos gerados
 
-O script `scripts/run_week2_benchmark.py` produz:
+O script `scripts/run_week2_benchmark.py` (v2; saída padrão `results/week2_baseline_v2/`) produz:
 - `runs.csv`: uma linha por instância/seed, com fitness, tempo, avaliações e permutação;
 - `convergence.csv`: média e desvio padrão amostral do melhor makespan por geração;
 - `metadata.json`: protocolo, ambiente, seeds, hashes dos arquivos, limites publicados e estatísticas agregadas.
