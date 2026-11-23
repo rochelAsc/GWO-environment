@@ -1,0 +1,60 @@
+{
+  "protocol": "week2_taillard_pfsp_gwo_v1",
+  "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "numpy": "2.5.1",
+  "n_wolves": 10,
+  "iterations": 50,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "evaluations_per_run_expected": 510,
+  "update_semantics": "synchronous_frozen_alpha_beta_delta",
+  "encoding": "random_keys_[0,1]_stable_argsort",
+  "a_schedule": "linear_2_to_0",
+  "objective": "makespan",
+  "instances": [
+    {
+      "name": "ta001",
+      "jobs": 20,
+      "machines": 5,
+      "published_seed": 873654221,
+      "published_upper_bound": 1278,
+      "published_lower_bound": 1232,
+      "sha256": "fa586022d3a4a759f2d26c4b61c5267e71c00e4016f3307bbe706982df2b42c3",
+      "path": "data\\benchmarks\\taillard\\ta001.txt"
+    },
+    {
+      "name": "ta011",
+      "jobs": 20,
+      "machines": 10,
+      "published_seed": 587595453,
+      "published_upper_bound": 1582,
+      "published_lower_bound": 1448,
+      "sha256": "16b1e1b2bf1464e5af0f28b7c1aaeed4d65ff00bce51d10f583dfd3fa12a02b6",
+      "path": "data\\benchmarks\\taillard\\ta011.txt"
+    }
+  ],
+  "summary": [
+    {
+      "instance": "ta001",
+      "n_runs": 3,
+      "mean": 1272.0,
+      "median": 1265.0,
+      "std_sample": 12.12435565298214,
+      "best": 1265,
+      "worst": 1286
+    },
+    {
+      "instance": "ta011",
+      "n_runs": 3,
+      "mean": 1717.6666666666667,
+      "median": 1711.0,
+      "std_sample": 60.27713773341708,
+      "best": 1661,
+      "worst": 1781
+    }
+  ]
+}
