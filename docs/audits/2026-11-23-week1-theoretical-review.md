@@ -146,7 +146,7 @@ Diversidade populacional e estagnação não são variáveis obrigatórias do GW
 | Entradas, saídas e representação | Mapeamento PFS registrado nesta revisão | Revisado |
 | Fitness e espaço de busca | Random keys, domínio e Total Tardiness confirmados no código | Atendido tecnicamente |
 | Variáveis críticas de estado | Líderes, posições e (a) identificados; diversidade/estagnação são extensões Fuzzy | Parcial |
-| Apresentação PDF e documento de duas páginas | Não foi localizado artefato inequivocamente identificado como entrega da Semana 1 | Não comprovado |
+| Relatórios e roteiro em PDF | Foram localizados três PDFs em `docs/reports/`; a existência está confirmada, mas ainda é necessário conferir o conteúdo e mapear cada seção aos requisitos específicos da Semana 1 | Presente; conteúdo a validar |
 
 ## 8. Pendências para fechar a Semana 1
 
