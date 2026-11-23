@@ -39,7 +39,9 @@ def test_fuzzy_gwo_respects_budget_and_is_reproducible():
     assert np.array_equal(first.convergence, second.convergence)
     assert first.trace == second.trace
     assert np.all(np.diff(first.convergence) <= 0)
-    assert all(0.0 <= row["diversity"] <= 1.0 for row in first.trace)
+    diversity_values = [row["diversity"] for row in first.trace]
+    assert all(0.0 <= value <= 1.0 for value in diversity_values)
+    assert np.ptp(diversity_values) > 1e-9, "Fuzzy diversity must be recomputed from the evolving population"
     assert all(0.5 <= row["fuzzy_scale"] <= 1.5 for row in first.trace)
     assert all(0.0 <= row["a"] <= 2.0 for row in first.trace)
 
