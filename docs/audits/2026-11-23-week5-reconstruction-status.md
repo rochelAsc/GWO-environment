@@ -2,7 +2,7 @@
 
 # Semana 5 — Auditoria da reconstrução Fuzzy
 
-**Status:** implementação e protocolo publicados; validação automatizada e execução experimental ainda pendentes.
+**Status atual:** solver v2 e teste de regressão publicados; CI e piloto v2 pendentes. As informações de execução abaixo descrevem o histórico v1 e não validam adaptação Fuzzy.
 
 ## Evidência histórica
 
@@ -17,7 +17,7 @@ Foram adicionados:
 - `tests/test_week5_fuzzy.py`: testes de limites, validação, reprodutibilidade e orçamento;
 - `docs/reports/week5_fuzzy_protocol.md`: especificação completa.
 
-O protocolo usa PFSP/Taillard, makespan, 30 lobos, 500 iterações, 15.030 avaliações por execução e seeds 0–29. O piloto recomendado usa seeds 0, 1 e 2. A comparação usa resultados congelados das Semanas 2 e 3, sem reexecutar nem sobrescrever essas baterias.
+O protocolo usa PFSP/Taillard, makespan, 30 lobos, 500 iterações, 15.030 avaliações por execução e seeds 0–29. O piloto recomendado usa seeds 0, 1 e 2. A comparação v2 usa os resultados corrigidos das Semanas 2 e 3, sem sobrescrever os diretórios v1.
 
 ## Controlador
 
