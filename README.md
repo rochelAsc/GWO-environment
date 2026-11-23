@@ -13,7 +13,7 @@ Repositório do projeto de Sistemas Inteligentes: estudo experimental de variant
 
 ## Ambiente e testes locais
 
-Requer Python 3.12 ou superior e pip. Na raiz do repositório:
+Ambientes verificados: Python 3.12 no CI e Python 3.14 em execução local. Requer pip. Na raiz do repositório:
 
 ```bash
 python -m pip install -r requirements-dev.txt
