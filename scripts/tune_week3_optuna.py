@@ -24,7 +24,7 @@ def main():
     parser.add_argument("--trials", type=int, default=30)
     parser.add_argument("--training-seeds", nargs="+", type=int, default=[100, 101, 102])
     parser.add_argument("--instances", nargs="+", type=Path, default=DEFAULT_INSTANCES)
-    parser.add_argument("--output", type=Path, default=Path("results/week3_optuna_v1"))
+    parser.add_argument("--output", type=Path, default=Path("results/week3_optuna_v2"))
     parser.add_argument("--sampler-seed", type=int, default=20261123)
     args = parser.parse_args()
     if args.trials < 2 or not args.training_seeds:
@@ -37,7 +37,7 @@ def main():
 
     db_path = (args.output / "study.db").resolve()
     study = optuna.create_study(
-        study_name="week3_pfsp_makespan_tpe_v1",
+        study_name="week3_pfsp_makespan_tpe_v2",
         storage=f"sqlite:///{db_path.as_posix()}",
         direction="minimize",
         sampler=TPESampler(seed=args.sampler_seed),
@@ -87,7 +87,7 @@ def main():
     params = dict(best.params)
     best_wolves = int(params["n_wolves"])
     metadata = {
-        "protocol": "week3_pfsp_optuna_tpe_v1",
+        "protocol": "week3_pfsp_optuna_tpe_v2",
         "objective": "mean across instances of mean(best_makespan / published_upper_bound)",
         "direction": "minimize", "sampler": "TPESampler", "sampler_seed": args.sampler_seed,
         "n_trials": args.trials, "training_seeds": args.training_seeds,
@@ -98,6 +98,7 @@ def main():
         "best_trial_runtime_seconds": best.user_attrs.get("runtime_seconds"),
         "best_trial_total_evaluations": best.user_attrs.get("total_evaluations"),
         "total_tuning_runtime_seconds": tuning_time,
+        "solver_version": "gwo_pfs_population_replacement_v2",
         "total_tuning_evaluations": args.trials * len(instances) * len(args.training_seeds) * BUDGET,
         "python": sys.version, "platform": platform.platform(),
         "numpy": np.__version__, "optuna": optuna.__version__,
