@@ -7,13 +7,14 @@ recovered or that this format is a canonical Taillard format.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Sequence
 
 import numpy as np
 
 
 def _integer_array(values, *, name: str, ndim: int) -> np.ndarray:
     raw = np.asarray(values)
+    if np.iscomplexobj(raw):
+        raise ValueError(f"{name} must contain real numeric values")
     if raw.ndim != ndim:
         raise ValueError(f"{name} must be {ndim}-dimensional; got shape {raw.shape}")
     if not np.issubdtype(raw.dtype, np.number) or not np.all(np.isfinite(raw)):
