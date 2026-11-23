@@ -82,6 +82,9 @@ def gwo_pfs_fuzzy(
         pool_fitness = np.concatenate((leader_fitness, new_fitness))
         selected = np.argsort(pool_fitness, kind="stable")[:3]
         leaders, leader_fitness = pool_positions[selected].copy(), pool_fitness[selected].copy()
+        # Advance the complete population before the next generation. The elite
+        # leaders are retained separately, while diversity is measured on this new population.
+        positions = new_positions
         improved = int(leader_fitness[0]) < best_fitness
         if improved:
             best_fitness = int(leader_fitness[0])
