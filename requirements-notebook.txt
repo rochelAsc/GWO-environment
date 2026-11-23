@@ -1,0 +1,12 @@
+# Dependências Python usadas pelas células do notebook histórico no Google Colab.
+# O pacote google-colab é fornecido pelo próprio runtime do Colab.
+numpy
+matplotlib
+optuna
+tqdm
+pandas
+seaborn
+scipy
+scikit-optimize
+scikit-learn
+scikit-fuzzy
