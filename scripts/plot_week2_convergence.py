@@ -46,12 +46,12 @@ def main() -> None:
     parser.add_argument(
         "--input",
         type=Path,
-        default=Path("results/week2_baseline_v1/convergence.csv"),
+        default=Path("results/week2_baseline_v2/convergence.csv"),
     )
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path("results/week2_baseline_v1/figures"),
+        default=Path("results/week2_baseline_v2/figures"),
     )
     args = parser.parse_args()
     plot(args.input, args.output)
