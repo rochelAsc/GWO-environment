@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import numpy as np
 from scripts.pfs_taillard import makespan
+from scripts.fuzzy_controller import population_diversity
 
 @dataclass
 class GWOResult:
@@ -10,6 +11,7 @@ class GWOResult:
     best_permutation: np.ndarray
     convergence: np.ndarray
     evaluations: int
+    population_diversity: np.ndarray
 
 def decode_random_keys(keys: np.ndarray) -> np.ndarray:
     keys = np.asarray(keys, dtype=float)
@@ -52,6 +54,7 @@ def gwo_pfs(
     best_position = leaders[0].copy()
     best_fitness = int(leader_fitness[0])
     history = [best_fitness]
+    diversity_history = [population_diversity(positions)]
 
     for iteration in range(iterations):
         progress = iteration / iterations
@@ -77,6 +80,10 @@ def gwo_pfs(
         order = np.argsort(pool_fitness, kind="stable")[:3]
         leaders = pool_positions[order].copy()
         leader_fitness = pool_fitness[order].copy()
+        # Advance the full population. Leaders remain an external elite archive;
+        # without this assignment every generation would evolve from generation 0.
+        positions = new_positions
+        diversity_history.append(population_diversity(positions))
         if int(leader_fitness[0]) < best_fitness:
             best_fitness = int(leader_fitness[0])
             best_position = leaders[0].copy()
@@ -87,4 +94,5 @@ def gwo_pfs(
         best_permutation=decode_random_keys(best_position),
         convergence=np.asarray(history, dtype=np.int64),
         evaluations=evaluations,
+        population_diversity=np.asarray(diversity_history, dtype=float),
     )
