@@ -39,10 +39,10 @@ Depois da validação do piloto, execute o protocolo de 30 seeds:
 ```bash
 python -m scripts.run_week2_benchmark
 python -m pip install matplotlib
-python -m scripts.plot_week2_convergence
+python -m scripts.plot_week2_convergence --input results/week2_baseline_v2/convergence.csv --output results/week2_baseline_v2/figures
 ```
 
-Os padrões são 30 lobos, 500 iterações e seeds 0–29, nas instâncias `ta001` e `ta011`. A saída padrão é `results/week2_baseline_v2/`; os gráficos devem ser gerados nessa mesma pasta. Não execute a bateria completa antes de conferir o tempo do piloto. Os resultados são novos e não substituem os arquivos históricos.
+Os padrões são 30 lobos, 500 iterações e seeds 0–29, nas instâncias `ta001` e `ta011`. A saída padrão é `results/week2_baseline_v2/`; os gráficos devem ser gerados nessa mesma pasta. Não execute a bateria completa antes de conferir o tempo do piloto. Os resultados v2 são novos e não substituem os arquivos v1 preservados.
 
 ## Semana 3 — Optuna com GWO corrigido
 
