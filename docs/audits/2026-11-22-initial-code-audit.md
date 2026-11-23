@@ -19,7 +19,7 @@ A criação do `.gitignore` não remove arquivos já rastreados pelo Git. Foram 
 
 **Impacto:** invalida rastreabilidade e comparabilidade experimental.
 
-**Correção necessária:** falhar explicitamente com `FileNotFoundError` ou erro de parsing contextualizado. Não manter fallback no caminho experimental.
+**Status em 2026-11-22:** corrigido no caminho atualizado do notebook/export: ambos importam `scripts/legacy_pfs.py`, cujo loader falha com `FileNotFoundError` ou `ValueError` contextualizado. O módulo antigo embutido foi removido desses pontos de entrada.
 
 ### L-02 — contrato incorreto/ambíguo de métodos da classe
 
@@ -27,7 +27,7 @@ A criação do `.gitignore` não remove arquivos já rastreados pelo Git. Foram 
 
 **Impacto:** API frágil e erro de execução dependente da forma de chamada.
 
-**Correção necessária:** declarar explicitamente como `@staticmethod` ou movê-los para funções de módulo, após mapear os consumidores.
+**Status em 2026-11-22:** corrigido no módulo atualizado: ambos os métodos são `@staticmethod`; testes cobrem chamada pela classe e pela instância.
 
 ### L-03 — parser legado não valida estrutura suficientemente
 
@@ -35,7 +35,7 @@ O parser assume posições fixas de linhas, não valida rigorosamente IDs de má
 
 **Impacto:** arquivos malformados podem ser mascarados.
 
-**Correção necessária:** caracterizar o formato PFS histórico e implementar parser estrito com testes. Não reutilizar automaticamente o parser DPFSP-DD, pois as famílias têm formatos diferentes.
+**Status em 2026-11-22:** parser estrito e testes de caracterização adicionados em `scripts/legacy_pfs.py` e `tests/test_legacy_pfs.py`. A gramática foi inferida das suposições do parser antigo; sem os arquivos PFS originais, a compatibilidade com todas as instâncias históricas continua não comprovada. Ver `docs/audits/2026-11-22-legacy-pfs-characterization.md`.
 
 ### L-04 — dinâmica do GWO legado é sequencial/in-place
 
@@ -177,8 +177,8 @@ O arquivo `scripts/sistemas_inteligentes_entregavel.py` é um script exportado d
 
 ## 7. Sequência recomendada após esta auditoria
 
-1. Inventariar os arquivos rastreados `__pycache__` e removê-los do índice após a criação do `.gitignore`.
-2. Criar testes de caracterização do parser, avaliador e dinâmica PFS legados; remover fallback sintético no caminho experimental.
+1. **Concluído:** inventariar e remover os arquivos `__pycache__` rastreados.
+2. **Parcialmente concluído:** parser/avaliador caracterizados com fixtures sintéticas e fallback removido do notebook/export atualizado. Falta executar a suíte no ambiente local e validar o parser contra instâncias PFS históricas reais, se forem recuperadas.
 3. **Proveniência parcialmente delimitada:** o responsável confirmou que o material já mapeado é todo o conteúdo utilizado e que não houve outro dataset/conteúdo. O ZIP DPFSP-DD está identificado e auditado; o subconjunto exato de instâncias PFS dos experimentos antigos não foi recuperado. Não afirmar que as 23 instâncias antigas são Taillard sem evidência. Ver `docs/audits/2026-11-22-dataset-provenance.md`.
 4. Congelar uma matriz de aplicabilidade por família. O GWO random-key DPFSP-DD não substitui automaticamente o GWO PFS histórico.
 5. Auditar e refazer Optuna sob orçamento comparável, se a sintonia fizer parte dos resultados novos.
