@@ -1,3 +1,5 @@
+> **REVISÃO CRÍTICA — piloto Fuzzy v1 inválido para avaliar adaptação por diversidade.** O solver Fuzzy também não substituía `positions` por `new_positions`. A diversidade registrada ficou constante dentro de cada execução, então o controlador não observou a evolução da população. O piloto e os CSVs v1 são preservados como evidência do defeito, não como resultado válido do controlador adaptativo. A versão v2 corrige a dinâmica; um novo piloto curto deve ser executado contra a baseline e o tuning v2. Nenhuma bateria de 30 seeds deve ser executada antes de inspecionar esse piloto.
+
 # Semana 5 — Auditoria da reconstrução Fuzzy
 
 **Status:** implementação e protocolo publicados; validação automatizada e execução experimental ainda pendentes.
