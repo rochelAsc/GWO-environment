@@ -55,6 +55,8 @@ def test_gwo_is_reproducible_and_respects_evaluation_budget():
     assert np.array_equal(first.best_permutation, second.best_permutation)
     assert np.array_equal(first.convergence, second.convergence)
     assert first.evaluations == 6 * 9
+    assert first.population_diversity.shape == (9,)
+    assert np.ptp(first.population_diversity) > 1e-9
     assert first.convergence.size == 9
     assert np.all(np.diff(first.convergence) <= 0)
 
