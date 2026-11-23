@@ -80,7 +80,7 @@ A seleção foi feita dentro do conjunto de teste e funciona como diagnóstico d
 
 ## 6. Testes, CI e rastreabilidade
 
-A implementação e os testes da v2 foram cobertos pela CI. A execução GitHub Actions do commit `ec8640d6924c543d27f70fb70e8c69d689403729` concluiu com sucesso (run `45102830749`). A execução posterior associada à publicação da versão principal estava em andamento na última consulta e não é declarada aprovada nesta auditoria.
+A implementação e os testes da v2 foram cobertos pela CI. A execução GitHub Actions do piloto corrigido (commit `ec8640d6924c543d27f70fb70e8c69d689403729`, run `45102830749`) concluiu com sucesso. A execução da versão principal de 2.000 amostras (commit `91f13bb8`, run `45103486452`) também concluiu com sucesso. A atualização desta auditoria gerou o run `45103639754`, que estava na fila na última consulta; esse run verifica a documentação atualizada, não invalida os resultados experimentais já concluídos.
 
 Os resultados registram ambiente Python 3.14.6, Windows 11, NumPy 2.5.1, SciPy 1.18.0 e scikit-learn 1.9.0. Os hashes registrados foram:
 - `ta001`: `fa586022d3a4a759f2d26c4b61c5267e71c00e4016f3307bbe706982df2b42c3`;
