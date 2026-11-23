@@ -18,6 +18,7 @@ import numpy as np
 import scipy
 import sklearn
 from scipy.stats import qmc, spearmanr
+from sklearn.compose import TransformedTargetRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
@@ -74,19 +75,23 @@ def generate_dataset(processing_times: np.ndarray, sample_count: int, seed: int)
 
 
 def build_model(seed: int) -> Pipeline:
+    regressor = MLPRegressor(
+        hidden_layer_sizes=(64, 64),
+        activation="relu",
+        solver="adam",
+        alpha=1e-4,
+        learning_rate_init=1e-3,
+        max_iter=1000,
+        early_stopping=True,
+        validation_fraction=0.15,
+        n_iter_no_change=30,
+        random_state=seed,
+    )
     return Pipeline([
-        ("scale", StandardScaler()),
-        ("mlp", MLPRegressor(
-            hidden_layer_sizes=(64, 64),
-            activation="relu",
-            solver="adam",
-            alpha=1e-4,
-            learning_rate_init=1e-3,
-            max_iter=1000,
-            early_stopping=True,
-            validation_fraction=0.15,
-            n_iter_no_change=30,
-            random_state=seed,
+        ("scale_features", StandardScaler()),
+        ("regressor", TransformedTargetRegressor(
+            regressor=regressor,
+            transformer=StandardScaler(),
         )),
     ])
 
@@ -221,7 +226,7 @@ def evaluate_instance(instance_path: Path, output: Path, sample_count: int, seed
             "max_iter": 1000,
             "early_stopping": True,
             "n_iter_no_change": 30,
-            "n_iter_actual": int(model.named_steps["mlp"].n_iter_),
+            "n_iter_actual": int(model.named_steps["regressor"].regressor_.n_iter_),
             "random_state": seed,
         },
         "metrics": metrics,
