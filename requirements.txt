@@ -3,3 +3,5 @@ optuna>=4.0,<5
 matplotlib
 pandas
 scipy
+scikit-learn>=1.5,<2
+joblib
