@@ -22,7 +22,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt pytest
-      - name: Compile Python sources
-        run: python -m compileall -q scripts tests
+      - name: Compile conventional Python sources
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          # This export is intended for Google Colab/IPython and contains
+          # notebook magics (!pip), so it is not a standalone Python module.
+          excluded = Path("scripts/sistemas_inteligentes_entregavel.py")
+          sources = [
+              path
+              for root in (Path("scripts"), Path("tests"))
+              for path in root.rglob("*.py")
+              if path != excluded
+          ]
+          for path in sources:
+              compile(path.read_text(encoding="utf-8"), str(path), "exec")
+          print(f"Compiled {len(sources)} conventional Python files.")
+          PY
       - name: Run test suite
         run: python -m pytest -q
