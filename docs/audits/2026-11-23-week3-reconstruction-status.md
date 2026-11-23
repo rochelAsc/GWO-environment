@@ -7,7 +7,7 @@
 - Formulação: PFSP Taillard, minimização do makespan.
 - Baseline: results/week2_baseline_v1.
 - Orçamento: 15.030 avaliações por execução.
-- TPE: 30 trials, sampler seed 20261123.
+- TPE: 30 trials, sampler seed 20261123; primeiro trial pré-enfileirado com os parâmetros da baseline.
 - Seeds de sintonia: 100, 101 e 102.
 - Seeds de avaliação final: 0–29, pareadas com a baseline e não usadas na sintonia.
 - Espaço: população {9, 10, 15, 18, 30, 45}; a_start [1,5; 2,5]; a_end [0; 0,5]; expoente [0,5; 2,0].
