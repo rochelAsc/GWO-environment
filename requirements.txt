@@ -1,3 +1,5 @@
 numpy
 optuna>=4.0,<5
 matplotlib
+pandas
+scipy
