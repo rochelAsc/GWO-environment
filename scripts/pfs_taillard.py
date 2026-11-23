@@ -35,7 +35,7 @@ def load_taillard_instance(path: str | Path) -> TaillardInstance:
     for raw in path.read_text(encoding="utf-8-sig").splitlines():
         if "#" in raw:
             comment = raw.split("#", 1)[1]
-            numbers = [int(x) for x in re.findall(r"\\d+", comment)]
+            numbers = [int(x) for x in re.findall(r"\d+", comment)]
             if len(numbers) >= 5:
                 comment_numeric_rows.append(numbers)
         line = raw.split("#", 1)[0].strip()
