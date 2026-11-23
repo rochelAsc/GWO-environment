@@ -1,0 +1,74 @@
+{
+  "protocol": "week4_taillard_pfsp_surrogate_v1",
+  "instance": "ta011",
+  "instance_path": "data\\benchmarks\\taillard\\ta011.txt",
+  "instance_sha256": "16b1e1b2bf1464e5af0f28b7c1aaeed4d65ff00bce51d10f583dfd3fa12a02b6",
+  "jobs": 20,
+  "machines": 10,
+  "published_upper_bound": 1582,
+  "published_lower_bound": 1448,
+  "sample_count_requested": 300,
+  "unique_permutations": 300,
+  "duplicate_rate": 0.0,
+  "train_samples": 240,
+  "test_samples": 60,
+  "seed": 20261123,
+  "feature_encoding": "normalized_job_rank_permutation",
+  "sampling": "scipy_qmc_latin_hypercube_on_random_keys_then_stable_argsort",
+  "model": {
+    "class": "sklearn.neural_network.MLPRegressor",
+    "hidden_layer_sizes": [
+      64,
+      64
+    ],
+    "activation": "relu",
+    "solver": "adam",
+    "alpha": 0.0001,
+    "learning_rate_init": 0.001,
+    "max_iter": 1000,
+    "early_stopping": true,
+    "n_iter_no_change": 30,
+    "n_iter_actual": 54,
+    "random_state": 20261123
+  },
+  "metrics": {
+    "train": {
+      "mse": 3407.6310134965215,
+      "rmse": 58.37491767443036,
+      "mae": 45.36663157487619,
+      "r2": 0.3918431848306586,
+      "spearman_rho": 0.6309503763680585
+    },
+    "test": {
+      "mse": 6132.51743190957,
+      "rmse": 78.31039159594064,
+      "mae": 63.4840341878243,
+      "r2": -0.014679827525347022,
+      "spearman_rho": 0.22383704912357358
+    }
+  },
+  "timing": {
+    "dataset_generation_and_exact_labels_seconds": 0.031860100105404854,
+    "training_seconds": 0.07981580006889999,
+    "test_exact_total_seconds": 0.10153370001353323,
+    "test_exact_seconds_per_prediction": 8.461141667794437e-05,
+    "surrogate_batch_total_seconds": 0.02090099989436567,
+    "surrogate_batch_seconds_per_prediction": 1.741749991197139e-05,
+    "surrogate_single_total_seconds": 0.4292110000969842,
+    "surrogate_single_seconds_per_prediction": 0.0003576758334141535,
+    "timing_repeats": 20
+  },
+  "selection_check": {
+    "top_k_by_predicted_makespan": 10,
+    "best_predicted_makespan": 1959.1224353801567,
+    "best_exact_makespan_among_selected": 1852,
+    "mean_exact_makespan_among_selected": 2032.9
+  },
+  "environment": {
+    "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "scikit_learn": "1.9.0"
+  }
+}
