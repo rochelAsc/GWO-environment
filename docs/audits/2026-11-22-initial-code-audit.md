@@ -9,7 +9,7 @@
 
 Foi criado `.gitignore` para Python, pytest, ambientes virtuais, Jupyter, IDEs, arquivos de sistema e segredos locais. A regra não ignora `results/` globalmente, para não ocultar dados experimentais versionados intencionalmente.
 
-A criação do `.gitignore` não remove arquivos já rastreados pelo Git. A lista de arquivos `__pycache__` rastreados ainda precisa ser obtida e removida do índice em commit separado, preservando os arquivos locais.
+A criação do `.gitignore` não remove arquivos já rastreados pelo Git. Foram encontrados cinco arquivos `.pyc` rastreados em `scripts/__pycache__/` e `tests/__pycache__/`; os cinco foram removidos do repositório em commits separados. Uma nova leitura da árvore Git confirmou que não restam diretórios `__pycache__` nem arquivos `.pyc` rastreados. Os arquivos locais do usuário não foram tocados.
 
 ## 2. Achados críticos no motor legado
 
@@ -179,7 +179,7 @@ O arquivo `scripts/sistemas_inteligentes_entregavel.py` é um script exportado d
 
 1. Inventariar os arquivos rastreados `__pycache__` e removê-los do índice após a criação do `.gitignore`.
 2. Criar testes de caracterização do parser, avaliador e dinâmica PFS legados; remover fallback sintético no caminho experimental.
-3. Confirmar formalmente qual dataset/instâncias pertencem ao PFS Taillard e quais pertencem ao DPFSP-DD. Não assumir que as 23 instâncias do protocolo antigo sejam Taillard.
+3. **Proveniência parcialmente delimitada:** o responsável confirmou que o material já mapeado é todo o conteúdo utilizado e que não houve outro dataset/conteúdo. O ZIP DPFSP-DD está identificado e auditado; o subconjunto exato de instâncias PFS dos experimentos antigos não foi recuperado. Não afirmar que as 23 instâncias antigas são Taillard sem evidência. Ver `docs/audits/2026-11-22-dataset-provenance.md`.
 4. Congelar uma matriz de aplicabilidade por família. O GWO random-key DPFSP-DD não substitui automaticamente o GWO PFS histórico.
 5. Auditar e refazer Optuna sob orçamento comparável, se a sintonia fizer parte dos resultados novos.
 6. Reimplementar Fuzzy com estado encapsulado e orçamento comum.
