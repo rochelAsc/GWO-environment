@@ -101,7 +101,7 @@ Comparar pareadamente o Fuzzy com baseline e tunado por instância, usando os me
 Piloto técnico:
 
 ```bash
-python -m scripts.run_week5_fuzzy --seeds 0 1 2 --output results/week5_fuzzy_pilot
+python -m scripts.run_week5_fuzzy --seeds 0 1 2 --output results/week5_fuzzy_pilot_v2
 ```
 
 Bateria completa:
