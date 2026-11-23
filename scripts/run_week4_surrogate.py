@@ -185,7 +185,7 @@ def benchmark_latency(
         ),
     }
     summary["comparison_basis"] = (
-        "same held-out raw random_keys; exact=decode+makepsan; "
+        "same held-out raw random_keys; exact=decode+makespan; "
         "surrogate=decode+feature_encoding+predict"
     )
     return summary
