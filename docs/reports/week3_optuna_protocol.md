@@ -43,7 +43,7 @@ Cada trial executa as duas instâncias com as mesmas seeds de sintonia (100, 101
 
 A normalização evita que a instância com maior escala numérica domine o objetivo. O upper bound publicado é referência de escala, não afirmação de ótimo provado.
 
-Configuração inicial: 30 trials, TPESampler com seed fixa 20261123. Isso representa 30 × 2 instâncias × 3 seeds = 180 execuções, ou 2.705.400 avaliações de makespan durante a sintonia. O custo de tuning será reportado separadamente.
+Configuração inicial: 30 trials, TPESampler com seed fixa 20261123. O primeiro trial é pré-enfileirado com os parâmetros exatos da baseline da Semana 2; assim, o estudo inclui uma referência explícita e pode selecionar novamente a baseline se as demais configurações não forem melhores nas seeds de sintonia. Isso representa 30 × 2 instâncias × 3 seeds = 180 execuções, ou 2.705.400 avaliações de makespan durante a sintonia. O custo de tuning será reportado separadamente.
 
 ## Avaliação final sem reutilizar seeds de sintonia
 
