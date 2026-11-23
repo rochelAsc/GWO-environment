@@ -1,0 +1,123 @@
+{
+  "protocol": "week5_taillard_pfsp_fuzzy_gwo_v1",
+  "objective": "makespan",
+  "controller": "Mamdani min-max centroid",
+  "inputs": {
+    "diversity": "mean pairwise absolute distance in random-key population",
+    "stagnation": "consecutive generations without global-best improvement / window, clipped to [0,1]"
+  },
+  "output": "exploration multiplier in [0.5,1.5] applied to linear a schedule, then clipped to [0,2]",
+  "rule_matrix_rows_diversity_low_medium_high_columns_stagnation_low_medium_high": [
+    [
+      "medium",
+      "high",
+      "high"
+    ],
+    [
+      "low",
+      "medium",
+      "high"
+    ],
+    [
+      "low",
+      "medium",
+      "high"
+    ]
+  ],
+  "n_wolves": 30,
+  "iterations": 500,
+  "evaluation_budget_per_run": 15030,
+  "stagnation_window": 20,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "comparisons": {
+    "ta001": {
+      "fuzzy_vs_baseline": {
+        "n_pairs": 3,
+        "mean_difference_fuzzy_minus_reference": 0.0,
+        "median_difference": 0.0,
+        "fuzzy_better": 0,
+        "equal": 3,
+        "fuzzy_worse": 0,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_pvalue": 1.0
+      },
+      "fuzzy_vs_tuned": {
+        "n_pairs": 3,
+        "mean_difference_fuzzy_minus_reference": 0.0,
+        "median_difference": 0.0,
+        "fuzzy_better": 0,
+        "equal": 3,
+        "fuzzy_worse": 0,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_pvalue": 1.0
+      },
+      "fuzzy_summary": {
+        "n": 3,
+        "mean": 1265.0,
+        "median": 1265.0,
+        "std_sample": 0.0,
+        "best": 1265.0,
+        "worst": 1265.0,
+        "mean_runtime_seconds": 0.984988100011833
+      }
+    },
+    "ta011": {
+      "fuzzy_vs_baseline": {
+        "n_pairs": 3,
+        "mean_difference_fuzzy_minus_reference": 3.0,
+        "median_difference": 0.0,
+        "fuzzy_better": 1,
+        "equal": 1,
+        "fuzzy_worse": 1,
+        "wilcoxon_statistic": 1.0,
+        "wilcoxon_pvalue": 1.0
+      },
+      "fuzzy_vs_tuned": {
+        "n_pairs": 3,
+        "mean_difference_fuzzy_minus_reference": 10.666666666666666,
+        "median_difference": 14.0,
+        "fuzzy_better": 1,
+        "equal": 0,
+        "fuzzy_worse": 2,
+        "wilcoxon_statistic": 1.5,
+        "wilcoxon_pvalue": 0.75
+      },
+      "fuzzy_summary": {
+        "n": 3,
+        "mean": 1630.6666666666667,
+        "median": 1626.0,
+        "std_sample": 8.082903768654761,
+        "best": 1626.0,
+        "worst": 1640.0,
+        "mean_runtime_seconds": 1.4521401999906327
+      }
+    }
+  },
+  "instances": [
+    {
+      "name": "ta001",
+      "jobs": 20,
+      "machines": 5,
+      "sha256": "fa586022d3a4a759f2d26c4b61c5267e71c00e4016f3307bbe706982df2b42c3",
+      "published_upper_bound": 1278,
+      "path": "data\\benchmarks\\taillard\\ta001.txt"
+    },
+    {
+      "name": "ta011",
+      "jobs": 20,
+      "machines": 10,
+      "sha256": "16b1e1b2bf1464e5af0f28b7c1aaeed4d65ff00bce51d10f583dfd3fa12a02b6",
+      "published_upper_bound": 1582,
+      "path": "data\\benchmarks\\taillard\\ta011.txt"
+    }
+  ],
+  "baseline_file": "results\\week2_baseline_v1\\runs.csv",
+  "tuned_file": "results\\week3_optuna_v1\\final_runs.csv",
+  "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "numpy": "2.5.1"
+}
