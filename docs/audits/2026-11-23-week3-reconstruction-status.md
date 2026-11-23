@@ -1,3 +1,5 @@
+> **REVISÃO CRÍTICA — tuning e avaliação v1 invalidados como evidência de GWO iterativo.** O motor compartilhado não substituía a população após calcular `new_positions`; assim, cada geração partia da população inicial. O estudo Optuna v1 e a avaliação final v1 são preservados, mas não sustentam conclusões sobre o GWO iterativo. A versão corrigida exige nova baseline Semana 2, nova sintonia TPE e nova avaliação held-out, todos com o mesmo solver v2. Novos artefatos: `results/week3_optuna_v2/`. A execução ainda está pendente.
+
 # Semana 3 — Status da reconstrução
 
 **Status:** experimentos concluídos; auditoria dos artefatos concluída; validação CI da correção pendente.
