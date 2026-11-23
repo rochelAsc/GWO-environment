@@ -28,7 +28,7 @@ def test_decoder_is_a_permutation_and_stable_on_ties():
 def test_makespan_matches_hand_calculated_two_job_two_machine_case():
     p = np.array([[2, 3], [4, 1]], dtype=np.int64)
     assert makespan(p, [0, 1]) == 7
-    assert makespan(p, [1, 0]) == 8
+    assert makespan(p, [1, 0]) == 9
 
 
 def test_makespan_matches_exhaustive_reference_for_small_instance():
