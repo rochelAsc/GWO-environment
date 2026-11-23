@@ -7,7 +7,7 @@ Este guia separa os caminhos executáveis e explicita quais artefatos estão dis
 
 ## 1. Requisitos
 
-- Python 3.12 ou superior.
+- Python 3.12 (CI) ou Python 3.14 (validação local registrada).
 - Git.
 - Para testes e scripts locais: `requirements-dev.txt`.
 - Para o notebook histórico no Google Colab: dependências de `requirements-notebook.txt`; `google.colab` é fornecido pelo runtime Colab, não deve ser instalado via pip.
