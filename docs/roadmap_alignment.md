@@ -2,7 +2,9 @@
 
 **Data:** 2026-11-22  
 **Base examinada:** commit c212951b7e3cf9516ca3742cb25889cc0a2a1e84  
-**Preservação:** auditoria aditiva; nenhum artefato histórico foi modificado.
+**Preservação:** documento de planejamento atualizado sem alterar relatórios ou resultados experimentais históricos.
+
+> **Correção de escopo (22/11/2026):** o professor determinou a remoção da etapa de Meta-Learning e não indicou substituta. Portanto, a Semana 7 de Meta-Learning está fora do escopo vigente. Não implementar classificador, meta-dataset ou etapa substituta por iniciativa própria. A proposta registrada na seção 5 abaixo é apenas um registro histórico de planejamento e não constitui tarefa atual.
 
 ## 1. Objetivo
 
@@ -18,7 +20,7 @@ Confrontar o roteiro acadêmico publicado com o estado do repositório e com o p
 | 4 — Surrogate | LHS, MLP/RBF, métricas e custo | Existe experimento exploratório; generalização e avaliação final têm riscos | Treinar por instância, separar por permutação e validar no motor real |
 | 5 — Fuzzy | Entradas de estado, regras, ajuste e histórico | Existe controlador Mamdani; há erro de variável e estado global a investigar | Corrigir em módulo novo e testar isolamento |
 | 6 — Benchmark | Quatro versões, instâncias variadas, estatística e avaliações | Protocolo atual cobre quatro versões, 23 instâncias e duas ablações; ainda não executado | Piloto, auditoria de orçamento e bateria integral |
-| 7 — Meta-Learning | Metacaracterísticas e recomendador de solver | Não existe etapa correspondente no protocolo atual | Especificar meta-dataset e validação por instância |
+| 7 — Meta-Learning | Etapa removida pelo professor; sem substituta | Fora do escopo vigente | Não implementar; registrar a remoção no artigo/apresentação se necessário |
 | 8 — Artigo | Artigo de 8–10 páginas e repositório reproduzível | Planejado, não iniciado | Congelar métodos, resultados, limitações e artefatos |
 
 ## 3. Risco crítico: identidade do problema e compatibilidade das instâncias
@@ -71,7 +73,7 @@ O script histórico deve permanecer intacto. Correções devem nascer em arquivo
 - Contar separadamente treino, inferências e validação real.
 - Métricas de regressão não substituem a avaliação da solução otimizada no motor real.
 
-## 5. Meta-Learning: proposta compatível com o tamanho dos dados
+## 5. Proposta histórica de Meta-Learning (fora do escopo vigente)
 
 A Semana 7 deve ser tratada como experimento separado, dependente de benchmark válido.
 
