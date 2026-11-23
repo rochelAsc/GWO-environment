@@ -1,5 +1,9 @@
 # Semana 5 — Protocolo de reconstrução do GWO com controlador Fuzzy
 
+## 0. Versão corrigida do solver (v2)
+
+O piloto Fuzzy v1 foi executado com a população congelada entre gerações, pois `new_positions` não era atribuída a `positions`. A diversidade observada no traço permaneceu constante; portanto, o controlador não recebeu uma medida atualizada da população. O piloto v1 é preservado como histórico, mas não valida um GWO iterativo nem um controlador adaptativo baseado em diversidade. A versão v2 corrige a evolução da população em ambos os solvers e deve comparar apenas com `results/week2_baseline_v2/runs.csv` e `results/week3_optuna_v2/final_runs.csv`. A nova saída padrão é `results/week5_fuzzy_v2/`.
+
 ## 1. Escopo e decisão de reconstrução
 
 A reconstrução usa o mesmo problema das Semanas 2–4: PFSP de uma fábrica, instâncias Taillard `ta001` e `ta011`, random keys e minimização de makespan. Isso viabiliza uma comparação pareada com os resultados congelados das Semanas 2 e 3.
@@ -13,7 +17,7 @@ O CSV histórico `data/experimental/historico_fuzzy (1).csv` é preservado. Ele 
 - Orçamento: 15.030 avaliações reais por execução.
 - Iterações: 500, pois 30 × (500 + 1) = 15.030.
 - Seeds: 0–29.
-- Comparadores congelados: GWO baseline da Semana 2 e GWO tunado da Semana 3.
+- Comparadores: baseline corrigida v2 da Semana 2 e GWO tunado v2 da Semana 3.
 - Mesmas instâncias, índices de seed e orçamento em todas as versões.
 - Fitness sempre calculado pelo avaliador exato de makespan; o Fuzzy não substitui a função objetivo.
 
