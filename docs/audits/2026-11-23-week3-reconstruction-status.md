@@ -2,7 +2,7 @@
 
 # Semana 3 — Status da reconstrução
 
-**Status:** experimentos concluídos; auditoria dos artefatos concluída; validação CI da correção pendente.
+**Status atual:** implementação v2 publicada; nova bateria de tuning e avaliação pendente. As seções de resultados abaixo documentam exclusivamente a versão v1, hoje invalidada como evidência de GWO iterativo.
 
 ## Escopo e decisões metodológicas
 
@@ -74,10 +74,10 @@ O workflow anterior executava `compileall` indiscriminadamente em `scripts/`. Is
 
 A etapa foi ajustada para compilar todos os arquivos `.py` de `scripts/` e `tests/`, exceto esse export específico. A suíte `pytest` continua sendo executada integralmente. A correção evita tratar sintaxe própria do notebook como erro de módulo Python, sem excluir os módulos convencionais da verificação.
 
-**Atenção:** a alteração do workflow foi publicada, mas a aprovação da CI só poderá ser declarada depois que a nova execução do GitHub Actions terminar com sucesso.
+**Atenção:** esta seção da auditoria registra a CI histórica da v1. A correção v2 tem uma execução de CI própria; consulte o estado do Actions antes de declarar a suíte aprovada para a versão atual.
 
 ## Conclusão
 
-A reconstrução experimental da Semana 3 está concluída e seus resultados foram preservados. A sintonia não demonstrou superioridade consistente sobre a baseline nas duas instâncias avaliadas. A limitação principal é a cobertura de apenas duas instâncias Taillard; não se deve generalizar o resultado para toda a família.
+A reconstrução v1 da Semana 3 está preservada, mas suas conclusões de desempenho foram invalidadas pelo defeito de população congelada. A versão v2 deverá repetir tuning e avaliação, sem reutilizar a baseline v1. A limitação principal é a cobertura de apenas duas instâncias Taillard; não se deve generalizar o resultado para toda a família.
 
-A pendência operacional é confirmar a execução bem-sucedida da CI após a correção do passo de compilação. Esta etapa não altera os resultados experimentais nem substitui a baseline da Semana 2.
+A pendência experimental atual é executar a sintonia e avaliação v2 após a nova baseline v2. A CI valida código e testes, não substitui essas execuções experimentais.
