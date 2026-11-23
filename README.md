@@ -24,12 +24,14 @@ O CI executa a suíte em Python 3.12. A suíte também foi executada localmente 
 
 ## Semana 2 — reconstrução do baseline Taillard/PFSP
 
+> **Importante:** as baterias `week2_baseline_v1`, `week3_optuna_v1` e `week5_fuzzy_v1` foram afetadas por um bug que mantinha a população GWO congelada entre gerações. Elas foram preservadas, mas não são evidência válida de GWO iterativo. Os scripts atuais implementam a correção v2 e usam pastas de saída distintas.
+
 A reconstrução versionada da Semana 2 usa instâncias Taillard de PFSP e minimiza makespan. Ela é independente dos experimentos históricos com tardiness e do solver DPFSP-DD. O protocolo completo está em [`docs/reports/week2_reconstruction_protocol.md`](docs/reports/week2_reconstruction_protocol.md).
 
 Execute primeiro um piloto curto para estimar o custo no seu computador:
 
 ```bash
-python -m scripts.run_week2_benchmark --seeds 3 --wolves 10 --iterations 50 --output results/week2_pilot
+python -m scripts.run_week2_benchmark --seeds 3 --wolves 10 --iterations 50 --output results/week2_pilot_v2
 ```
 
 Depois da validação do piloto, execute o protocolo de 30 seeds:
@@ -40,7 +42,18 @@ python -m pip install matplotlib
 python -m scripts.plot_week2_convergence
 ```
 
-Os padrões são 30 lobos, 500 iterações e seeds 0–29, nas instâncias `ta001` e `ta011`. O script gera `runs.csv`, `convergence.csv` e `metadata.json`; os gráficos são gravados em `results/week2_baseline_v1/figures/`. Não execute a bateria completa antes de conferir o tempo do piloto. Os resultados são novos e não substituem os arquivos históricos.
+Os padrões são 30 lobos, 500 iterações e seeds 0–29, nas instâncias `ta001` e `ta011`. A saída padrão é `results/week2_baseline_v2/`; os gráficos devem ser gerados nessa mesma pasta. Não execute a bateria completa antes de conferir o tempo do piloto. Os resultados são novos e não substituem os arquivos históricos.
+
+## Semana 3 — Optuna com GWO corrigido
+
+Depois de gerar `results/week2_baseline_v2/runs.csv`, execute:
+
+```bash
+python -m scripts.tune_week3_optuna --output results/week3_optuna_v2
+python -m scripts.run_week3_evaluation --config results/week3_optuna_v2/best_params.json --baseline results/week2_baseline_v2/runs.csv --output results/week3_optuna_v2
+```
+
+A sintonia padrão usa 30 trials, seeds de treino 100–102 e orçamento de 15.030 avaliações por execução. A avaliação final usa seeds 0–29, reservadas fora da sintonia.
 
 ## DPFSP-DD
 
@@ -100,7 +113,7 @@ A reconstrução da Semana 5 aplica um controlador Mamdani ao parâmetro de expl
 Execute primeiro o piloto pareado (3 seeds) e confira os artefatos:
 
 ```bash
-python -m scripts.run_week5_fuzzy --seeds 0 1 2 --output results/week5_fuzzy_pilot
+python -m scripts.run_week5_fuzzy --seeds 0 1 2 --output results/week5_fuzzy_pilot_v2
 ```
 
 Depois, se o piloto estiver íntegro, execute as 30 seeds:
@@ -109,4 +122,4 @@ Depois, se o piloto estiver íntegro, execute as 30 seeds:
 python -m scripts.run_week5_fuzzy
 ```
 
-O padrão compara 30 lobos, 500 iterações e 15.030 avaliações por execução com os resultados congelados das Semanas 2 e 3, nas instâncias `ta001` e `ta011`. Os resultados incluem execuções, convergência, traço temporal Fuzzy e comparações pareadas. Não misture esta reconstrução com o histórico de PFS/tardiness nem com DPFSP-DD.
+O padrão compara 30 lobos, 500 iterações e 15.030 avaliações por execução com os resultados v2 das Semanas 2 e 3 ( nas instâncias `ta001` e `ta011`). A saída padrão é `results/week5_fuzzy_v2/`. Os resultados incluem execuções, convergência, traço temporal Fuzzy e comparações pareadas. Não misture esta reconstrução com o histórico de PFS/tardiness nem com DPFSP-DD.
