@@ -24,6 +24,8 @@ O CI executa a suíte em Python 3.12. A suíte também foi executada localmente 
 
 ## Semana 2 — reconstrução do baseline Taillard/PFSP
 
+> **Auditoria da correção:** [causa, impacto, testes e sequência de reexecução](docs/audits/2026-11-23-gwo-population-freeze-correction.md).
+>
 > **Importante:** as baterias `week2_baseline_v1`, `week3_optuna_v1` e `week5_fuzzy_v1` foram afetadas por um bug que mantinha a população GWO congelada entre gerações. Elas foram preservadas, mas não são evidência válida de GWO iterativo. Os scripts atuais implementam a correção v2 e usam pastas de saída distintas.
 
 A reconstrução versionada da Semana 2 usa instâncias Taillard de PFSP e minimiza makespan. Ela é independente dos experimentos históricos com tardiness e do solver DPFSP-DD. O protocolo completo está em [`docs/reports/week2_reconstruction_protocol.md`](docs/reports/week2_reconstruction_protocol.md).
