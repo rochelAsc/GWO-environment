@@ -42,3 +42,21 @@ def test_single_machine_instance_has_defined_adjacent_correlations():
     features = extract_instance_features(np.array([[2], [3], [4]], dtype=np.int64))
     assert features["adjacent_machine_corr_mean"] == 0.0
     assert features["adjacent_machine_corr_std"] == 0.0
+
+
+def test_stratified_taillard_pilot_instances_parse_and_have_finite_features():
+    from pathlib import Path
+    from scripts.pfs_taillard import load_taillard_instance
+
+    expected = {
+        "ta001": (20, 5), "ta011": (20, 10), "ta021": (20, 20),
+        "ta031": (50, 5), "ta041": (50, 10), "ta051": (50, 20),
+        "ta061": (100, 5), "ta071": (100, 10), "ta081": (100, 20),
+        "ta091": (200, 10), "ta101": (200, 20), "ta111": (500, 20),
+    }
+    root = Path("data/benchmarks/taillard")
+    for name, dimensions in expected.items():
+        instance = load_taillard_instance(root / f"{name}.txt")
+        assert (instance.n_jobs, instance.n_machines) == dimensions
+        features = extract_instance_features(instance.processing_times)
+        assert all(np.isfinite(value) for value in features.values())
