@@ -1,0 +1,87 @@
+{
+  "protocol": "week2_taillard_pfsp_gwo_v2",
+  "python": "3.13.18 (main, Oct 26 2026, 15:28:15) [GCC 13.3.0]",
+  "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+  "numpy": "2.4.6",
+  "n_wolves": 30,
+  "iterations": 500,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "evaluations_per_run_expected": 15030,
+  "update_semantics": "synchronous_population_replacement_with_elite_alpha_beta_delta_archive",
+  "encoding": "random_keys_[0,1]_stable_argsort",
+  "a_schedule": "linear_2_to_0",
+  "objective": "makespan",
+  "instances": [
+    {
+      "name": "ta001",
+      "jobs": 20,
+      "machines": 5,
+      "published_seed": 873654221,
+      "published_upper_bound": 1278,
+      "published_lower_bound": 1232,
+      "sha256": "2b0277746a8bdf0da424f4cde45779432ca75ce7c5fafddedc914c82d6483432",
+      "path": "data/benchmarks/taillard/ta001.txt"
+    },
+    {
+      "name": "ta011",
+      "jobs": 20,
+      "machines": 10,
+      "published_seed": 587595453,
+      "published_upper_bound": 1582,
+      "published_lower_bound": 1448,
+      "sha256": "dadcba033e965f2cbf99ef5d1220553e2e974a15250add72bceea415f813c628",
+      "path": "data/benchmarks/taillard/ta011.txt"
+    }
+  ],
+  "summary": [
+    {
+      "instance": "ta001",
+      "n_runs": 30,
+      "mean": 1272.7333333333333,
+      "median": 1265.0,
+      "std_sample": 15.415919522125291,
+      "best": 1265,
+      "worst": 1338
+    },
+    {
+      "instance": "ta011",
+      "n_runs": 30,
+      "mean": 1640.2333333333333,
+      "median": 1634.0,
+      "std_sample": 24.07557545175885,
+      "best": 1626,
+      "worst": 1731
+    }
+  ]
+}

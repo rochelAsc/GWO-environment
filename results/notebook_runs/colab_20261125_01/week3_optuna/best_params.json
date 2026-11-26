@@ -1,0 +1,93 @@
+{
+  "protocol": "week3_pfsp_optuna_tpe_v2",
+  "objective": "mean across instances of mean(best_makespan / published_upper_bound)",
+  "direction": "minimize",
+  "sampler": "TPESampler",
+  "sampler_seed": 20261123,
+  "n_trials": 30,
+  "training_seeds": [
+    100,
+    101,
+    102
+  ],
+  "evaluation_seeds_reserved": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "evaluation_budget_per_run": 15030,
+  "wolf_choices": [
+    9,
+    10,
+    15,
+    18,
+    30,
+    45
+  ],
+  "best_params": {
+    "n_wolves": 45,
+    "a_start": 1.5440503621306245,
+    "a_end": 0.10823255813246829,
+    "a_exponent": 0.5516894986429127
+  },
+  "best_value": 1.0088203755472855,
+  "best_iterations_derived": 333,
+  "best_trial_instance_scores": {
+    "ta001": 0.989827856025039,
+    "ta011": 1.0278128950695322
+  },
+  "best_trial_runtime_seconds": 13.345588991999648,
+  "best_trial_total_evaluations": 90180,
+  "total_tuning_runtime_seconds": 418.6373028109999,
+  "solver_version": "gwo_pfs_population_replacement_v2",
+  "total_tuning_evaluations": 2705400,
+  "python": "3.13.18 (main, Oct 26 2026, 15:28:15) [GCC 13.3.0]",
+  "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+  "numpy": "2.4.6",
+  "optuna": "4.9.0",
+  "instances": [
+    {
+      "name": "ta001",
+      "jobs": 20,
+      "machines": 5,
+      "published_upper_bound": 1278,
+      "sha256": "2b0277746a8bdf0da424f4cde45779432ca75ce7c5fafddedc914c82d6483432",
+      "path": "data/benchmarks/taillard/ta001.txt"
+    },
+    {
+      "name": "ta011",
+      "jobs": 20,
+      "machines": 10,
+      "published_upper_bound": 1582,
+      "sha256": "dadcba033e965f2cbf99ef5d1220553e2e974a15250add72bceea415f813c628",
+      "path": "data/benchmarks/taillard/ta011.txt"
+    }
+  ]
+}

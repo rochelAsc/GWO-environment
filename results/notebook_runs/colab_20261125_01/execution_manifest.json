@@ -1,0 +1,63 @@
+{
+  "run_id": "colab_20261125_01",
+  "created_utc": "2026-11-26T01:44:22.469451+00:00",
+  "repository": "https://github.com/rochelAsc/GWO-environment.git",
+  "branch": "main",
+  "commit": "8c09b360c01227e215e1e037441eb662c19502ba",
+  "instances_sha256": {
+    "ta001.txt": "2b0277746a8bdf0da424f4cde45779432ca75ce7c5fafddedc914c82d6483432",
+    "ta011.txt": "dadcba033e965f2cbf99ef5d1220553e2e974a15250add72bceea415f813c628"
+  },
+  "environment": {
+    "python": "3.13.18 (main, Oct 26 2026, 15:28:15) [GCC 13.3.0]",
+    "platform": "Linux-6.6.159+-x86_64-with-glibc2.39",
+    "packages": {
+      "numpy": "2.4.6",
+      "scipy": "1.16.3",
+      "scikit-learn": "1.6.1",
+      "pandas": "2.2.3",
+      "optuna": "4.9.0",
+      "matplotlib": "3.10.0",
+      "joblib": "1.6.0",
+      "pytest": "8.4.2"
+    }
+  },
+  "protocol": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "wolves": 30,
+    "iterations": 500,
+    "week4_requested_samples_per_instance": 2000,
+    "week6_surrogate_top_k": 3
+  }
+}
