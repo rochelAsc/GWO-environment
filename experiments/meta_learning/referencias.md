@@ -71,8 +71,3 @@ Este arquivo reúne referências utilizadas para fundamentar o experimento de cu
     - Propõe seleção de amostras para surrogate KNN considerando características fenotípicas e genotípicas de heurísticas de scheduling. Reporta redução do tempo de treinamento e melhor qualidade com orçamento comparável.
     - Proximidade: seleção representativa de amostras para surrogate em scheduling.
     - Limitação: dynamic flexible job shop e genetic programming; não é PFSP clássico nem surrogate direto de makespan de permutações.
-
-11. **Graph Neural Networks for Job Shop Scheduling Problems: A Survey (2025).** Computers & Operations Research, 176, 106914. DOI: [10.1016/j.cor.2024.106914](https://doi.org/10.1016/j.cor.2024.106914).
-    - Revisão de representações em grafos e GNNs em job shop e flow shop.
-    - Proximidade: alternativas estruturadas para representar jobs, máquinas e relações de scheduling.
-    - Limitação: revisão ampla; não prova que GNN seja melhor para nosso surrogate. Implementação deve vir depois de baselines tabulares/GBDT.
