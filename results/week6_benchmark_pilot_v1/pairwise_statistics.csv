@@ -1,0 +1,13 @@
+instance,left,right,n_pairs,mean_difference_left_minus_right,median_difference_left_minus_right,left_better,equal,left_worse,wilcoxon_statistic,pvalue_raw,pvalue_holm
+ta001,baseline,optuna,2,0.0,0.0,0,2,0,0.0,1.0,1.0
+ta001,baseline,surrogate,2,-7.0,-7.0,1,1,0,0.0,1.0,1.0
+ta001,baseline,fuzzy,2,-7.0,-7.0,1,1,0,0.0,1.0,1.0
+ta001,optuna,surrogate,2,-7.0,-7.0,1,1,0,0.0,1.0,1.0
+ta001,optuna,fuzzy,2,-7.0,-7.0,1,1,0,0.0,1.0,1.0
+ta001,surrogate,fuzzy,2,0.0,0.0,0,2,0,0.0,1.0,1.0
+ta011,baseline,optuna,2,-21.0,-21.0,2,0,0,0.0,0.5,1.0
+ta011,baseline,surrogate,2,-2.5,-2.5,1,0,1,1.0,1.0,1.0
+ta011,baseline,fuzzy,2,11.5,11.5,0,0,2,0.0,0.5,1.0
+ta011,optuna,surrogate,2,18.5,18.5,0,1,1,0.0,1.0,1.0
+ta011,optuna,fuzzy,2,32.5,32.5,0,0,2,0.0,0.5,1.0
+ta011,surrogate,fuzzy,2,14.0,14.0,0,0,2,0.0,0.5,1.0

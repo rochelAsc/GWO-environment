@@ -1,0 +1,427 @@
+{
+  "protocol": "week6_taillard_four_variant_benchmark_v1",
+  "decision": "docs/decisions/2026-11-25-week6-surrogate-assisted-evaluation.md",
+  "protocol_document": "docs/reports/week6_benchmark_protocol.md",
+  "objective": "minimize PFSP makespan",
+  "variants": [
+    "baseline",
+    "optuna",
+    "surrogate",
+    "fuzzy"
+  ],
+  "seeds": [
+    0,
+    1
+  ],
+  "optuna": {
+    "config_path": "results\\week3_optuna_v2\\best_params.json",
+    "config_sha256": "f884121834b23ccefaa1fb81fd3958eb5b3b4071625a4c6dc81ab4b784c13d06",
+    "parameters": {
+      "n_wolves": 45,
+      "a_start": 1.5440503621306247,
+      "a_end": 0.10823255813246829,
+      "a_exponent": 0.5516894986429128
+    },
+    "iterations": 333,
+    "evaluations_per_run": 15030
+  },
+  "surrogate": {
+    "top_k": 3,
+    "wolves": 30,
+    "iterations": 500,
+    "exact_evaluations_per_run": 1530,
+    "predictions_per_run": 15000,
+    "models": {
+      "ta001": {
+        "path": "results\\week4_surrogate_v2\\ta001\\surrogate.joblib",
+        "sha256": "6858072fecfcd205b8c9b5233c08329dfb324b4c4b7c27dee6dcc05a0c9b7a33",
+        "metrics_path": "results\\week4_surrogate_v2\\ta001\\metrics.json",
+        "dataset_generation_and_exact_labels_seconds": 0.14166600001044571,
+        "training_seconds": 0.2646591999800876,
+        "exact_training_labels": 2000,
+        "test_metrics": {
+          "mse": 1866.9511447438895,
+          "rmse": 43.20823005798652,
+          "mae": 34.10183627146632,
+          "r2": 0.5729696911380979,
+          "spearman_rho": 0.7584811985793666
+        }
+      },
+      "ta011": {
+        "path": "results\\week4_surrogate_v2\\ta011\\surrogate.joblib",
+        "sha256": "b0068ad34461ac4c8e9d90b8f39dd00d0ba7a728fe68067efd6ddebe48559a7a",
+        "metrics_path": "results\\week4_surrogate_v2\\ta011\\metrics.json",
+        "dataset_generation_and_exact_labels_seconds": 0.20647259999532253,
+        "training_seconds": 0.3462789000477642,
+        "exact_training_labels": 2000,
+        "test_metrics": {
+          "mse": 4347.428833913057,
+          "rmse": 65.93503495041962,
+          "mae": 51.383473771245654,
+          "r2": 0.2517433802168467,
+          "spearman_rho": 0.5394148026677689
+        }
+      }
+    },
+    "preparation_exact_labels_total": 4000,
+    "preparation_seconds_total": 0.95907670003362
+  },
+  "instances": [
+    {
+      "name": "ta001",
+      "path": "data\\benchmarks\\taillard\\ta001.txt",
+      "sha256": "fa586022d3a4a759f2d26c4b61c5267e71c00e4016f3307bbe706982df2b42c3",
+      "jobs": 20,
+      "machines": 5,
+      "upper_bound": 1278
+    },
+    {
+      "name": "ta011",
+      "path": "data\\benchmarks\\taillard\\ta011.txt",
+      "sha256": "16b1e1b2bf1464e5af0f28b7c1aaeed4d65ff00bce51d10f583dfd3fa12a02b6",
+      "jobs": 20,
+      "machines": 10,
+      "upper_bound": 1582
+    }
+  ],
+  "expected_runs": 16,
+  "actual_runs": 16,
+  "search_exact_evaluations_total": 186480,
+  "search_surrogate_predictions_total": 60000,
+  "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "numpy": "2.5.1",
+  "scipy": "1.18.0",
+  "analysis": {
+    "ta001": {
+      "n_seeds": 2,
+      "variants": {
+        "baseline": {
+          "n": 2,
+          "mean": 1265.0,
+          "median": 1265.0,
+          "std_sample": 0.0,
+          "minimum": 1265.0,
+          "maximum": 1265.0,
+          "upper_bound_hits": 2,
+          "mean_runtime_seconds": 0.9662564499885775,
+          "median_runtime_seconds": 0.9662564499885775,
+          "mean_exact_evaluation_seconds": 0.9006767493556254,
+          "mean_surrogate_seconds": 0.0,
+          "exact_evaluations_per_run": [
+            15030
+          ],
+          "surrogate_predictions_per_run": [
+            0
+          ]
+        },
+        "optuna": {
+          "n": 2,
+          "mean": 1265.0,
+          "median": 1265.0,
+          "std_sample": 0.0,
+          "minimum": 1265.0,
+          "maximum": 1265.0,
+          "upper_bound_hits": 2,
+          "mean_runtime_seconds": 0.9372166999964975,
+          "median_runtime_seconds": 0.9372166999964975,
+          "mean_exact_evaluation_seconds": 0.886529401584994,
+          "mean_surrogate_seconds": 0.0,
+          "exact_evaluations_per_run": [
+            15030
+          ],
+          "surrogate_predictions_per_run": [
+            0
+          ]
+        },
+        "surrogate": {
+          "n": 2,
+          "mean": 1272.0,
+          "median": 1272.0,
+          "std_sample": 9.899494936611665,
+          "minimum": 1265.0,
+          "maximum": 1279.0,
+          "upper_bound_hits": 1,
+          "mean_runtime_seconds": 0.7528200499946252,
+          "median_runtime_seconds": 0.7528200499946252,
+          "mean_exact_evaluation_seconds": 0.11060999933397397,
+          "mean_surrogate_seconds": 0.5538228500518017,
+          "exact_evaluations_per_run": [
+            1530
+          ],
+          "surrogate_predictions_per_run": [
+            15000
+          ]
+        },
+        "fuzzy": {
+          "n": 2,
+          "mean": 1272.0,
+          "median": 1272.0,
+          "std_sample": 9.899494936611665,
+          "minimum": 1265.0,
+          "maximum": 1279.0,
+          "upper_bound_hits": 1,
+          "mean_runtime_seconds": 0.9950294000445865,
+          "median_runtime_seconds": 0.9950294000445865,
+          "mean_exact_evaluation_seconds": 0.842258949240204,
+          "mean_surrogate_seconds": 0.0,
+          "exact_evaluations_per_run": [
+            15030
+          ],
+          "surrogate_predictions_per_run": [
+            0
+          ]
+        }
+      },
+      "friedman": {
+        "statistic": null,
+        "pvalue": null
+      },
+      "pairwise_wilcoxon_holm": [
+        {
+          "left": "baseline",
+          "right": "optuna",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": 0.0,
+          "median_difference_left_minus_right": 0.0,
+          "left_better": 0,
+          "equal": 2,
+          "left_worse": 0,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "baseline",
+          "right": "surrogate",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": -7.0,
+          "median_difference_left_minus_right": -7.0,
+          "left_better": 1,
+          "equal": 1,
+          "left_worse": 0,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "baseline",
+          "right": "fuzzy",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": -7.0,
+          "median_difference_left_minus_right": -7.0,
+          "left_better": 1,
+          "equal": 1,
+          "left_worse": 0,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "optuna",
+          "right": "surrogate",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": -7.0,
+          "median_difference_left_minus_right": -7.0,
+          "left_better": 1,
+          "equal": 1,
+          "left_worse": 0,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "optuna",
+          "right": "fuzzy",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": -7.0,
+          "median_difference_left_minus_right": -7.0,
+          "left_better": 1,
+          "equal": 1,
+          "left_worse": 0,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "surrogate",
+          "right": "fuzzy",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": 0.0,
+          "median_difference_left_minus_right": 0.0,
+          "left_better": 0,
+          "equal": 2,
+          "left_worse": 0,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        }
+      ]
+    },
+    "ta011": {
+      "n_seeds": 2,
+      "variants": {
+        "baseline": {
+          "n": 2,
+          "mean": 1637.5,
+          "median": 1637.5,
+          "std_sample": 4.949747468305833,
+          "minimum": 1634.0,
+          "maximum": 1641.0,
+          "upper_bound_hits": 0,
+          "mean_runtime_seconds": 1.454030499968212,
+          "median_runtime_seconds": 1.454030499968212,
+          "mean_exact_evaluation_seconds": 1.3980080498149619,
+          "mean_surrogate_seconds": 0.0,
+          "exact_evaluations_per_run": [
+            15030
+          ],
+          "surrogate_predictions_per_run": [
+            0
+          ]
+        },
+        "optuna": {
+          "n": 2,
+          "mean": 1658.5,
+          "median": 1658.5,
+          "std_sample": 26.16295090390226,
+          "minimum": 1640.0,
+          "maximum": 1677.0,
+          "upper_bound_hits": 0,
+          "mean_runtime_seconds": 1.4730209999834187,
+          "median_runtime_seconds": 1.4730209999834187,
+          "mean_exact_evaluation_seconds": 1.4247891987324692,
+          "mean_surrogate_seconds": 0.0,
+          "exact_evaluations_per_run": [
+            15030
+          ],
+          "surrogate_predictions_per_run": [
+            0
+          ]
+        },
+        "surrogate": {
+          "n": 2,
+          "mean": 1640.0,
+          "median": 1640.0,
+          "std_sample": 0.0,
+          "minimum": 1640.0,
+          "maximum": 1640.0,
+          "upper_bound_hits": 0,
+          "mean_runtime_seconds": 0.7189615000388585,
+          "median_runtime_seconds": 0.7189615000388585,
+          "mean_exact_evaluation_seconds": 0.15884474967606366,
+          "mean_surrogate_seconds": 0.4767519004526548,
+          "exact_evaluations_per_run": [
+            1530
+          ],
+          "surrogate_predictions_per_run": [
+            15000
+          ]
+        },
+        "fuzzy": {
+          "n": 2,
+          "mean": 1626.0,
+          "median": 1626.0,
+          "std_sample": 0.0,
+          "minimum": 1626.0,
+          "maximum": 1626.0,
+          "upper_bound_hits": 0,
+          "mean_runtime_seconds": 1.648622999957297,
+          "median_runtime_seconds": 1.648622999957297,
+          "mean_exact_evaluation_seconds": 1.4798521008342505,
+          "mean_surrogate_seconds": 0.0,
+          "exact_evaluations_per_run": [
+            15030
+          ],
+          "surrogate_predictions_per_run": [
+            0
+          ]
+        }
+      },
+      "friedman": {
+        "statistic": null,
+        "pvalue": null
+      },
+      "pairwise_wilcoxon_holm": [
+        {
+          "left": "baseline",
+          "right": "optuna",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": -21.0,
+          "median_difference_left_minus_right": -21.0,
+          "left_better": 2,
+          "equal": 0,
+          "left_worse": 0,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 0.5,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "baseline",
+          "right": "surrogate",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": -2.5,
+          "median_difference_left_minus_right": -2.5,
+          "left_better": 1,
+          "equal": 0,
+          "left_worse": 1,
+          "wilcoxon_statistic": 1.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "baseline",
+          "right": "fuzzy",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": 11.5,
+          "median_difference_left_minus_right": 11.5,
+          "left_better": 0,
+          "equal": 0,
+          "left_worse": 2,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 0.5,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "optuna",
+          "right": "surrogate",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": 18.5,
+          "median_difference_left_minus_right": 18.5,
+          "left_better": 0,
+          "equal": 1,
+          "left_worse": 1,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 1.0,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "optuna",
+          "right": "fuzzy",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": 32.5,
+          "median_difference_left_minus_right": 32.5,
+          "left_better": 0,
+          "equal": 0,
+          "left_worse": 2,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 0.5,
+          "pvalue_holm": 1.0
+        },
+        {
+          "left": "surrogate",
+          "right": "fuzzy",
+          "n_pairs": 2,
+          "mean_difference_left_minus_right": 14.0,
+          "median_difference_left_minus_right": 14.0,
+          "left_better": 0,
+          "equal": 0,
+          "left_worse": 2,
+          "wilcoxon_statistic": 0.0,
+          "pvalue_raw": 0.5,
+          "pvalue_holm": 1.0
+        }
+      ]
+    }
+  }
+}
