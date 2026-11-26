@@ -355,6 +355,7 @@ def run_instance(
                     sampling_seed = uniform_seed
                     X_train = X_uniform[:sample_count]
                     y_train = y_uniform[:sample_count]
+                    permutations_train = permutations_uniform[:sample_count]
                     generation_seconds = uniform_label_time_per_sample * sample_count
 
                 distribution, position_counts, pairwise_precedence = (
