@@ -1,7 +1,7 @@
 # Protocolo v2 — correção do LHS e auditoria de distribuição
 
 **Data:** 26/11/2026  
-**Status:** implementação versionada; resultados experimentais ainda não executados.
+**Status:** implementação versionada e CI aprovado (workflow 45843900495); resultados experimentais ainda não executados.
 
 ## Objetivo
 
