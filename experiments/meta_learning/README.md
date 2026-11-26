@@ -103,6 +103,32 @@ Regras:
 - testar invariância do extrator a mudanças de caminho/nome do arquivo;
 - calcular qualquer padronização/seleção de features dentro do fold de treino, nunca sobre o dataset completo.
 
+## 4.1 Implementação inicial do extrator
+
+O primeiro componente implementado é `scripts/extract_instance_features.py`. Ele calcula, exclusivamente a partir da matriz de tempos de processamento:
+
+- dimensões e razão jobs/máquinas;
+- estatísticas globais dos tempos de processamento;
+- estatísticas das cargas agregadas por job;
+- estatísticas das cargas agregadas por máquina;
+- concentração relativa da carga nas máquinas;
+- dispersão dos coeficientes de variação por máquina;
+- correlações entre colunas de máquinas adjacentes, calculadas sobre os jobs.
+
+A saída inclui identificador, SHA-256 e versão do extrator para proveniência. Esses campos são metadados e **não podem entrar como preditores**. O script não usa UB/LB, makespan, resultados de algoritmos, seed ou caminho/nome como característica.
+
+Execução a partir da raiz do repositório:
+
+```bash
+python -m experiments.meta_learning.scripts.extract_instance_features \
+  --input-dir data/benchmarks/taillard \
+  --output experiments/meta_learning/data/instance_features.csv
+```
+
+Testes específicos: `python -m pytest -q tests/test_meta_learning_features.py`.
+
+Esta implementação é inicial e ainda precisa ser executada no ambiente do projeto, revisada contra instâncias de todas as dimensões e congelada com uma versão formal antes da construção da meta-base.
+
 ## 5. Alvos e normalização
 
 O objetivo primário permanece qualidade da solução. Para cada instância (i), variante (v) e seed (s), armazenar o makespan final (C_{i,v,s}), runtime e contadores.
