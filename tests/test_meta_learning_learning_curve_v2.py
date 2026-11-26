@@ -33,10 +33,8 @@ def test_lhs_design_is_global_and_each_dimension_occupies_each_stratum_once():
 
 def test_lhs_dataset_returns_exact_labels_and_unique_permutations():
     processing_times = np.array([
-        [2, 3, 4, 5, 2, 4, 3, 5],
-        [3, 2, 5, 4, 3, 5, 2, 4],
-        [4, 5, 2, 3, 5, 2, 4, 3],
-        [2, 4, 3, 5, 4, 3, 5, 2],
+        [2, 3, 4], [3, 2, 5], [4, 5, 2], [2, 4, 3],
+        [5, 3, 2], [4, 2, 5], [3, 5, 4], [5, 4, 3],
     ])
     X, y, permutations, attempts = generate_lhs_dataset(
         processing_times, 20, 789, max_attempts=100
