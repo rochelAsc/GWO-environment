@@ -43,6 +43,7 @@ Este arquivo reúne referências utilizadas para fundamentar o experimento de cu
 7. **Mario Andrés Muñoz e Michael Kirley (2021).** *Sampling Effects on Algorithm Selection for Continuous Black-Box Optimization.* Algorithms, 14(1), 19. DOI: [10.3390/a14010019](https://doi.org/10.3390/a14010019).
    - Estuda efeitos do tamanho/amostragem sobre características e seleção automática de algoritmos em otimização contínua black-box.
    - Para comparar tamanhos amostrais, divide um intervalo entre 100D e 1.000D em cinco intervalos igualmente espaçados em escala logarítmica, resultando em fatores {100, 178, 316, 562, 1.000} × D; usa Latin Hypercube Sampling.
+- Representando matematicamente os cinco níveis descritos no artigo, podemos escrever \(N_i = 10^{(2+i/4)}D\), para \(i=0,1,2,3,4\). Essa expressão é a reconstrução algébrica do espaçamento logarítmico e dos limites reportados (não uma transcrição de uma equação explicitamente numerada pelos autores).
    - É a justificativa metodológica mais direta, entre as referências consultadas, para usar níveis geometricamente espaçados em vez de incrementos lineares.
    - Limitação: domínio contínuo e amostragem de features ELA; não estabelece que a mesma curva seja ótima para PFSP. Usamos o princípio de espaçamento logarítmico como desenho de experimento, não os valores absolutos.
 
