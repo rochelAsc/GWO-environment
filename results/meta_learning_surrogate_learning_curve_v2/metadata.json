@@ -1,0 +1,58 @@
+{
+  "protocol": "meta_learning_surrogate_learning_curve_v2",
+  "growth_function": "round(N_min * (N_max/N_min) ** (i/(K-1)))",
+  "sample_sizes": [
+    300,
+    573,
+    1095,
+    2093,
+    4000
+  ],
+  "growth_ratio": 1.9108855844087336,
+  "repeats": 5,
+  "test_samples_per_instance": 1000,
+  "base_seed": 20261128,
+  "sampling_methods": [
+    "lhs_random_keys",
+    "uniform_permutations"
+  ],
+  "lhs_design": "one global N-point LatinHypercube design per size/repetition; decoded collisions discard the entire design and trigger a deterministic complete-design retry; blocks are never concatenated",
+  "lhs_max_attempts": 100,
+  "distribution_diagnostics": {
+    "position_frequencies": "computed over every training permutation",
+    "pairwise_precedence": "estimated from a deterministic subset of at most 512 permutations",
+    "kendall_distance": "distance to the first permutation in the diagnostic subset",
+    "arrays_saved": false,
+    "permutations_saved": false,
+    "permutation_hash": "SHA-256 of contiguous int32 permutation matrix"
+  },
+  "software_versions": {
+    "python": "3.12.3",
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "scikit_learn": "1.9.1"
+  },
+  "test_design": "fixed independent uniform permutations per instance, shared across all training sizes and repetitions",
+  "training_design": {
+    "lhs_random_keys": "one global N-point LHS design for each size and repetition; stable argsort decoder; complete-design retries on decoded duplicates",
+    "uniform_permutations": "one maximum-size uniform permutation set per repetition; smaller sizes are nested prefixes"
+  },
+  "model": "scripts.run_week4_surrogate.build_model; MLP 64x64 with feature and target scaling",
+  "instances": [
+    {
+      "path": "data/benchmarks/taillard/ta071.txt",
+      "sha256": "763dcae34b9fe2eb586ec6ef66f9a92c0bbf909cacf7a8647921c7e1f602f7d9",
+      "name": "ta071"
+    },
+    {
+      "path": "data/benchmarks/taillard/ta111.txt",
+      "sha256": "9f51c10368fa9d8c43f0c476f52c33499b86be42336f73da76a5c6d5e8895fe9",
+      "name": "ta111"
+    }
+  ],
+  "parallel_execution": false,
+  "literature_basis": [
+    "Framinan (2025), DOI 10.1049/cim2.70049: PFSP stochastic, GBT, sample sizes 10/100/1000",
+    "Muñoz and Kirley (2021), DOI 10.3390/a14010019: logarithmically spaced sample sizes and LHS"
+  ]
+}
