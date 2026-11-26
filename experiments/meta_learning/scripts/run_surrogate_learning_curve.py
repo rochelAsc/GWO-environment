@@ -8,7 +8,6 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import math
 import time
 from pathlib import Path
 
@@ -34,14 +33,6 @@ def geometric_sample_sizes(minimum: int = 300, maximum: int = 4000, points: int 
     if len(set(values)) != points:
         raise ValueError("sample-size range is too narrow for the requested number of points")
     return values
-
-
-def _unique_permutation(permutation: np.ndarray, n_jobs: int) -> bool:
-    return (
-        permutation.ndim == 1
-        and permutation.size == n_jobs
-        and np.array_equal(np.sort(permutation), np.arange(n_jobs))
-    )
 
 
 def generate_uniform_permutations(
@@ -212,6 +203,7 @@ def run_instance(
         processing_times, test_samples, test_seed
     )
     test_generation_seconds = time.perf_counter() - test_start
+    test_permutation_keys = {tuple(int(value) for value in row) for row in permutations_test}
     np.savez_compressed(
         instance_output / "fixed_test_set.npz",
         X_test=X_test,
@@ -225,10 +217,13 @@ def run_instance(
         # Uniform-permutation arm: one maximum design, nested prefixes.
         uniform_seed = base_seed + repetition * 10_000 + 101
         uniform_start = time.perf_counter()
-        X_uniform, y_uniform, _ = generate_uniform_permutations(
+        X_uniform, y_uniform, permutations_uniform = generate_uniform_permutations(
             processing_times, max_samples, uniform_seed
         )
         uniform_total_generation = time.perf_counter() - uniform_start
+        uniform_keys = {tuple(int(value) for value in row) for row in permutations_uniform}
+        if uniform_keys & test_permutation_keys:
+            raise RuntimeError("uniform training and fixed test sets overlap")
         uniform_label_time_per_sample = uniform_total_generation / max_samples
 
         for sample_count in sizes:
@@ -239,11 +234,15 @@ def run_instance(
                 )
                 if method == "lhs_random_keys":
                     generation_start = time.perf_counter()
-                    X_train, y_train, _ = generate_lhs_dataset(
+                    X_train, y_train, permutations_train = generate_lhs_dataset(
                         processing_times, sample_count, sampling_seed
                     )
                     generation_seconds = time.perf_counter() - generation_start
+                    lhs_keys = {tuple(int(value) for value in row) for row in permutations_train}
+                    if lhs_keys & test_permutation_keys:
+                        raise RuntimeError("LHS training and fixed test sets overlap")
                 else:
+                    sampling_seed = uniform_seed
                     X_train = X_uniform[:sample_count]
                     y_train = y_uniform[:sample_count]
                     generation_seconds = uniform_label_time_per_sample * sample_count
