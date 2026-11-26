@@ -1,6 +1,6 @@
 # Protocolo — Curva de aprendizagem do surrogate PFSP
 
-**Status:** protocolo definido; implementação/execução pendente. Nenhum resultado da curva foi produzido por este documento.
+**Status:** v1 executada e auditada em 26/11/2026. Resultados em results/meta_learning_surrogate_learning_curve_v1/. Esta versão registra o protocolo planejado e as diferenças encontradas na implementação; consulte a seção de auditoria ao final.
 
 ## 1. Pergunta
 
@@ -31,7 +31,7 @@ A função é preferível a incrementos lineares porque cada etapa aumenta aprox
 ## 4. Fatores e repetições
 
 - Instâncias: ta071 e ta111.
-- Tamanhos: 300, 574, 1.098, 2.103, 4.000.
+- Tamanhos efetivos: 300, 573, 1.095, 2.093 e 4.000.
 - Repetições independentes por ponto: 5.
 - Amostragem: dois braços — (A) LHS em random keys seguido de stable argsort, que preserva o procedimento atual; (B) permutações uniformes geradas diretamente.
 - Teste: um conjunto externo fixo de 1.000 permutações uniformes por instância, gerado com seed separada e compartilhado por todos os tamanhos, métodos e repetições.
@@ -106,3 +106,27 @@ Ver experiments/meta_learning/referencias.md, especialmente Framinan (2025), Mu�
 ### Nota de implementação — amostras LHS decodificadas
 
 A transformação de random keys em permutações por `stable argsort` é muitos-para-um: diferentes pontos LHS podem decodificar para a mesma permutação. O gerador, portanto, descarta duplicatas e continua sorteando novos lotes LHS até obter N permutações distintas (com limite de tentativas e validação de que N não excede N!). O N reportado é sempre o número de permutações únicas efetivamente rotuladas, não o número bruto de vetores de random keys gerados. Essa deduplicação deve ser considerada ao interpretar a distribuição induzida pelo braço LHS.
+
+
+## 10. Status e resultados da execução v1 (26/11/2026)
+
+A execução gerou 100 linhas: 2 instâncias × 2 métodos × 5 tamanhos × 5 repetições.
+
+- ta071: RMSE caiu de aproximadamente 160 para 140; Spearman chegou a 0,38–0,40; R² final aproximadamente 0,14–0,15.
+- ta111: RMSE caiu de aproximadamente 382–387 para 342–343; Spearman chegou a aproximadamente 0,14; R² permaneceu negativo.
+- top-k recall permaneceu baixo, inclusive em N=4.000. Mais amostras ajudam a regressão, mas não tornam o surrogate confiável para selecionar os melhores candidatos.
+- LHS e uniforme não apresentam vencedor consistente.
+
+### Divergência de implementação: LHS em blocos
+
+O gerador v1 limitou cada chamada a 512 random keys e concatenou chamadas subsequentes. Para os tamanhos usados, os blocos foram: 300; 512+61; 512+512+71; 512×4+45; 512×7+416. Assim, os resultados devem ser descritos como **LHS em blocos + stable argsort + deduplicação**, e não como um LHS global de N pontos. A próxima versão deve gerar um design LHS único por tamanho e registrar tentativas/duplicatas.
+
+### Representação e domínio de teste
+
+A entrada da MLP é o vetor de posições normalizadas por job, de dimensão 100 ou 500. A representação é bijetiva, mas não codifica explicitamente adjacência, precedência ou a estrutura de conclusão do PFSP. O teste externo contém apenas permutações uniformes; não mede a distribuição de candidatos produzidos pelo GWO.
+
+As permutações individuais de treino não foram salvas na v1, e o metadata não registra a versão do SciPy. Portanto, a auditoria permite análise do gerador e das seeds, mas não garante reconstrução exata dos draws. A próxima execução deverá persistir diagnósticos de distribuição e versões do ambiente.
+
+### Próxima etapa
+
+Antes de aumentar N, comparar MLP, GBDT/HistGradientBoosting e ExtraTrees nos mesmos dados; testar ranking pareado em seguida; e avaliar um conjunto externo de candidatos de trajetórias GWO. Ver o relatório surrogate_failure_analysis_2026-11-26.md para diagnóstico, literatura e plano detalhado.
