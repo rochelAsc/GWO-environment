@@ -76,11 +76,13 @@ python -m scripts.run_gwo_pilot data/instances/DPFSP_DD.zip
 
 O piloto usa três instâncias representativas, quatro combinações de população/decaimento, três sementes e 990 avaliações reais por execução. Os arquivos são gravados em `results/gwo_pilot/`. É um piloto técnico, não a bateria experimental confirmatória. Fuzzy e Surrogate não estão incluídos nessa implementação DPFSP-DD.
 
-## Notebook histórico PFS
+## Notebook reproduzível — Semanas 1–6
 
-O notebook [`notebooks/Sistemas_Inteligentes_Entregavel.ipynb`](notebooks/Sistemas_Inteligentes_Entregavel.ipynb) é um artefato histórico destinado ao Google Colab. Ele usa recursos `google.colab.files`, comandos mágicos e upload interativo. Abra o notebook no Colab e execute a partir de uma cópia/clonagem do repositório, de modo que `scripts/legacy_pfs.py` esteja disponível na raiz de trabalho.
+O notebook [`notebooks/Sistemas_Inteligentes_Entregavel.ipynb`](notebooks/Sistemas_Inteligentes_Entregavel.ipynb) foi atualizado como interface de reprodução no Google Colab. Ele instala as dependências, registra o ambiente, executa a suíte de testes e chama os scripts oficiais das Semanas 2–6. As baterias completas começam desativadas e escrevem em `results/notebook_runs/<RUN_ID>/`, evitando sobrescrever resultados publicados. Leia e habilite as etapas em ordem.
 
-Esse notebook espera instâncias do formato PFS legado. **Não use `data/instances/DPFSP_DD.zip` nele:** são formulações diferentes. As instâncias PFS exatas dos experimentos históricos não foram recuperadas para este repositório; portanto, não é possível prometer reprodução integral desses resultados apenas com os arquivos atualmente versionados. O export `scripts/sistemas_inteligentes_entregavel.py` contém magics do Colab e não deve ser executado como um script Python convencional.
+A Semana 1 é registrada como histórico teórico e mudança de escopo: a proposta original dengue/LSTM não possui pipeline executável completo no estado atual. As Semanas 2–6 reproduzem a linha corrigida PFSP/Taillard/makespan. Os experimentos históricos PFS/tardiness permanecem separados e não são reproduzidos por esse pipeline.
+
+A versão anterior do notebook foi preservada em [`notebooks/Sistemas_Inteligentes_Entregavel_historico_2026-11-25.ipynb`](notebooks/Sistemas_Inteligentes_Entregavel_historico_2026-11-25.ipynb).
 
 ## Guia de reprodução e limites da entrega
 
