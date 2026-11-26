@@ -22,9 +22,9 @@ Usaremos uma progressão geométrica com cinco pontos, mínimo de 300 e máximo 
 
 N_i = round(N_min × (N_max / N_min)^(i / (K − 1))), para i = 0,...,K−1.
 
-Com N_min=300, N_max=4000 e K=5, a razão constante é r=(4000/300)^(1/4)≈1,915.
+Com N_min=300, N_max=4000 e K=5, a razão constante é r=(4000/300)^(1/4)≈1,911.
 
-Tamanhos resultantes (arredondados): **300, 574, 1.098, 2.103 e 4.000**.
+Tamanhos resultantes (arredondados): **300, 573, 1.095, 2.093 e 4.000**.
 
 A função é preferível a incrementos lineares porque cada etapa aumenta aproximadamente pela mesma proporção. Isso permite observar ganhos iniciais e saturação sem escolher arbitrariamente vários pontos próximos uns dos outros. O limite 4.000 é um teto inicial de viabilidade, não uma alegação de suficiência.
 
@@ -101,3 +101,8 @@ Não definir um limiar universal de R² para declarar o surrogate útil. A final
 ## 9. Referências
 
 Ver experiments/meta_learning/referencias.md, especialmente Framinan (2025), Muñoz e Kirley (2021), Harada (2023), Liu et al. (2024) e Zhu et al. (2023).
+
+
+### Nota de implementação — amostras LHS decodificadas
+
+A transformação de random keys em permutações por `stable argsort` é muitos-para-um: diferentes pontos LHS podem decodificar para a mesma permutação. O gerador, portanto, descarta duplicatas e continua sorteando novos lotes LHS até obter N permutações distintas (com limite de tentativas e validação de que N não excede N!). O N reportado é sempre o número de permutações únicas efetivamente rotuladas, não o número bruto de vetores de random keys gerados. Essa deduplicação deve ser considerada ao interpretar a distribuição induzida pelo braço LHS.
