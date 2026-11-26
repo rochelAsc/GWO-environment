@@ -10,7 +10,7 @@ from experiments.meta_learning.scripts.run_surrogate_learning_curve import (
 
 
 def test_geometric_sample_sizes_match_log_spaced_protocol():
-    assert geometric_sample_sizes(300, 4000, 5) == [300, 574, 1098, 2103, 4000]
+    assert geometric_sample_sizes(300, 4000, 5) == [300, 573, 1095, 2093, 4000]
 
 
 @pytest.mark.parametrize(
