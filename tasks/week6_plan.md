@@ -16,38 +16,38 @@ Comparar Baseline, Optuna, Surrogate assistido e Fuzzy no PFSP/Taillard (`ta001`
 
 ## Fase 1 — Inventário e contratos
 
-- [ ] Confirmar parâmetros congelados do Optuna v2 em `results/week3_optuna_v2/best_params.json`.
-- [ ] Confirmar artefatos, hashes e metadados dos modelos da Semana 4.
-- [ ] Confirmar parâmetros e contrato de execução do Fuzzy v2.
-- [ ] Definir interfaces comuns para resultados, convergência e instrumentação de tempo.
-- [ ] Confirmar dependências estatísticas disponíveis no ambiente/CI.
-- [ ] Registrar os hashes das instâncias e dos modelos no manifesto do benchmark.
+- [x] Confirmar parâmetros congelados do Optuna v2 em `results/week3_optuna_v2/best_params.json`.
+- [x] Confirmar artefatos, hashes e metadados dos modelos da Semana 4.
+- [x] Confirmar parâmetros e contrato de execução do Fuzzy v2.
+- [x] Definir interfaces comuns para resultados, convergência e instrumentação de tempo.
+- [x] Confirmar dependências estatísticas disponíveis no ambiente/CI.
+- [x] Registrar os hashes das instâncias e dos modelos no manifesto do benchmark.
 
 **Checkpoint 1:** entradas e parâmetros identificados; nenhuma execução iniciada com configuração ambígua.
 
 ## Fase 2 — Implementar e testar o Surrogate assistido
 
-- [ ] Criar solver separado para GWO assistido, sem alterar Baseline, Optuna ou Fuzzy.
-- [ ] Reutilizar o decoder e a extração de features da Semana 4.
-- [ ] Avaliar exatamente a população inicial (30).
-- [ ] Em cada geração, prever em lote os 30 candidatos e reavaliar exatamente os três melhores previstos.
-- [ ] Atualizar líderes, melhor solução e convergência apenas com fitness exato.
-- [ ] Registrar previsões, seleção top-3, reavaliações, duplicatas, tempo de inferência e tempo de avaliação exata.
-- [ ] Testar contadores: 1.530 avaliações exatas e 15.000 previsões por execução.
-- [ ] Testar determinismo, clipping, ranking top-3 e isolamento do arquivo de líderes contra fitness previsto.
-- [ ] Testar que o modelo permanece congelado.
+- [x] Criar solver separado para GWO assistido, sem alterar Baseline, Optuna ou Fuzzy.
+- [x] Reutilizar o decoder e a extração de features da Semana 4.
+- [x] Avaliar exatamente a população inicial (30).
+- [x] Em cada geração, prever em lote os 30 candidatos e reavaliar exatamente os três melhores previstos.
+- [x] Atualizar líderes, melhor solução e convergência apenas com fitness exato.
+- [x] Registrar previsões, seleção top-3, reavaliações, duplicatas, tempo de inferência e tempo de avaliação exata.
+- [x] Testar contadores: 1.530 avaliações exatas e 15.000 previsões por execução.
+- [x] Testar determinismo, clipping, ranking top-3 e isolamento do arquivo de líderes contra fitness previsto.
+- [x] Testar que o modelo permanece congelado (solver não chama treino/fit).
 
 **Checkpoint 2:** testes unitários e de integração aprovados; nenhuma previsão pode aparecer como resultado real.
 
 ## Fase 3 — Runner e instrumentação
 
-- [ ] Criar runner único para as quatro variantes e duas instâncias.
-- [ ] Congelar seeds 0–29 e parâmetros definidos no protocolo.
-- [ ] Medir tempo total, avaliação exata, inferência e preparação do Surrogate separadamente.
-- [ ] Reutilizar os modelos da Semana 4; registrar caminho e SHA-256.
-- [ ] Implementar persistência incremental e validação de combinações ausentes/duplicadas.
-- [ ] Gerar CSVs brutos, logs de seleção Surrogate e JSON de metadados.
-- [ ] Implementar retomada sem duplicar execuções concluídas.
+- [x] Criar runner único para as quatro variantes e duas instâncias.
+- [x] Congelar seeds 0–29 e parâmetros definidos no protocolo.
+- [x] Medir tempo total, avaliação exata, inferência e preparação do Surrogate separadamente.
+- [x] Reutilizar os modelos da Semana 4; registrar caminho e SHA-256.
+- [x] Implementar persistência incremental e validação de combinações ausentes/duplicadas.
+- [x] Gerar CSVs brutos, logs de seleção Surrogate e JSON de metadados.
+- [x] Implementar retomada sem duplicar execuções concluídas.
 
 **Checkpoint 3:** runner validado em poucas seeds e resultados reproduzíveis.
 
