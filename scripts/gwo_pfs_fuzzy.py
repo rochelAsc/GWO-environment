@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import time
 import numpy as np
 
 from scripts.fuzzy_controller import MamdaniGWOController, population_diversity
@@ -16,6 +17,7 @@ class FuzzyGWOResult:
     convergence: np.ndarray
     evaluations: int
     trace: list[dict[str, float | int]]
+    exact_evaluation_seconds: float
 
 
 def gwo_pfs_fuzzy(
@@ -28,12 +30,7 @@ def gwo_pfs_fuzzy(
     a_start: float = 2.0,
     a_end: float = 0.0,
 ) -> FuzzyGWOResult:
-    """Run GWO under the Week 5 fixed evaluation budget.
-
-    The linear schedule is the reference envelope. Mamdani output scales its
-    current a value in [0.5, 1.5], clipped to [0, 2]. Stagnation is the
-    number of consecutive non-improving generations divided by a fixed window.
-    """
+    """Run GWO under the Week 5 fixed evaluation budget."""
     p = np.asarray(processing_times)
     if p.ndim != 2 or p.shape[0] == 0 or p.shape[1] == 0:
         raise ValueError("processing_times must be a non-empty matrix")
@@ -45,8 +42,17 @@ def gwo_pfs_fuzzy(
     rng = np.random.default_rng(seed)
     controller = MamdaniGWOController()
     n_jobs = p.shape[0]
+    exact_evaluation_seconds = 0.0
+
+    def evaluate(keys):
+        nonlocal exact_evaluation_seconds
+        started = time.perf_counter()
+        value = makespan(p, decode_random_keys(keys))
+        exact_evaluation_seconds += time.perf_counter() - started
+        return value
+
     positions = rng.uniform(0.0, 1.0, size=(n_wolves, n_jobs))
-    fitness = np.asarray([makespan(p, decode_random_keys(w)) for w in positions], dtype=np.int64)
+    fitness = np.asarray([evaluate(w) for w in positions], dtype=np.int64)
     evaluations = n_wolves
     order = np.argsort(fitness, kind="stable")[:3]
     leaders, leader_fitness = positions[order].copy(), fitness[order].copy()
@@ -73,17 +79,13 @@ def gwo_pfs_fuzzy(
             distance = np.abs(C * leader[None, :] - positions)
             candidates.append(leader[None, :] - A * distance)
         new_positions = np.clip(np.mean(candidates, axis=0), 0.0, 1.0)
-        new_fitness = np.asarray(
-            [makespan(p, decode_random_keys(w)) for w in new_positions], dtype=np.int64
-        )
+        new_fitness = np.asarray([evaluate(w) for w in new_positions], dtype=np.int64)
         evaluations += n_wolves
 
         pool_positions = np.vstack((leaders, new_positions))
         pool_fitness = np.concatenate((leader_fitness, new_fitness))
         selected = np.argsort(pool_fitness, kind="stable")[:3]
         leaders, leader_fitness = pool_positions[selected].copy(), pool_fitness[selected].copy()
-        # Advance the complete population before the next generation. The elite
-        # leaders are retained separately, while diversity is measured on this new population.
         positions = new_positions
         improved = int(leader_fitness[0]) < best_fitness
         if improved:
@@ -109,4 +111,5 @@ def gwo_pfs_fuzzy(
         convergence=np.asarray(best_history, dtype=np.int64),
         evaluations=evaluations,
         trace=trace,
+        exact_evaluation_seconds=exact_evaluation_seconds,
     )
