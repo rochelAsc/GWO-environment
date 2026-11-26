@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import time
 from pathlib import Path
 
@@ -66,24 +67,42 @@ def generate_lhs_dataset(
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Generate LHS random keys, decode with stable argsort, and label exactly."""
     n_jobs = processing_times.shape[0]
+    if count < 1:
+        raise ValueError("count must be positive")
+    if count > math.factorial(n_jobs):
+        raise ValueError(
+            f"requested {count} unique permutations, but only {math.factorial(n_jobs)} exist"
+        )
+
     sampler = qmc.LatinHypercube(d=n_jobs, seed=seed)
-    keys = sampler.random(n=count)
     features: list[np.ndarray] = []
     targets: list[float] = []
     permutations: list[np.ndarray] = []
     seen: set[tuple[int, ...]] = set()
-    for row in keys:
-        permutation = np.argsort(row, kind="stable")
-        key = tuple(int(value) for value in permutation)
-        if key in seen:
-            continue
-        seen.add(key)
-        permutations.append(permutation)
-        features.append(permutation_features(permutation))
-        targets.append(float(makespan(processing_times, permutation)))
+    draws = 0
+    max_draws = max(10_000, count * 100)
+    batch_size = min(max(count, 32), 512)
+
+    # LHS keys can decode to the same permutation. Draw additional LHS batches
+    # until the requested number of distinct decoded permutations is reached.
+    while len(permutations) < count and draws < max_draws:
+        keys = sampler.random(n=min(batch_size, max_draws - draws))
+        draws += len(keys)
+        for row in keys:
+            permutation = np.argsort(row, kind="stable")
+            key = tuple(int(value) for value in permutation)
+            if key in seen:
+                continue
+            seen.add(key)
+            permutations.append(permutation)
+            features.append(permutation_features(permutation))
+            targets.append(float(makespan(processing_times, permutation)))
+            if len(permutations) == count:
+                break
     if len(permutations) != count:
         raise RuntimeError(
-            f"LHS produced {len(permutations)} unique permutations; expected {count}"
+            f"LHS produced {len(permutations)} unique permutations after {draws} draws; "
+            f"expected {count}"
         )
     return (
         np.vstack(features),
