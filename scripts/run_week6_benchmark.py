@@ -72,6 +72,20 @@ def append_rows(path: Path, fields: list[str], rows: list[dict]) -> None:
         stream.flush()
 
 
+
+def deduplicate_csv(path: Path, key_fields: list[str]) -> None:
+    rows = read_csv(path)
+    if not rows:
+        return
+    latest = {}
+    for row in rows:
+        latest[tuple(row[field] for field in key_fields)] = row
+    fields = list(rows[0])
+    with path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(latest.values())
+
 def holm_adjust(p_values: list[float]) -> list[float]:
     """Holm step-down adjusted p-values, returned in original order."""
     values = np.asarray(p_values, dtype=float)
@@ -373,7 +387,6 @@ def main() -> None:
                     "runtime_seconds": wall_seconds,
                     "best_permutation": " ".join(map(str, np.asarray(permutation).tolist())),
                 }
-                append_rows(runs_path, RUN_FIELDS, [run])
                 convergence_rows = [
                     {
                         "variant": variant, "instance": name, "seed": seed,
@@ -384,6 +397,8 @@ def main() -> None:
                 append_rows(convergence_path, CONVERGENCE_FIELDS, convergence_rows)
                 append_rows(surrogate_trace_path, SURROGATE_TRACE_FIELDS, surrogate_rows)
                 append_rows(fuzzy_trace_path, FUZZY_TRACE_FIELDS, fuzzy_rows)
+                # The run row is the completion marker and is written last.
+                append_rows(runs_path, RUN_FIELDS, [run])
                 completed.add(key)
                 print(f"completed {variant} {name} seed={seed}: best={best}, exact={evaluations}")
 
@@ -402,6 +417,10 @@ def main() -> None:
             f"expected={len(expected)}, missing={missing[:10]}, extra={extra[:10]}"
         )
 
+    # Remove orphaned/duplicated per-generation rows left by an interrupted append.
+    deduplicate_csv(convergence_path, ["variant", "instance", "seed", "generation"])
+    deduplicate_csv(surrogate_trace_path, ["instance", "seed", "iteration", "candidate_index"])
+    deduplicate_csv(fuzzy_trace_path, ["instance", "seed", "iteration"])
     analysis = write_analysis(args.output, final_rows, instance_metadata)
     metadata = {
         "protocol": "week6_taillard_four_variant_benchmark_v1",
