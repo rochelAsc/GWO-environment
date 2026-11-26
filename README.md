@@ -86,6 +86,28 @@ Esse notebook espera instâncias do formato PFS legado. **Não use `data/instanc
 
 Consulte [`docs/guides/reproducibility.md`](docs/guides/reproducibility.md) para instalação, comandos, ambientes e limitações conhecidas. O protocolo em [`docs/experimental_protocol.md`](docs/experimental_protocol.md) registra o planejamento experimental, mas não deve ser interpretado como evidência de que a bateria completa de seis configurações foi executada.
 
+## Semana 6 — Benchmark comparativo
+
+O protocolo aprovado compara Baseline, Optuna, Surrogate assistido e Fuzzy em `ta001` e `ta011`, com 30 seeds pareadas. O planejamento inicial permanece preservado em `tasks/plan.md` e `tasks/todo.md`; o plano incremental desta etapa está em [`tasks/week6_plan.md`](tasks/week6_plan.md).
+
+Antes da bateria completa, execute um piloto curto (por exemplo, 2 seeds):
+
+```bash
+python -m scripts.run_week6_benchmark --seeds 0 1 --output results/week6_benchmark_pilot_v1
+```
+
+Após auditar o piloto, execute a bateria completa:
+
+```bash
+python -m scripts.run_week6_benchmark
+```
+
+O runner reutiliza os modelos da Semana 4 e os parâmetros congelados do Optuna v2. O Surrogate prevê 30 candidatos por geração e reavalia exatamente os três melhores; previsões nunca atualizam líderes nem convergência. Por execução, são 1.530 avaliações exatas e 15.000 previsões. Baseline, Optuna e Fuzzy usam 15.030 avaliações exatas. Portanto, os orçamentos exatos são diferentes e devem ser interpretados em conjunto com tempo, custo de preparação e qualidade.
+
+A saída é incremental e pode ser retomada: execuções já registradas em `runs.csv` são ignoradas. Não reutilize uma pasta de saída para um protocolo diferente. Os arquivos incluem resultados por seed, convergência, traces Fuzzy/Surrogate, resumo e testes estatísticos com Friedman, Wilcoxon pareado e correção de Holm.
+
+Consulte a [decisão metodológica](docs/decisions/2026-11-25-week6-surrogate-assisted-evaluation.md) e o [protocolo completo](docs/reports/week6_benchmark_protocol.md). A auditoria final só será escrita após a bateria e a análise dos resultados.
+
 ## Rastreabilidade
 
 Decisões técnicas e metodológicas são registradas em `docs/decisions/`; auditorias e proveniência estão em `docs/audits/`. Protocolos e resultados históricos devem permanecer identificados separadamente e não ser sobrescritos retroativamente.
