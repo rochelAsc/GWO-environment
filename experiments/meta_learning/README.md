@@ -327,3 +327,8 @@ A curva v1 foi executada para ta071 e ta111, com 300, 573, 1.095, 2.093 e 4.000 
 Conclusão: mais amostras melhoraram RMSE e ranking, mas a qualidade ainda é insuficiente, principalmente na ta111. Não aumentar N imediatamente. Primeiro comparar MLP com GBDT/HistGradientBoosting e ExtraTrees, investigar ranking pareado e avaliar candidatos extraídos de trajetórias GWO. A execução v1 chamou o braço LHS em blocos de até 512 draws; por isso, não descrevê-lo como um LHS global de N pontos.
 
 **Meta-Learning por instância:** a expansão de 12 para 36 instâncias Taillard é recomendada como próximo piloto (três instâncias por grupo), com possível avanço para 60 e depois o benchmark completo de 120 instâncias. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância. Ver o relatório de auditoria antes de iniciar a bateria.
+
+
+### Curva de aprendizagem v2 — LHS global e diagnósticos
+
+A correção metodológica está implementada em [run_surrogate_learning_curve_v2.py](scripts/run_surrogate_learning_curve_v2.py), com testes em [test_meta_learning_learning_curve_v2.py](../../tests/test_meta_learning_learning_curve_v2.py) e protocolo em [surrogate_learning_curve_v2_protocol.md](reports/surrogate_learning_curve_v2_protocol.md). A v1 e seus resultados permanecem preservados. A v2 gera um LHS global por tamanho/repetição, descarta designs inteiros quando a decodificação gera colisões e registra métricas de distribuição, hashes e versões de software. Os arrays completos e as permutações podem ser persistidos opcionalmente via flags; a bateria v2 ainda precisa ser executada após CI aprovado.
