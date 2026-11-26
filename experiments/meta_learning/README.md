@@ -298,3 +298,19 @@ flowchart TD
 - O resultado será válido para a distribuição de instâncias representada no dataset; generalização para outras famílias de scheduling não está garantida.
 - Meta-Learning é uma extensão independente e opcional. A entrega principal continua sendo a linha PFSP/Taillard e os resultados auditados das Semanas 2–6.
 - O documento define o plano, não afirma que código, modelos ou experimentos de Meta-Learning já existem.
+
+
+## Referências e curva de aprendizagem do surrogate
+
+As referências bibliográficas utilizadas na fundamentação estão em [referencias.md](referencias.md). O protocolo de curva de aprendizagem, incluindo a justificativa da progressão geométrica, está em [surrogate_learning_curve_protocol.md](reports/surrogate_learning_curve_protocol.md).
+
+O runner foi implementado em [run_surrogate_learning_curve.py](scripts/run_surrogate_learning_curve.py). Ele compara LHS em random keys com permutações uniformes, usa um teste externo fixo por instância e mede regressão, ranking, top-k e custo.
+
+Execução padrão (sequencial; não paralelizar nesta primeira rodada):
+
+```bash
+python -m pytest -q tests/test_meta_learning_learning_curve.py
+python -m experiments.meta_learning.scripts.run_surrogate_learning_curve
+```
+
+A configuração padrão avalia `ta071` e `ta111`, cinco tamanhos geométricos (300, 574, 1.098, 2.103 e 4.000), cinco repetições e 1.000 permutações de teste fixas por instância. Resultados são escritos em `results/meta_learning_surrogate_learning_curve_v1/`. Não sobrescrever resultados anteriores; para uma nova execução, use outro diretório `--output` e registre as seeds.
