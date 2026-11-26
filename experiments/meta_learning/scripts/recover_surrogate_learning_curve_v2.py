@@ -221,10 +221,12 @@ def recover_instance(
 
                 # Persist only genuinely missing diagnostic files; never alter existing originals.
                 if not diagnostic_path.exists():
+                    diagnostic_seed = (
+                        base_seed + repetition * 100_000 + sample_count * 7
+                        if method == "lhs_random_keys" else uniform_seed
+                    )
                     positions, precedence = _diagnostic_arrays(
-                        permutations,
-                        (base_seed + repetition * 100_000 + sample_count * 7
-                         + (0 if method == "lhs_random_keys" else 1)) + 73_001,
+                        permutations, diagnostic_seed + 73_001,
                     )
                     np.savez_compressed(
                         destination_instance / diagnostic_path.name,
