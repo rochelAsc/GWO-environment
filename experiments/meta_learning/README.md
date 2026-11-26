@@ -314,3 +314,16 @@ python -m experiments.meta_learning.scripts.run_surrogate_learning_curve
 ```
 
 A configuração padrão avalia `ta071` e `ta111`, cinco tamanhos geométricos (300, 573, 1.095, 2.093 e 4.000), cinco repetições e 1.000 permutações de teste fixas por instância. Resultados são escritos em `results/meta_learning_surrogate_learning_curve_v1/`. Não sobrescrever resultados anteriores; para uma nova execução, use outro diretório `--output` e registre as seeds.
+
+
+## 9. Surrogate: curva v1 e diagnóstico (26/11/2026)
+
+A curva v1 foi executada para ta071 e ta111, com 300, 573, 1.095, 2.093 e 4.000 amostras, cinco repetições e dois braços de amostragem. Resultados e limitações estão documentados em:
+
+- [Protocolo e resultados da curva](reports/surrogate_learning_curve_protocol.md)
+- [Auditoria de representação, distribuição, literatura e plano de correção](reports/surrogate_failure_analysis_2026-11-26.md)
+- Resultados brutos e agregados: results/meta_learning_surrogate_learning_curve_v1/
+
+Conclusão: mais amostras melhoraram RMSE e ranking, mas a qualidade ainda é insuficiente, principalmente na ta111. Não aumentar N imediatamente. Primeiro comparar MLP com GBDT/HistGradientBoosting e ExtraTrees, investigar ranking pareado e avaliar candidatos extraídos de trajetórias GWO. A execução v1 chamou o braço LHS em blocos de até 512 draws; por isso, não descrevê-lo como um LHS global de N pontos.
+
+**Meta-Learning por instância:** a expansão de 12 para 36 instâncias Taillard é recomendada como próximo piloto (três instâncias por grupo), com possível avanço para 60 e depois o benchmark completo de 120 instâncias. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância. Ver o relatório de auditoria antes de iniciar a bateria.
