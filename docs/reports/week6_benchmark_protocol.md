@@ -1,6 +1,6 @@
 # Semana 6 — Protocolo de benchmarking comparativo
 
-**Status:** protocolo aprovado pelo autor em 25/11/2026; implementação e execução pendentes.
+**Status:** protocolo executado e auditado em 25/11/2026. Resultados: `../../results/week6_benchmark_v1/`. Auditoria: [2026-11-25-week6-benchmark-audit.md](../audits/2026-11-25-week6-benchmark-audit.md).
 
 **Decisão associada:** [Benchmarking e Surrogate assistido](../decisions/2026-11-25-week6-surrogate-assisted-evaluation.md).
 
