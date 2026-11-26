@@ -10,10 +10,13 @@ import argparse
 import csv
 import gc
 import json
+import platform
 import time
 from pathlib import Path
 
 import numpy as np
+import scipy
+import sklearn
 from scipy.stats import kendalltau, qmc, spearmanr
 
 from scripts.pfs_taillard import load_taillard_instance, makespan
@@ -163,7 +166,7 @@ def recover_instance(
                 diagnostic_path = source_instance / (
                     f"{name}_{method}_n{sample_count}_rep{repetition + 1}_diagnostics.npz"
                 )
-                attempts = 0
+                attempts: int | None = None
                 if diagnostic_path.exists():
                     with np.load(diagnostic_path, allow_pickle=False) as data:
                         if "permutations" not in data.files:
@@ -175,6 +178,7 @@ def recover_instance(
                         jobs, sample_count, sampling_seed, lhs_max_attempts
                     )
                 else:
+                    attempts = 0
                     if repetition != repeats - 1:
                         raise FileNotFoundError(f"unexpected missing uniform design: {diagnostic_path}")
                     if uniform_rep5 is None:
@@ -239,6 +243,10 @@ def recover_instance(
                     "train_samples_actual": int(len(y_train)),
                     "test_samples": int(len(y_test)),
                     "lhs_complete_design_attempts": attempts,
+                    "python_version": platform.python_version(),
+                    "numpy_version": np.__version__,
+                    "scipy_version": scipy.__version__,
+                    "scikit_learn_version": sklearn.__version__,
                     "training_seconds_recovered": training_seconds,
                     "dataset_generation_and_labeling_seconds_original": None,
                     "metrics_reconstructed": True,
@@ -317,6 +325,12 @@ def main() -> None:
         "base_seed": args.seed,
         "instances": [str(path) for path in args.instances],
         "records": len(rows),
+        "software_versions": {
+            "python": platform.python_version(),
+            "numpy": np.__version__,
+            "scipy": scipy.__version__,
+            "scikit_learn": sklearn.__version__,
+        },
         "recovery_policy": "reuses saved permutations; regenerates missing designs deterministically; verifies rep-5 uniform prefix; one model fit at a time; JSONL checkpoint after every fit",
         "limitations": [
             "original dataset-generation timings were not checkpointed and cannot be recovered",
