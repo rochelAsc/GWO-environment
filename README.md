@@ -149,3 +149,8 @@ python -m scripts.run_week5_fuzzy
 ```
 
 O padrão compara 30 lobos, 500 iterações e 15.030 avaliações por execução com os resultados v2 das Semanas 2 e 3 ( nas instâncias `ta001` e `ta011`). A saída padrão é `results/week5_fuzzy_v2/`. Os resultados incluem execuções, convergência, traço temporal Fuzzy e comparações pareadas. Não misture esta reconstrução com o histórico de PFS/tardiness nem com DPFSP-DD.
+
+
+## Extensão opcional — Meta-Learning
+
+O planejamento da extensão de Meta-Learning está em [`experiments/meta_learning/README.md`](experiments/meta_learning/README.md). Ele define um único pipeline de coleta/meta-base para comparar classificação (Random Forest Classifier) e regressão (Random Forest Regressor), com divisão de treino/teste por instância para evitar vazamento. Esta pasta contém **somente o plano metodológico** neste estágio: não há implementação nem resultados de Meta-Learning publicados. A extensão exige ampliar o conjunto de instâncias Taillard e executar um piloto de custo antes de qualquer bateria completa; não é requisito obrigatório da entrega principal.
