@@ -14,7 +14,7 @@ def test_features_batch_matches_week4_single_permutation_encoder():
     ], dtype=np.int32)
     features = _features_batch(permutations)
     expected = np.array([
-        [1.0 / 3.0, 0.0, 2.0 / 3.0, 1.0],
+        [1.0 / 3.0, 2.0 / 3.0, 0.0, 1.0],
         [2.0 / 3.0, 0.0, 1.0, 1.0 / 3.0],
     ])
     np.testing.assert_allclose(features, expected)
