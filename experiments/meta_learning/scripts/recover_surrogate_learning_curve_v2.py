@@ -9,9 +9,7 @@ from __future__ import annotations
 import argparse
 import csv
 import gc
-import hashlib
 import json
-import math
 import time
 from pathlib import Path
 
@@ -19,7 +17,7 @@ import numpy as np
 from scipy.stats import kendalltau, qmc, spearmanr
 
 from scripts.pfs_taillard import load_taillard_instance, makespan
-from scripts.run_week4_surrogate import build_model, permutation_features, sha256
+from scripts.run_week4_surrogate import build_model, sha256
 from experiments.meta_learning.scripts.run_surrogate_learning_curve_v2 import (
     evaluate_predictions,
     geometric_sample_sizes,
