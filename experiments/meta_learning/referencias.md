@@ -54,3 +54,25 @@ Este arquivo reúne referências utilizadas para fundamentar o experimento de cu
 - Há evidência indireta para medir ranking separadamente da regressão (Harada, 2023; Tom et al., 2025).
 - A progressão geométrica é apoiada como desenho de curva de aprendizagem em seleção de algoritmos (Muñoz e Kirley, 2021), mas sua aplicação a nosso PFSP é uma decisão experimental a validar.
 - Não foi encontrada, nesta busca, uma publicação que reproduza exatamente Taillard 100×10/500×20 + random keys + LHS + MLP 64×64 + curva de aprendizagem de surrogate de makespan. Essa lacuna deve ser explicitada no relatório, sem alegar que a literatura prova antecipadamente o resultado.
+
+## Surrogates para permutações e Meta-Learning PFSP — referências acrescentadas em 26/11/2026
+
+8. **Takashi Ikeguchi, Kei Nishihara, Yo Kawauchi, Yuji Koguma e Masaya Nakata (2025).** *A Surrogate-Assisted Memetic Algorithm for Permutation-Based Combinatorial Optimization Problems.* Swarm and Evolutionary Computation, 98, 102060. DOI: [10.1016/j.swevo.2025.102060](https://doi.org/10.1016/j.swevo.2025.102060).
+   - Usa Gradient Boosting Decision Trees (GBDT) como surrogate para espaços discretos de permutação e combina com busca memética. O resumo reporta desempenho superior a RBF e Random Forest em mais de 35 das 42 instâncias avaliadas.
+   - Proximidade: representação de permutação e surrogate-assisted combinatorial optimization.
+   - Limitação: não é um estudo específico de PFSP Taillard nem comparação direta com nossa MLP; precisa ser testado no nosso problema.
+
+9. **Guilherme Alberto Sousa Ribeiro et al. (2026).** *Meta-Learning for Selecting Meta-heuristics Based on Iterated Local Search to Solve Permutation Flow-Shop Problem.* SN Computer Science, 7, artigo 716. DOI: [10.1007/s42979-026-05312-x](https://doi.org/10.1007/s42979-026-05312-x).
+   - Estuda seleção de meta-heurísticas diretamente no PFSP. Usa 360 instâncias de Taillard e VRF, desempenho previamente disponível de dez meta-heurísticas ILS, dois grafos para representar instâncias e meta-features topológicas; seleciona cinco características e compara Decision Tree, SVM e KNN em validação cruzada de 10 folds.
+   - Reporta 99,7% de acurácia para Decision Tree. O resultado depende do performance space e dos benchmarks usados; o artigo também discute limites de diversidade/saturação e necessidade de expandir instâncias/configurações.
+   - Proximidade: muito alta para nosso Meta-Learning de seleção de algoritmo no PFSP; não trata do surrogate de avaliação de permutações dentro do GWO.
+
+10. **Luyao Zhu, Fangfang Zhang, Xiaodong Zhu, Ke Chen e Mengjie Zhang (2025).** *Phenotype and Genotype Based Sample Aware Surrogate-Assisted Genetic Programming in Dynamic Flexible Job Shop Scheduling.* IEEE Transactions on Artificial Intelligence (versão aceita em 2025). DOI: [10.1109/TAI.2025.3562161](https://doi.org/10.1109/TAI.2025.3562161).
+    - Propõe seleção de amostras para surrogate KNN considerando características fenotípicas e genotípicas de heurísticas de scheduling. Reporta redução do tempo de treinamento e melhor qualidade com orçamento comparável.
+    - Proximidade: seleção representativa de amostras para surrogate em scheduling.
+    - Limitação: dynamic flexible job shop e genetic programming; não é PFSP clássico nem surrogate direto de makespan de permutações.
+
+11. **Graph Neural Networks for Job Shop Scheduling Problems: A Survey (2025).** Computers & Operations Research, 176, 106914. DOI: [10.1016/j.cor.2024.106914](https://doi.org/10.1016/j.cor.2024.106914).
+    - Revisão de representações em grafos e GNNs em job shop e flow shop.
+    - Proximidade: alternativas estruturadas para representar jobs, máquinas e relações de scheduling.
+    - Limitação: revisão ampla; não prova que GNN seja melhor para nosso surrogate. Implementação deve vir depois de baselines tabulares/GBDT.
