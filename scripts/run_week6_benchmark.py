@@ -219,10 +219,12 @@ def write_analysis(output: Path, run_rows: list[dict[str, str]], instances: list
             "n_runs": len(arr), "mean_best_makespan": float(arr.mean()),
             "std_best_makespan": float(arr.std(ddof=1)) if len(arr) > 1 else 0.0,
         })
-    append_rows(output / "convergence_summary.csv", [
-        "variant", "instance", "generation", "n_runs",
-        "mean_best_makespan", "std_best_makespan",
-    ], aggregate_rows) if not (output / "convergence_summary.csv").exists() else None
+    with (output / "convergence_summary.csv").open("w", newline="", encoding="utf-8") as stream:
+        fields = ["variant", "instance", "generation", "n_runs",
+                  "mean_best_makespan", "std_best_makespan"]
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(aggregate_rows)
 
     return analysis
 
@@ -241,6 +243,10 @@ def main() -> None:
     if args.top_k < 1 or args.top_k > 30:
         parser.error("--top-k must be in [1,30]")
 
+    args.optuna_config = args.optuna_config.resolve()
+    args.surrogate_dir = args.surrogate_dir.resolve()
+    args.output = args.output.resolve()
+    args.instances = [path.resolve() for path in args.instances]
     config = json.loads(args.optuna_config.read_text(encoding="utf-8"))
     params = config["best_params"]
     wolves_optuna = int(params["n_wolves"])
@@ -389,9 +395,12 @@ def main() -> None:
     }
     final_rows = read_csv(runs_path)
     final_keys = {(r["variant"], r["instance"], int(r["seed"])) for r in final_rows}
-    if final_keys != expected:
+    if final_keys != expected or len(final_rows) != len(expected):
         missing, extra = sorted(expected - final_keys), sorted(final_keys - expected)
-        raise RuntimeError(f"benchmark incomplete; missing={missing[:10]}, extra={extra[:10]}")
+        raise RuntimeError(
+            f"benchmark incomplete or duplicated; rows={len(final_rows)}, "
+            f"expected={len(expected)}, missing={missing[:10]}, extra={extra[:10]}"
+        )
 
     analysis = write_analysis(args.output, final_rows, instance_metadata)
     metadata = {
