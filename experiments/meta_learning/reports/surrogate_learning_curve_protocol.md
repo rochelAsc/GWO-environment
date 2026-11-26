@@ -33,7 +33,7 @@ A função é preferível a incrementos lineares porque cada etapa aumenta aprox
 - Instâncias: ta071 e ta111.
 - Tamanhos efetivos: 300, 573, 1.095, 2.093 e 4.000.
 - Repetições independentes por ponto: 5.
-- Amostragem: dois braços — (A) LHS em random keys seguido de stable argsort, que preserva o procedimento atual; (B) permutações uniformes geradas diretamente.
+- Amostragem planejada: dois braços — (A) LHS em random keys seguido de stable argsort; (B) permutações uniformes geradas diretamente. Na execução v1, o braço A foi implementado em blocos de até 512 draws, conforme a auditoria da seção 10.
 - Teste: um conjunto externo fixo de 1.000 permutações uniformes por instância, gerado com seed separada e compartilhado por todos os tamanhos, métodos e repetições.
 - Modelo: mesma MLP da Semana 4, MLPRegressor(hidden_layer_sizes=(64,64), activation='relu', solver='adam', alpha=1e-4, learning_rate_init=1e-3, max_iter=1000, early_stopping=True, validation_fraction=0.15, n_iter_no_change=30); StandardScaler nas entradas e transformação padronizada do alvo.
 - Seed do modelo e seed da amostragem serão registrados separadamente.
@@ -47,7 +47,7 @@ O mesmo conjunto de teste externo evita que diferenças na composição do teste
 
 As permutações uniformes serão geradas em uma sequência máxima por repetição e os menores tamanhos serão prefixos desse conjunto (subconjuntos aninhados). Isso reduz a variação da composição ao comparar N.
 
-LHS convencional não oferece, em geral, designs aninhados válidos para todos os tamanhos. Para não chamar prefixos de um LHS grande de “LHS em N menor”, cada tamanho do braço LHS será gerado como um design LHS independente, com seed registrada. O teste permanece idêntico nos dois braços. Essa diferença de aninhamento será documentada como característica do desenho.
+LHS convencional não oferece, em geral, designs aninhados válidos para todos os tamanhos. O protocolo planejado previa um design independente por tamanho. A execução v1 divergiu: gerou chamadas de até 512 linhas e concatenou os blocos até atingir N permutações únicas. Portanto, N>512 não corresponde a um único design LHS global. A próxima versão deve gerar um design único por tamanho ou rotular explicitamente a amostragem em blocos. O teste permanece idêntico nos dois braços.
 
 ## 5. Métricas
 
@@ -105,7 +105,7 @@ Ver experiments/meta_learning/referencias.md, especialmente Framinan (2025), Mu�
 
 ### Nota de implementação — amostras LHS decodificadas
 
-A transformação de random keys em permutações por `stable argsort` é muitos-para-um: diferentes pontos LHS podem decodificar para a mesma permutação. O gerador, portanto, descarta duplicatas e continua sorteando novos lotes LHS até obter N permutações distintas (com limite de tentativas e validação de que N não excede N!). O N reportado é sempre o número de permutações únicas efetivamente rotuladas, não o número bruto de vetores de random keys gerados. Essa deduplicação deve ser considerada ao interpretar a distribuição induzida pelo braço LHS.
+A transformação de random keys em permutações por `stable argsort` é muitos-para-um: diferentes pontos LHS podem decodificar para a mesma permutação. Na v1, o gerador descartou duplicatas e continuou sorteando blocos LHS de até 512 random keys até obter N permutações distintas (com limite de tentativas e validação de que N não excede N!). O N reportado é o número de permutações únicas efetivamente rotuladas, não o número bruto de vetores de random keys gerados. Essa deduplicação e a concatenação dos blocos devem ser consideradas ao interpretar a distribuição induzida pelo braço LHS.
 
 
 ## 10. Status e resultados da execução v1 (26/11/2026)
