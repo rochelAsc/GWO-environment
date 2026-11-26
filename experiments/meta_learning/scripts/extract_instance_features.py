@@ -77,9 +77,6 @@ def extract_instance_features(processing_times: np.ndarray) -> dict[str, float |
     if p.shape[1] > 1:
         adjacent = []
         for j in range(p.shape[1] - 1):
-            left, right = machine_loads[j], machine_loads[j + 1]
-            if np.std([left, right]) == 0:
-                continue
             # Correlation across jobs for adjacent machine columns.
             a, b = p[:, j], p[:, j + 1]
             if np.std(a) > 0 and np.std(b) > 0:
