@@ -309,6 +309,8 @@ def main() -> None:
         parser.error("--test-samples must be >= 50")
 
     sizes = geometric_sample_sizes(args.min_samples, args.max_samples, args.points)
+    if args.output.exists() and (not args.output.is_dir() or any(args.output.iterdir())):
+        parser.error(f"output directory already exists and is not empty: {args.output}; choose a new --output")
     args.output.mkdir(parents=True, exist_ok=True)
     all_rows: list[dict] = []
     for instance_path in args.instances:
