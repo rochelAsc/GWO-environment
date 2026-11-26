@@ -1,0 +1,29 @@
+{
+  "protocol": "meta_learning_surrogate_learning_curve_v2_recovery",
+  "source_directory": "results/meta_learning_surrogate_learning_curve_v2_extension",
+  "sample_sizes": [
+    8000,
+    16000,
+    32000
+  ],
+  "repeats": 5,
+  "base_seed": 20261128,
+  "instances": [
+    "data/benchmarks/taillard/ta071.txt",
+    "data/benchmarks/taillard/ta111.txt"
+  ],
+  "records": 60,
+  "software_versions": {
+    "python": "3.12.3",
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "scikit_learn": "1.9.1"
+  },
+  "recovery_policy": "reuses saved permutations; regenerates missing designs deterministically; verifies rep-5 uniform prefix; one model fit at a time; JSONL checkpoint after every fit",
+  "limitations": [
+    "original dataset-generation timings were not checkpointed and cannot be recovered",
+    "training times are measured during recovery, not the interrupted original run",
+    "the original run's software-version metadata was not written before interruption",
+    "top-k metrics use the original v2 argsort tie handling"
+  ]
+}
