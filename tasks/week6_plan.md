@@ -1,6 +1,6 @@
 # Plano de execução — Semana 6
 
-**Status:** planejamento aprovado; protocolo congelado; implementação pendente.  
+**Status:** implementação, bateria completa e auditoria experimental concluídas; preparação da apresentação/artigo permanece pendente.  
 **Decisão:** [Benchmarking comparativo e Surrogate assistido](../docs/decisions/2026-11-25-week6-surrogate-assisted-evaluation.md).  
 **Protocolo:** [Benchmark comparativo da Semana 6](../docs/reports/week6_benchmark_protocol.md).
 
@@ -53,34 +53,34 @@ Comparar Baseline, Optuna, Surrogate assistido e Fuzzy no PFSP/Taillard (`ta001`
 
 ## Fase 4 — Piloto e bateria integral
 
-- [ ] Executar piloto curto nas duas instâncias, com seeds explicitamente identificadas.
-- [ ] Auditar contadores, integridade dos CSVs, convergência e custos.
-- [ ] Corrigir problemas encontrados sem sobrescrever artefatos do piloto.
-- [ ] Executar a bateria completa: 4 variantes × 2 instâncias × 30 seeds = 240 execuções.
-- [ ] Conferir 15.030 avaliações exatas por execução nas variantes Baseline/Optuna/Fuzzy.
-- [ ] Conferir 1.530 avaliações exatas e 15.000 previsões por execução Surrogate.
-- [ ] Confirmar total de 2.797.200 avaliações exatas na busca e 4.000 rótulos exatos de preparação já gerados na Semana 4 (2.801.200 incluindo preparação).
+- [x] Executar piloto curto nas duas instâncias, com seeds explicitamente identificadas.
+- [x] Auditar contadores, integridade dos CSVs, convergência e custos.
+- [x] Corrigir problemas encontrados sem sobrescrever artefatos do piloto.
+- [x] Executar a bateria completa: 4 variantes × 2 instâncias × 30 seeds = 240 execuções.
+- [x] Conferir 15.030 avaliações exatas por execução nas variantes Baseline/Optuna/Fuzzy.
+- [x] Conferir 1.530 avaliações exatas e 15.000 previsões por execução Surrogate.
+- [x] Confirmar total de 2.797.200 avaliações exatas na busca e 4.000 rótulos exatos de preparação já gerados na Semana 4 (2.801.200 incluindo preparação).
 
 **Checkpoint 4:** conjunto bruto completo, auditável e sem combinações faltantes.
 
 ## Fase 5 — Análise e auditoria
 
-- [ ] Gerar média, mediana, desvio padrão, mínimo, máximo e hits do upper bound por instância/variante.
-- [ ] Gerar curvas de convergência e gráficos comparativos.
-- [ ] Executar Friedman por instância.
-- [ ] Executar seis Wilcoxon pareados por instância e correção de Holm.
-- [ ] Reportar p-values brutos/ajustados e diferenças pareadas.
-- [ ] Separar custo de preparação, custo de busca e custo total/amortizado do Surrogate.
-- [ ] Criar relatório de auditoria com limitações e conclusões estritamente suportadas pelos dados.
+- [x] Gerar média, mediana, desvio padrão, mínimo, máximo e hits do upper bound por instância/variante.
+- [x] Gerar curvas de convergência em CSV; gráficos comparativos independentes não foram incluídos na bateria.
+- [x] Executar Friedman por instância.
+- [x] Executar seis Wilcoxon pareados por instância e correção de Holm.
+- [x] Reportar p-values brutos/ajustados e diferenças pareadas.
+- [x] Separar custo de preparação e custo de busca; custo amortizado é discutido qualitativamente na auditoria.
+- [x] Criar relatório de auditoria com limitações e conclusões estritamente suportadas pelos dados.
 
 **Checkpoint 5:** relatório regenerável diretamente dos dados brutos.
 
 ## Fase 6 — Qualidade e entrega
 
-- [ ] Executar testes completos e CI.
-- [ ] Revisar código e documentação sem alterar resultados históricos.
-- [ ] Atualizar README com comandos e limites da Semana 6.
-- [ ] Publicar protocolo, código, testes, dados, gráficos e auditoria em commits rastreáveis.
+- [x] Executar testes completos e CI.
+- [x] Revisar código e documentação sem alterar resultados históricos.
+- [x] Atualizar README com comandos e limites da Semana 6.
+- [x] Publicar protocolo, código, testes, dados e auditoria em commits rastreáveis; gráficos comparativos independentes não foram publicados.
 - [ ] Preparar material para a apresentação: linha do tempo de decisões, mudanças de escopo, bug encontrado, reexecuções e justificativas metodológicas.
 
 ## Artefatos esperados
