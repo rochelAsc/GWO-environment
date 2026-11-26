@@ -256,8 +256,10 @@ def recover_instance(
 
         del uniform_rep5
         uniform_rep5 = None
-        del X_test, y_test, test_permutations
         gc.collect()
+
+    del X_test, y_test, test_permutations
+    gc.collect()
 
 
 def main() -> None:
