@@ -151,11 +151,9 @@ def recover_instance(
     test_seed = base_seed + 900_000
 
     # Only the interrupted rep-5 uniform maximum design is regenerated.
-    uniform_rep5: np.ndarray | None = None
     for repetition in range(repeats):
         uniform_seed = base_seed + repetition * 10_000 + 101
-        if repetition == repeats - 1:
-            uniform_rep5 = None
+        uniform_rep5: np.ndarray | None = None
 
         for sample_count in sizes:
             for method in ("lhs_random_keys", "uniform_permutations"):
@@ -195,7 +193,7 @@ def recover_instance(
                             raise RuntimeError(
                                 f"uniform regenerated prefix differs from saved data for {name}, rep {repetition + 1}"
                             )
-                    permutations = uniform_rep5[:sample_count].copy()
+                    permutations = uniform_rep5[:sample_count]
 
                 if permutations.shape != (sample_count, jobs) or not _unique_rows(permutations):
                     raise ValueError(f"invalid or duplicate permutations in {diagnostic_path}")
