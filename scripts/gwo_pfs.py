@@ -1,6 +1,7 @@
 """Synchronous Grey Wolf Optimizer for PFSP using random-key encoding."""
 from __future__ import annotations
 from dataclasses import dataclass
+import time
 import numpy as np
 from scripts.pfs_taillard import makespan
 
@@ -11,6 +12,7 @@ class GWOResult:
     convergence: np.ndarray
     evaluations: int
     final_population: np.ndarray
+    exact_evaluation_seconds: float
 
 def decode_random_keys(keys: np.ndarray) -> np.ndarray:
     keys = np.asarray(keys, dtype=float)
@@ -23,11 +25,7 @@ def gwo_pfs(
     seed: int = 0, a_start: float = 2.0, a_end: float = 0.0,
     a_exponent: float = 1.0,
 ) -> GWOResult:
-    """Run synchronous GWO with configurable power-law a schedule.
-
-    a(t) = a_end + (a_start-a_end) * (1-t/T)**a_exponent.
-    Defaults reproduce the Week 2 linear schedule.
-    """
+    """Run synchronous GWO with configurable power-law a schedule."""
     p = np.asarray(processing_times)
     if p.ndim != 2 or p.shape[0] == 0 or p.shape[1] == 0:
         raise ValueError("processing_times must be a non-empty matrix")
@@ -44,8 +42,17 @@ def gwo_pfs(
 
     rng = np.random.default_rng(seed)
     n_jobs = p.shape[0]
+    exact_evaluation_seconds = 0.0
+
+    def evaluate(keys):
+        nonlocal exact_evaluation_seconds
+        started = time.perf_counter()
+        value = makespan(p, decode_random_keys(keys))
+        exact_evaluation_seconds += time.perf_counter() - started
+        return value
+
     positions = rng.uniform(0.0, 1.0, size=(n_wolves, n_jobs))
-    fitness = np.asarray([makespan(p, decode_random_keys(w)) for w in positions], dtype=np.int64)
+    fitness = np.asarray([evaluate(w) for w in positions], dtype=np.int64)
     evaluations = n_wolves
     leader_indices = np.argsort(fitness, kind="stable")[:3]
     leaders = positions[leader_indices].copy()
@@ -57,7 +64,6 @@ def gwo_pfs(
     for iteration in range(iterations):
         progress = iteration / iterations
         if a_start == 2.0 and a_end == 0.0 and a_exponent == 1.0:
-            # Preserve the exact Week 2 arithmetic for bit-for-bit baseline compatibility.
             a = 2.0 - 2.0 * iteration / iterations
         else:
             a = a_end + (a_start - a_end) * (1.0 - progress) ** a_exponent
@@ -71,15 +77,13 @@ def gwo_pfs(
             D = np.abs(C[leader_idx] * leader[None, :] - positions)
             candidates.append(leader[None, :] - A[leader_idx] * D)
         new_positions = np.clip(np.mean(candidates, axis=0), 0.0, 1.0)
-        new_fitness = np.asarray([makespan(p, decode_random_keys(w)) for w in new_positions], dtype=np.int64)
+        new_fitness = np.asarray([evaluate(w) for w in new_positions], dtype=np.int64)
         evaluations += n_wolves
         pool_positions = np.vstack((leaders, new_positions))
         pool_fitness = np.concatenate((leader_fitness, new_fitness))
         order = np.argsort(pool_fitness, kind="stable")[:3]
         leaders = pool_positions[order].copy()
         leader_fitness = pool_fitness[order].copy()
-        # Advance the full population. Leaders remain an external elite archive;
-        # without this assignment every generation would evolve from generation 0.
         positions = new_positions
         if int(leader_fitness[0]) < best_fitness:
             best_fitness = int(leader_fitness[0])
@@ -92,4 +96,5 @@ def gwo_pfs(
         convergence=np.asarray(history, dtype=np.int64),
         evaluations=evaluations,
         final_population=positions.copy(),
+        exact_evaluation_seconds=exact_evaluation_seconds,
     )
