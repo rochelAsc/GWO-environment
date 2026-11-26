@@ -1,4 +1,4 @@
-# Auditoria técnica inicial — legado PFS, Fuzzy e Surrogate
+# Auditoria técnica — diagnóstico inicial e atualização consolidada
 
 - **Data:** 2026-11-22
 - **Escopo:** inspeção estática de `scripts/sistemas_inteligentes_entregavel.py`, `scripts/discrete_gwo_dpfsp.py`, `scripts/dpfsp_dd.py`, `scripts/run_gwo_pilot.py` e do protocolo vigente.
@@ -191,3 +191,144 @@ O arquivo `scripts/sistemas_inteligentes_entregavel.py` é um script exportado d
 - Inspeção estática dos arquivos listados; nenhum benchmark legado foi executado nesta etapa.
 - A existência de artefatos adicionais de Optuna, datasets Taillard ou código em notebooks ainda precisa ser verificada.
 - Nenhum resultado histórico foi invalidado automaticamente; os achados indicam riscos/bugs que exigem rastrear quais execuções foram afetadas.
+
+
+---
+
+# Atualização consolidada — 25/11/2026
+
+Esta seção atualiza o diagnóstico de 22/11/2026 à luz das correções, reconstruções experimentais, auditorias por semana e reprodução no Google Colab realizadas posteriormente. O conteúdo original foi preservado como registro do estado inicial; quando houver divergência entre uma recomendação antiga e esta atualização, prevalece o status mais recente descrito aqui.
+
+## 9. Conclusão executiva atualizada
+
+O repositório evoluiu de um conjunto heterogêneo de notebooks, código legado e resultados parcialmente documentados para um fluxo experimental modular, versionado e reproduzível para **PFSP com benchmarks Taillard**, com uma trilha documental separada para a mudança de escopo e para os experimentos históricos.
+
+O estado atual permite considerar as etapas experimentais das Semanas 2 a 6 concluídas dentro dos escopos explicitamente documentados. A Semana 1 permanece como registro teórico/documental da proposta original de dengue/LSTM/GWO; não existe pipeline executável atual que reproduza esse experimento. A etapa de Meta-Learning foi retirada pelo professor e não integra os critérios de conclusão.
+
+A conclusão não significa que todos os artefatos históricos foram validados retroativamente, nem que os resultados possam ser generalizados para qualquer instância de scheduling. As limitações de cobertura e as diferenças entre famílias de problemas permanecem relevantes.
+
+## 10. Atualização dos achados iniciais
+
+### 10.1 Motor legado e separação entre famílias
+
+- Os caminhos experimentais atuais mantêm separados o PFS/PFSP de makespan e o DPFSP-DD. O motor legado não é tratado como avaliador substituto do DPFSP-DD.
+- A reconstrução da Semana 2 implementa PFSP de uma fábrica, sem due dates, com makespan como objetivo e instâncias Taillard identificadas e versionadas.
+- A representação random-key e o decoder por ordenação estável estão documentados nos scripts e protocolos da Semana 2.
+- A correção da dinâmica congelada do GWO foi registrada em auditoria própria. A população agora recebe as novas posições a cada geração; testes de regressão cobrem a atualização da população e a variação da diversidade.
+- Os resultados produzidos antes da correção foram preservados e não são tratados como evidência equivalente às execuções corrigidas. Semana 2 v2 e Semana 3 v2 foram reexecutadas após a correção.
+
+### 10.2 Optuna — orçamento e rastreabilidade
+
+A sintonia reconstruída da Semana 3 usa orçamento fixo de 15.030 avaliações exatas por execução, com população escolhida entre divisores do orçamento. Os seeds de tuning (100–102) são separados dos seeds de avaliação final (0–29). Os parâmetros selecionados estão registrados em `results/week3_optuna_v2/best_params.json`.
+
+A comparação final é feita em duas instâncias Taillard e não sustenta uma alegação geral de superioridade estatística do Optuna. Os resultados devem ser apresentados como evidência condicionada às instâncias e ao protocolo utilizados.
+
+### 10.3 Fuzzy — reconstrução e limites
+
+O controlador atual está separado em módulo próprio, com entradas, funções de pertinência, regras Mamdani, defuzzificação e integração com o GWO documentadas. A implementação corrigida possui rastreamento e testes.
+
+A bateria completa da Semana 5 v2 contém 60 execuções (duas instâncias × 30 seeds), com 15.030 avaliações exatas por execução. As comparações pareadas com Baseline e Optuna não demonstraram superioridade estatística após os procedimentos definidos. Os resultados descritivos favoráveis em uma instância não devem ser convertidos em afirmação de vencedor universal.
+
+O CSV histórico antigo de Fuzzy continua incompleto para reconstruir o controlador original; não foi usado para inferir regras ou preencher dados ausentes.
+
+### 10.4 Surrogate — validação e custo
+
+A Semana 4 v2 deduplica amostras pela permutação decodificada antes da separação treino/teste e treina modelos separados por instância. Os resultados publicados usam 2.000 permutações únicas por instância, com 1.600 amostras de treino e 400 de teste.
+
+As métricas de teste permanecem moderadas, sobretudo na `ta011` (R² = 0,252; Spearman = 0,539). A inferência em lote apresenta speedup sobre avaliação exata, mas a inferência individual é mais lenta. O relatório de runtime documenta os pontos de equilíbrio e impede que a aceleração em lote seja apresentada como ganho universal.
+
+Na Semana 6, a variante Surrogate prediz 30 candidatos por geração e reavalia exatamente os três melhores previstos. Apenas fitness exato atualiza líderes, arquivo elite e convergência. A bateria confirma 1.530 avaliações exatas e 15.000 predições por execução. O custo de preparação dos modelos (4.000 rótulos exatos) é reportado separadamente.
+
+### 10.5 Semana 6 — benchmark integrado
+
+A bateria publicada em `results/week6_benchmark_v1/` contém 240 execuções: quatro variantes, duas instâncias e 30 seeds. O total é de 2.797.200 avaliações exatas durante a busca, mais 4.000 rótulos exatos de preparação dos modelos, além de 900.000 predições Surrogate.
+
+Resultados principais:
+- `ta001`: Optuna apresentou a menor média (1268,40); Fuzzy teve menor desvio padrão (6,24); Surrogate foi o mais rápido, mas teve média 1275,13.
+- `ta011`: Fuzzy apresentou a menor média (1633,83); Surrogate foi o mais rápido, mas teve média 1660,20.
+- Friedman indicou diferenças globais entre variantes nas duas instâncias.
+- Após correção de Holm, nenhuma comparação par a par foi significativa na `ta001`; na `ta011`, Surrogate foi significativamente pior que Baseline, Optuna e Fuzzy.
+
+Os orçamentos de avaliações exatas não são iguais entre Surrogate e as demais variantes. A bateria compara estratégias conforme o protocolo, não algoritmos sob orçamento idêntico de avaliações exatas ou custo computacional total.
+
+## 11. Reprodução independente no Google Colab
+
+O notebook principal `notebooks/Sistemas_Inteligentes_Entregavel.ipynb` foi reconstruído como interface de reprodução dos scripts oficiais. O notebook histórico foi preservado separadamente.
+
+A execução Colab `colab_20261125_01` foi publicada em `results/notebook_runs/colab_20261125_01/`, com manifesto que identifica commit, ambiente, hashes das instâncias, parâmetros e seeds. A auditoria dos artefatos verificou:
+
+- 60 execuções da Semana 2;
+- 30 trials Optuna e 60 avaliações finais da Semana 3;
+- dois datasets/modelos e métricas da Semana 4;
+- 60 execuções Fuzzy da Semana 5;
+- 240 execuções da Semana 6;
+- 180/180 correspondências de makespan entre Semana 2 e Baseline da Semana 6, Semana 3 e Optuna da Semana 6, e Semana 5 e Fuzzy da Semana 6;
+- contadores de avaliações exatas e predições da Semana 6 coerentes com o protocolo.
+
+A reprodução confirma consistência dos artefatos experimentais e resultados de qualidade nas etapas verificadas. **Não comprova integralmente a execução de todas as células nem a aprovação do pytest dentro daquela sessão Colab**, pois o ZIP não contém log completo de saída dessas células. Essa limitação está explicitada na auditoria específica.
+
+As workflows de CI dos documentos de auditoria Colab e análise de runtime concluíram com sucesso:
+- auditoria Colab: run 45742586029;
+- análise de runtime: run 45742590733.
+
+## 12. Tempos: interpretação entre ambientes
+
+A análise de runtime compara a máquina local (Windows 11, Python 3.14.6) e o Colab (Linux, Python 3.13.18). Nas baterias comparadas, o Colab registrou tempos aproximadamente 1,7× a 2,1× maiores. Não há dados suficientemente detalhados e controlados de CPU, frequência, vCPU e carga concorrente para atribuir causalidade ou estabelecer fator universal de conversão.
+
+Os tempos absolutos devem sempre vir acompanhados da identificação do ambiente. A diferença de runtime não invalida, por si só, a consistência dos makespans e contadores reproduzidos. O custo de treinamento do Surrogate permanece separado do custo de busca.
+
+## 13. Matriz consolidada de situação por etapa
+
+| Etapa | Situação atual | Evidência e ressalvas |
+|---|---|---|
+| Semana 1 — proposta original | Documental | Proposta original dengue/LSTM/GWO preservada; sem pipeline executável atual. |
+| Semana 2 — GWO canônico PFSP | Concluída no escopo reconstruído | Duas instâncias Taillard, 30 seeds cada; versão corrigida reexecutada; protocolo e auditoria publicados. |
+| Semana 3 — Optuna | Concluída no escopo reconstruído | Orçamento fixo, tuning/evaluation seeds separados; resultados finais e parâmetros versionados. |
+| Semana 4 — Surrogate | Concluída no escopo reconstruído | Dataset deduplicado por permutação, modelos por instância, métricas e latência reportadas; generalização limitada. |
+| Semana 5 — Fuzzy | Concluída no escopo reconstruído | Controlador documentado e bateria de 60 runs; sem evidência de superioridade estatística pós-hoc. |
+| Semana 6 — benchmark | Concluída no escopo definido | 240 runs, estatística global e pós-hoc, custos separados e auditoria formal. |
+| Semana 7 — Meta-Learning | Fora do escopo | Retirado pelo professor; não deve ser apresentado como entrega pendente. |
+| Semana 8 — artigo e apresentação | Consolidação pendente | Exige sintetizar os resultados e limitações sem misturar famílias de problema ou resultados históricos. |
+
+## 14. Limitações remanescentes e riscos de interpretação
+
+1. **Cobertura pequena de benchmarks:** a bateria integrada usa apenas duas instâncias Taillard de 20 jobs. Não permite generalização ampla para outros tamanhos, distribuições ou variantes de scheduling.
+2. **Mudança de escopo:** a proposta inicial era dengue/LSTM/GWO; o experimento consolidado é PFSP/Taillard. A transição precisa ser declarada, não retroativamente apagada.
+3. **Histórico PFS tardiness:** os experimentos exploratórios antigos de PFS com due dates são distintos do PFSP/makespan reconstruído. Seus resultados não devem ser mesclados.
+4. **Histórico DPFSP-DD:** o piloto DPFSP-DD é outra família de problema e não é continuação numérica da bateria PFSP/Taillard.
+5. **Surrogate:** as métricas preditivas, em especial na `ta011`, limitam a qualidade do ranking e explicam o compromisso entre economia de avaliações e desempenho.
+6. **Orçamento:** a comparação da Semana 6 não tem orçamento igual de avaliações exatas para Surrogate; os resultados devem ser apresentados como comparação de estratégias.
+7. **Estatística:** os testes se restringem às duas instâncias e aos 30 blocos de seed por variante. Seeds iguais não garantem números aleatórios comuns idênticos.
+8. **Runtime:** tempos dependem do ambiente; Colab e máquina local não devem ser agregados numa média única.
+9. **Reprodução Colab:** os artefatos foram auditados, mas não há log integral que comprove cada saída de célula e o pytest naquela sessão.
+10. **Semana 1:** não afirmar que dengue/LSTM foi executado no pipeline atual.
+11. **Meta-Learning:** não o reintroduzir como requisito ou como etapa experimental concluída.
+
+## 15. Recomendações atualizadas para a entrega
+
+1. Usar PFSP/Taillard como núcleo experimental atual e explicar explicitamente a mudança de escopo em relação à proposta inicial.
+2. Manter os relatórios históricos de PFS tardiness e DPFSP-DD em seções separadas, sem agregar métricas entre famílias.
+3. Apresentar os resultados das Semanas 2–6 com seus protocolos, seeds, orçamentos, instâncias e ambiente.
+4. Na Semana 6, declarar a diferença de avaliações exatas e o custo de preparação do Surrogate; não chamar a comparação de orçamento igual.
+5. Reportar resultados de qualidade e tempos locais/Colab separadamente.
+6. Não declarar superioridade geral de Optuna, Fuzzy ou Surrogate; descrever os resultados específicos por instância e testes pós-hoc.
+7. Preservar resultados antigos e versões anteriores; qualquer experimento adicional deve receber novo identificador e protocolo.
+8. Priorizar agora artigo e apresentação, incluindo limitações e evidências de reprodução. Não iniciar Meta-Learning como se fosse exigência do roteiro.
+
+## 16. Documentos de referência desta atualização
+
+- `docs/audits/2026-11-23-week1-theoretical-review.md`
+- `docs/audits/2026-11-23-week2-reconstruction-status.md`
+- `docs/audits/2026-11-23-week3-reconstruction-status.md`
+- `docs/audits/2026-11-23-week4-corrected-pilot-status.md`
+- `docs/audits/2026-11-23-week5-reconstruction-status.md`
+- `docs/audits/2026-11-25-week5-fuzzy-v2-pilot-audit.md`
+- `docs/audits/2026-11-25-week6-benchmark-audit.md`
+- `docs/audits/2026-11-25-colab-reproduction-audit.md`
+- `docs/reports/colab-vs-local-runtime-analysis.md`
+- `docs/reports/week2_reconstruction_protocol.md`
+- `docs/reports/week5_fuzzy_protocol.md`
+- `docs/reports/week6_benchmark_protocol.md`
+- `results/notebook_runs/colab_20261125_01/execution_manifest.json`
+
+**Status final:** auditoria técnica inicial atualizada com o estado consolidado conhecido em 25/11/2026. A atualização não altera dados brutos, resultados históricos, protocolos experimentais ou conclusões estatísticas das auditorias específicas.
