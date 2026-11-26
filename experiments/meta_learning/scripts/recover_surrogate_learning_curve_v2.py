@@ -150,6 +150,25 @@ def recover_instance(
         raise ValueError(f"fixed test features do not match saved permutations for {name}")
     test_seed = base_seed + 900_000
 
+    # Validate the local SciPy/QMC implementation against a saved LHS design
+    # before trusting deterministic regeneration of the missing 32k design.
+    lhs_validation_seed = base_seed + (repeats - 1) * 100_000 + min(sizes) * 7
+    validation_path = source_instance / (
+        f"{name}_lhs_random_keys_n{min(sizes)}_rep{repeats}_diagnostics.npz"
+    )
+    with np.load(validation_path, allow_pickle=False) as data:
+        saved_lhs_validation = data["permutations"].astype(np.int32, copy=True)
+    regenerated_lhs_validation, _ = _lhs_permutations(
+        jobs, min(sizes), lhs_validation_seed, lhs_max_attempts
+    )
+    if not np.array_equal(regenerated_lhs_validation, saved_lhs_validation):
+        raise RuntimeError(
+            f"local SciPy/QMC does not reproduce the saved LHS design for {name}; "
+            "use the original virtual environment/version before recovering the missing LHS design"
+        )
+    del saved_lhs_validation, regenerated_lhs_validation
+    gc.collect()
+
     # Only the interrupted rep-5 uniform maximum design is regenerated.
     for repetition in range(repeats):
         uniform_seed = base_seed + repetition * 10_000 + 101
