@@ -313,4 +313,4 @@ python -m pytest -q tests/test_meta_learning_learning_curve.py
 python -m experiments.meta_learning.scripts.run_surrogate_learning_curve
 ```
 
-A configuração padrão avalia `ta071` e `ta111`, cinco tamanhos geométricos (300, 574, 1.098, 2.103 e 4.000), cinco repetições e 1.000 permutações de teste fixas por instância. Resultados são escritos em `results/meta_learning_surrogate_learning_curve_v1/`. Não sobrescrever resultados anteriores; para uma nova execução, use outro diretório `--output` e registre as seeds.
+A configuração padrão avalia `ta071` e `ta111`, cinco tamanhos geométricos (300, 573, 1.095, 2.093 e 4.000), cinco repetições e 1.000 permutações de teste fixas por instância. Resultados são escritos em `results/meta_learning_surrogate_learning_curve_v1/`. Não sobrescrever resultados anteriores; para uma nova execução, use outro diretório `--output` e registre as seeds.
