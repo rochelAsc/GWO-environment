@@ -343,3 +343,15 @@ Conclusão: mais amostras melhoraram RMSE e ranking, mas a qualidade ainda é in
 ### Curva de aprendizagem v2 — LHS global e diagnósticos
 
 A correção metodológica está implementada em [run_surrogate_learning_curve_v2.py](scripts/run_surrogate_learning_curve_v2.py), com testes em [test_meta_learning_learning_curve_v2.py](../../tests/test_meta_learning_learning_curve_v2.py) e protocolo em [surrogate_learning_curve_v2_protocol.md](reports/surrogate_learning_curve_v2_protocol.md). A v1 e seus resultados permanecem preservados. A curva v2 original foi executada e publicada; a extensão até 32.000 amostras foi recuperada e publicada em diretório separado. A análise estatística consolidada está em [surrogate_learning_curve_v2_extension_statistical_analysis.md](reports/surrogate_learning_curve_v2_extension_statistical_analysis.md). O próximo experimento é a comparação controlada de modelos, definida em [surrogate_model_comparison_protocol.md](reports/surrogate_model_comparison_protocol.md).
+
+
+### Comparação de modelos substitutos — piloto CPU
+
+O protocolo e runner do piloto estão documentados em [surrogate_model_comparison_protocol.md](reports/surrogate_model_comparison_protocol.md) e [run_surrogate_model_comparison_pilot.py](scripts/run_surrogate_model_comparison_pilot.py). O piloto usa os artefatos originais da branch de recuperação, sem regenerar ou modificar os NPZs.
+
+```bash
+python -m pytest -q tests/test_surrogate_model_comparison_pilot.py
+python -m experiments.meta_learning.scripts.run_surrogate_model_comparison_pilot
+```
+
+A execução compara MLP 64×64, Random Forest, Extra Trees e HistGradientBoosting em `ta111`, 8.000 permutações uniformes (repetição 1) e teste fixo de 1.000 permutações. Treina sequencialmente em CPU, grava checkpoints por modelo e permite retomada. A comparação ainda não foi executada; não interpretar a implementação como resultado experimental.
