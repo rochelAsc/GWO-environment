@@ -71,6 +71,9 @@ Protocolo: média de makespan em 3 seeds por variante; normalização por UB pub
 
 ## Próximos passos recomendados
 
+**Runbook operacional da próxima rodada:** [2026-11-27-meta-learning-next-execution-runbook.md](2026-11-27-meta-learning-next-execution-runbook.md). Ele contém os comandos ordenados para reprodução, auditoria de completude, integridade numérica e alinhamento de features/alvos. Execute as etapas A–E e envie as saídas antes de iniciar treinamento ou expansão.
+
+
 1. Congelar a meta-base derivada do piloto (`per_instance_targets.csv` + features v1) como versão `metabasis_pilot_v1`.
 2. Implementar baselines de seleção + RF classificador/regressor com divisão **por instância** (Fases 6–8), tratando o resultado como exploratório.
 3. Só então decidir expansão para 10 seeds e/ou 60–120 instâncias, com base no custo já medido.
