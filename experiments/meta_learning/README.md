@@ -1,6 +1,6 @@
 # Plano de Meta-Learning: classificação e regressão
 
-**Status (2026-11-27):** piloto 36×3×4 congelado (`metabasis_pilot_v1`); LOO exploratório sem ganho vs Fuzzy; **reprodução A–D aprovada** (hashes 4/4; LOO recheck bit-idêntico). Decisão formal Fase 5 ainda pendente. Holdout confirmatório e expansão 60/120 não autorizados. A curva/comparação de surrogate abaixo é trilho distinto.
+**Status (2026-11-27):** piloto 36×3×4 congelado (`metabasis_pilot_v1`); LOO exploratório sem ganho operacional demonstrado vs sempre Fuzzy; reprodução A–D aprovada. **Expansão Fase 5 aprovada:** 60 instâncias primeiro, 120 como alvo condicionado a custo/integridade. A coleta v2 ainda não começou; inventário, split pré-registrado e adaptação técnica são gates obrigatórios. A curva/comparação de surrogate abaixo é trilho distinto.
 
 Este documento define o pipeline metodológico e aponta o estado real dos artefatos. É uma extensão opcional do projeto, não etapa obrigatória do roteiro do professor e não substitui as Semanas 1–6.
 
@@ -13,6 +13,7 @@ Este documento define o pipeline metodológico e aponta o estado real dos artefa
 | Status das fases | [`docs/reports/2026-11-27-meta-learning-phase-status.md`](../../docs/reports/2026-11-27-meta-learning-phase-status.md) |
 | Relatório LOO exploratório | [`docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md`](../../docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md) |
 | Reprodução A–D | [`docs/reports/2026-11-27-meta-learning-reproduction-ad.md`](../../docs/reports/2026-11-27-meta-learning-reproduction-ad.md) |
+| Decisão de expansão v2 | [`docs/decisions/2026-11-27-meta-learning-expansion-v2.md`](../../docs/decisions/2026-11-27-meta-learning-expansion-v2.md) |
 | Roadmap | [`docs/plans/2026-11-27-meta-learning-completion-roadmap.md`](../../docs/plans/2026-11-27-meta-learning-completion-roadmap.md) |
 | Runbook | [`docs/reports/2026-11-27-meta-learning-next-execution-runbook.md`](../../docs/reports/2026-11-27-meta-learning-next-execution-runbook.md) |
 
@@ -26,7 +27,7 @@ Este documento define o pipeline metodológico e aponta o estado real dos artefa
 
 O RF regressor não demonstrou superioridade: IC95 se sobrepõem amplamente e há 28 empates em 36 instâncias. O piloto tem 36 unidades independentes e 35 preditores; LOO não substitui holdout externo. Aumentar seeds não resolve a limitação do número de instâncias. Ver [relatório LOO](../../docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md).
 
-**Próxima ação:** decisão formal Fase 5 (continuar / encerrar / reformular). Reprodução A–D já documentada. Não executar freeze novamente no diretório existente nem expandir a base antes da decisão registrada em `docs/decisions/`.
+**Próxima ação:** executar os gates do [runbook de expansão](../../docs/reports/2026-11-27-meta-learning-next-execution-runbook.md): inventário Taillard 120, split estratificado e imutável, adaptação/testes dos scripts v2. Não sobrescrever o freeze piloto.
 
 Comandos usados na reprodução (já executados; não repetir sobre o freeze):
 
@@ -34,6 +35,21 @@ Comandos usados na reprodução (já executados; não repetir sobre o freeze):
 python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
 python -m scripts.evaluate_meta_learning_selectors_pilot --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 --seed 0 --random-repeats 100
 ```
+
+
+
+### Expansão aprovada: metabasis_v2
+
+A decisão formal autoriza uma expansão em dois estágios. O piloto de 36 instâncias permanece exclusivamente no desenvolvimento.
+
+| Estágio | Desenvolvimento | Holdout selado | Total |
+|---|---:|---:|---:|
+| 60 | 48 (4 por grupo) | 12 (1 por grupo) | 60 |
+| 120 | 96 (8 por grupo) | 24 (2 por grupo) | 120 |
+
+Em cada grupo Taillard, as 7 instâncias ainda não usadas serão divididas deterministicamente em 5 para desenvolvimento e 2 para holdout, sem consultar resultados. Se houver expansão a 120, os 12 holdouts do checkpoint de 60 continuam selados; o holdout final de 24 só será aberto uma vez, depois do congelamento do pipeline. Seeds iniciais: 0, 1 e 2 pareadas. Não aumentar seeds como substituto de instâncias independentes.
+
+A inspeção dos scripts identificou defaults de piloto: o runner ainda registra protocolo v1 e o freezer grava schema metabasis_pilot_v1. Portanto, a bateria v2 não deve ser iniciada até a adaptação e os testes previstos no runbook. A coleta ainda não foi executada.
 
 ## Trabalho concluído relacionado: curva de aprendizagem do surrogate
 
