@@ -29,6 +29,7 @@ from threadpoolctl import threadpool_limits
 from scripts.pfs_taillard import load_taillard_instance, makespan
 from scripts.run_week4_surrogate import build_model, sha256
 from experiments.meta_learning.scripts.run_surrogate_learning_curve_v2 import evaluate_predictions
+from experiments.meta_learning.scripts.surrogate_topk_metrics import evaluate_topk_suite
 
 
 DEFAULT_SOURCE = Path("results/meta_learning_surrogate_learning_curve_v2_extension")
@@ -311,6 +312,11 @@ def run_pilot(
                 predictions = estimator.predict(X_test)
                 inference_seconds = time.perf_counter() - inference_start
         metrics = evaluate_predictions(y_test, predictions)
+        # Legacy top{k}_regret stays as historical best-selected gap.
+        # Explicit S-A1 names are added for new comparison batteries.
+        topk_metrics = evaluate_topk_suite(
+            y_test, predictions, ks=(3, 10, 50), policies=("strict", "inclusive")
+        )
         if not np.all(np.isfinite(predictions)):
             raise ValueError(f"{model_name} produced non-finite predictions")
         row = {
@@ -328,6 +334,7 @@ def run_pilot(
             "train_samples": len(y_train),
             "test_samples": len(y_test),
             **metrics,
+            **topk_metrics,
         }
         _append_checkpoint(checkpoint_path, row)
         rows.append(row)

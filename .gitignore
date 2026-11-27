@@ -29,6 +29,7 @@ ENV/
 # Editors and operating systems
 .vscode/
 .idea/
+.cursor/.supermemory/
 .DS_Store
 Thumbs.db
 *.swp

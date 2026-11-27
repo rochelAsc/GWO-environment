@@ -9,9 +9,9 @@ Este é o ponto de entrada para executar as baterias pendentes. Leia primeiro o 
 
 | Ordem | Ação | Estado |
 |---:|---|---|
-| 1 | Auditar hashes, branch, dados e ambiente antes de novas execuções | Pendente por sessão |
-| 2 | Corrigir/validar métricas top-k com empates e duas definições de regret | Pendente |
-| 3 | Completar comparação pareada dos 4 modelos em ta071/ta111, N=8k/32k, 5 repetições | Pendente; piloto isolado já existe |
+| 1 | Auditar hashes, branch, dados e ambiente antes de novas execuções | **S-A0 aprovado com ressalvas** — [relatório](../../docs/reports/2026-11-27-master-runbook-sa0-audit.md) |
+| 2 | Corrigir/validar métricas top-k com empates e duas definições de regret | **S-A1 aprovado** — [relatório](../../docs/reports/2026-11-27-surrogate-topk-metrics-sa1.md); 13 testes |
+| 3 | Completar comparação pareada dos 4 modelos em ta071/ta111, N=8k/32k, 5 repetições | Smoke S-A1 OK ([relatório](../../docs/reports/2026-11-27-surrogate-model-comparison-sa1-smoke.md)); matriz 80 células ainda pendente |
 | 4 | Caracterizar candidatos das trajetórias reais do GWO e avaliar surrogate nessa distribuição | Pendente |
 | 5 | Decidir se existe evidência para integração experimental do surrogate | Bloqueado até 2–4 |
 | 6 | Formalizar decisão Meta-Learning: encerrar em 60 ou avançar a 120 | Pendente |

@@ -365,7 +365,7 @@ Comando de holdout só deve ser executado depois de confirmar a sintaxe e o gate
 
 ## Surrogate
 
-- [ ] Métricas top-k corrigidas/testadas e históricas preservadas.
+- [x] Métricas top-k corrigidas/testadas e históricas preservadas. ([S-A1](2026-11-27-surrogate-topk-metrics-sa1.md); auditoria [S-A0](2026-11-27-master-runbook-sa0-audit.md))
 - [ ] Comparação de modelos pareada concluída (80 ajustes ou desvios justificados).
 - [ ] Resultados por instância/repetição, ICs e custos reportados.
 - [ ] Distribuição GWO real caracterizada e avaliada em teste separado.
