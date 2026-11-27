@@ -12,13 +12,16 @@
 | C4 custo 36 | Medido | `results/meta_learning_cost_pilot_v3/cost_projection.json` ≈ **1,06 h** (3 seeds) / **3,54 h** (10 seeds) |
 | C4 meta-base piloto | Aprovado | `results/meta_learning_metabasis_pilot_v1/`: **432/432** runs (36 instâncias × 4 variantes × 3 seeds) |
 | C4 análise do piloto | Concluída | `results/meta_learning_metabasis_pilot_v1/analysis/` |
+| C4 recheck A–E | Aprovado | `analysis_recheck_20261127/` idêntico ao publicado; 432/432; norm=ub 36/36 |
+| Freeze metabasis_pilot_v1 | Aprovado | `experiments/meta_learning/data/metabasis_pilot_v1/`; decisão `docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md` |
+| LOO seletores (exploratório) | Concluído | `results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1/` |
 
 ## Decisões-chave
 
 1. Não trocar MLP da variante Surrogate; ranking real em trajetórias GWO permanece fraco.
 2. Extrator `taillard_pfsp_features_v1` congelado; preditores só da matriz P.
 3. Expansão para 36 instâncias (3 por grupo) baixada do espelho PISCO; custo viável no hardware local.
-4. Piloto 36×3×4 fechado e agregado; treino meta-modelo ainda não autorizado como evidência confirmatória.
+4. Piloto 36×3×4 fechado, auditado e congelado como `metabasis_pilot_v1`. Avaliação LOO é exploratória; não é evidência confirmatória.
 5. Baseline operacional forte do piloto: **sempre Fuzzy**. Meta-Learning só se justifica se superar esse seletor em holdout por instância.
 
 ## Análise do piloto meta-base (36 instâncias)
@@ -69,23 +72,35 @@ Protocolo: média de makespan em 3 seeds por variante; normalização por UB pub
 - Três seeds por instância estimam ruído, não criam 36×3 unidades independentes.
 - Resultado exploratório: não alegar generalização confirmatória nem promover Fuzzy como ótimo universal fora desta amostra.
 
+## Avaliação exploratória LOO (36 instâncias)
+
+Protocolo: leave-one-instance-out; RF 200 árvores; seed 0; aleatório = média de 100 sorteios/fold. Fonte: `selector_eval_exploratory_v1/summary.json`.
+
+| Seletor | Regret médio | IC95 | vs Fuzzy (melhor/pior/empate) |
+|---|---:|---|---|
+| always Fuzzy | **0,00292** | [0,00159, 0,00441] | — |
+| RF regressor | 0,00291 | [0,00154, 0,00430] | 5 / 3 / 28 |
+| best-global-treino (= Fuzzy) | 0,00292 | [0,00159, 0,00441] | 0 / 0 / 36 |
+| RF classifier | 0,00523 | [0,00342, 0,00707] | 8 / 17 / 11 |
+| always Baseline | 0,00614 | [0,00425, 0,00829] | 12 / 22 / 2 |
+| always Optuna | 0,00681 | [0,00445, 0,00920] | 12 / 23 / 1 |
+| random | 0,00905 | [0,00717, 0,01098] | 6 / 29 / 1 |
+| always Surrogate | 0,01931 | [0,01473, 0,02388] | 3 / 32 / 1 |
+
+Accuracy LOO: classifier 22,2%; regressor 47,2%. RF regressor empatou Fuzzy em regret; classifier piorou. Sem evidência de ganho operacional no piloto.
+
 ## Próximos passos recomendados
 
-**Runbook operacional da próxima rodada:** [2026-11-27-meta-learning-next-execution-runbook.md](2026-11-27-meta-learning-next-execution-runbook.md). Ele contém os comandos ordenados para reprodução, auditoria de completude, integridade numérica e alinhamento de features/alvos. Execute as etapas A–E e envie as saídas antes de iniciar treinamento ou expansão.
-
-
-1. Congelar a meta-base derivada do piloto (`per_instance_targets.csv` + features v1) como versão `metabasis_pilot_v1`.
-2. Implementar baselines de seleção + RF classificador/regressor com divisão **por instância** (Fases 6–8), tratando o resultado como exploratório.
-3. Só então decidir expansão para 10 seeds e/ou 60–120 instâncias, com base no custo já medido.
-4. Não retunar Surrogate nem misturar orçamentos sem reportar a diferença.
+1. Decidir expansão (10 seeds e/ou 60–120 instâncias) com base no custo já medido e neste resultado exploratório negativo/neutro.
+2. Se expandir: nova versão de meta-base (`metabasis_*_v2`); não retreinar silenciosamente sobre o freeze v1.
+3. Não retunar Surrogate nem misturar orçamentos sem reportar a diferença.
+4. Holdout confirmatório só após meta-base maior e critérios pré-registrados.
 
 ## Comandos de verificação
 
 ```bash
-python -m scripts.validate_gwo_populations_csv
-python -m scripts.analyze_gwo_population_distribution
-python -m scripts.evaluate_surrogate_on_gwo_populations
-python -m pytest -q tests/test_meta_learning_features.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
-python -m scripts.run_meta_learning_metabasis_pilot
+python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
 python -m scripts.analyze_meta_learning_metabasis_pilot
+python -m scripts.freeze_meta_learning_metabasis_pilot
+python -m scripts.evaluate_meta_learning_selectors_pilot
 ```

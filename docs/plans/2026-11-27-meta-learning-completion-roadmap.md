@@ -2,7 +2,7 @@
 
 **Data:** 27/11/2026  
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Status:** Fases 1–4 concluídas (piloto 36×3×4 = 432/432 e análise agregada). Pipeline de treino/avaliação meta ainda não iniciado.  
+**Status:** Fases 1–4 concluídas; meta-base piloto congelada (`metabasis_pilot_v1`); avaliação LOO exploratória de baselines/RF concluída (sem ganho vs sempre Fuzzy). Fase 5 (expansão) ainda não autorizada.  
 **Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
 **Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).
 
@@ -220,11 +220,11 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Objetivo:** converter resultados por seed em um problema de seleção por instância.
 
-- [ ] Agregar makespan por instância/variante com média, mediana, desvio-padrão e intervalo de confiança/bootstrap.
-- [ ] Normalizar o alvo por UB validado quando disponível; documentar separadamente qualquer regra para instâncias sem UB.
-- [ ] Gerar quatro alvos contínuos por instância e o rótulo da variante com menor desempenho médio normalizado.
-- [ ] Calcular margem entre primeira e segunda variantes; identificar rótulos instáveis/baixa confiança sem removê-los silenciosamente.
-- [ ] Preservar resultados por seed e produzir análise de sensibilidade para empates e diferenças pequenas.
+- [x] Agregar makespan por instância/variante com média, desvio-padrão; bootstrap do regret na avaliação LOO exploratória.
+- [x] Normalizar o alvo por UB validado quando disponível; fallback `rel_best` documentado (neste piloto: UB 36/36).
+- [x] Gerar quatro alvos contínuos por instância e o rótulo da variante com menor desempenho médio normalizado.
+- [x] Calcular margem entre primeira e segunda variantes; sinalizar low-confidence (22/36) sem remoção silenciosa.
+- [x] Preservar resultados por seed em `runs.csv` do freeze; sensibilidade via margem/low-confidence no relatório.
 - [ ] Verificar correlação entre características e alvos apenas no conjunto de desenvolvimento, sem usar essa análise para selecionar features com acesso ao teste.
 
 **Aceite:** uma linha por instância na meta-base derivada; quatro alvos e classe reproduzíveis; incerteza e regra de normalização documentadas.
@@ -237,13 +237,13 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Objetivo:** implementar as duas estratégias de Meta-Learning sobre os mesmos folds.
 
-- [ ] Implementar seletores baselines: aleatório uniforme, cada variante fixa e melhor variante global do treino.
-- [ ] Implementar RandomForestClassifier para prever a variante vencedora.
-- [ ] Implementar RandomForestRegressor multioutput ou quatro regressors independentes, após teste técnico pré-especificado.
-- [ ] Definir pipeline de pré-processamento dentro dos folds; impedir qualquer fit em dados de validação/teste.
+- [x] Implementar seletores baselines: aleatório uniforme, cada variante fixa e melhor variante global do treino (`evaluate_meta_learning_selectors_pilot.py`).
+- [x] Implementar RandomForestClassifier para prever a variante vencedora (piloto LOO exploratório).
+- [x] Implementar RandomForestRegressor multioutput (piloto LOO exploratório).
+- [x] Fit apenas no treino de cada fold LOO; sem uso do holdout confirmatório (ainda inexistente).
 - [ ] Ajustar hiperparâmetros apenas nos folds de desenvolvimento; manter orçamento de busca modesto e registrado.
-- [ ] Salvar modelos, parâmetros, versões, seeds e previsões out-of-fold.
-- [ ] Comparar classificação e regressão na mesma divisão de instâncias.
+- [x] Salvar previsões out-of-fold e summary (`selector_eval_exploratory_v1/`).
+- [x] Comparar classificação e regressão na mesma divisão de instâncias (LOO).
 
 **Aceite:** modelos reproduzíveis e baselines corretos; previsões out-of-fold disponíveis; nenhuma informação do holdout participa de treinamento ou tuning.
 
@@ -256,14 +256,14 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 **Objetivo:** medir se a seleção meta melhora a decisão em instâncias não vistas.
 
 - [ ] Reservar holdout de instâncias antes do tuning final, estratificando por grupos de dimensão quando possível.
-- [ ] No desenvolvimento, usar validação cruzada agrupada por instância; usar validação aninhada se houver seleção de hiperparâmetros.
+- [x] No piloto: Leave-One-Instance-Out agrupado; resultado declarado **exploratório** (n=36, 22 rótulos low-margin).
 - [ ] Como análise secundária, testar generalização para grupos/famílias de dimensão não vistos, quando a quantidade de instâncias permitir.
-- [ ] Classificação: accuracy, balanced accuracy, macro-F1, matriz de confusão e calibração probabilística quando aplicável.
-- [ ] Regressão: MAE/RMSE por variante, qualidade do ranking e regret da variante selecionada.
-- [ ] Decisão: comparar makespan normalizado e regret contra os baselines, com intervalos de confiança e análise pareada por instância.
-- [ ] Reportar frequência de empates, rótulos instáveis, erros por dimensão e casos em que o meta-modelo escolhe uma variante claramente pior.
+- [x] Classificação piloto: accuracy LOO reportada (complementar); balanced/macro-F1/calibração ainda pendentes.
+- [x] Regressão piloto: regret da variante selecionada (primário); MAE/RMSE por variante ainda pendentes.
+- [x] Decisão piloto: regret + IC bootstrap + pareado vs sempre Fuzzy — RF não supera Fuzzy de forma útil.
+- [x] Reportar low-confidence (22/36) e ausência de ganho vs Fuzzy no status 2026-11-27.
 - [ ] Reportar custo de inferência meta e custo da variante escolhida; manter custo de treino/benchmark separado.
-- [ ] Abrir o holdout uma única vez após congelar pipeline e critérios. Se a amostra for pequena demais, declarar avaliação exploratória em vez de alegar generalização confirmatória.
+- [x] Sem holdout confirmatório nesta rodada; avaliação LOO explícita como exploratória.
 
 **Aceite:** comparação justa com baselines em instâncias não vistas; métricas, incerteza, regret, falhas e limites reportados.
 
@@ -339,13 +339,12 @@ Se o modelo não superar os baselines, isso não invalida o experimento: a concl
 
 ## 9. Ordem prática recomendada para a próxima sessão
 
-1. Recuperar o `populations.csv` e validar integridade (Fase 1).
-2. Corrigir processamento/memória do runner e produzir análise de distribuição (Fase 1).
-3. Com os achados, congelar a configuração Surrogate que será usada em novos dados (Fase 2).
-4. Auditar e congelar o extrator de features (Fase 3).
-5. Medir custo em 36 instâncias e decidir expansão (Fase 4).
+1. Revisar o LOO exploratório: RF não supera sempre Fuzzy no piloto.
+2. Decidir explicitamente: (a) expandir seeds/instâncias, (b) encerrar Meta-Learning com conclusão negativa/insuficiente, ou (c) mudar formulação com decisão versionada.
+3. Se (a): planejar Fase 5 com orçamento do cost pilot; nova versão de meta-base.
+4. Não retunar Surrogate nem consultar holdout inexistente para “melhorar” o RF.
 
-**Não iniciar agora** a bateria de 60/120 instâncias, treinamento dos meta-modelos ou tuning final. A sequência acima reduz o risco de gastar recursos construindo uma meta-base inconsistente.
+**Não iniciar** bateria 60/120 sem decisão de expansão registrada.
 
 ## 10. Relação com outros planos e manutenção
 

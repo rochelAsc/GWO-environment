@@ -278,13 +278,13 @@ Preencher após a execução local:
 
 | Item | Resultado |
 |---|---|
-| Data/hora | PREENCHER |
-| Branch / commit | PREENCHER |
-| Python | PREENCHER |
-| Testes | PREENCHER |
-| Agregação reproduzida | PREENCHER |
-| Completude das chaves | PREENCHER |
-| Integridade numérica | PREENCHER |
-| Alinhamento features/alvos | PREENCHER |
-| Decisão | Aguardando auditoria |
+| Data/hora | 2026-11-27 |
+| Branch / commit | `recovery/surrogate-learning-curve-v2-oom` / `f51f96d020953ffa5a6db0ba6419f2958e27a191` |
+| Python | 3.14.6 |
+| Testes | 19 passed (contratos) + 10 passed (`test_meta_learning_metabasis_pilot`) |
+| Agregação reproduzida | `analysis_recheck_20261127` idêntico ao publicado (Fuzzy 17/36, low-conf 22) |
+| Completude das chaves | 432/432; 0 missing/extra/duplicata |
+| Integridade numérica | 0 inválidos; norm=`ub` 36/36 |
+| Alinhamento features/alvos | 36/36; 35 preditores |
+| Decisão | Freeze `metabasis_pilot_v1` aprovado; LOO exploratório executado (RF não supera Fuzzy) |
 

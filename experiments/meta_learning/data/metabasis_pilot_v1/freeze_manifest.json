@@ -1,0 +1,85 @@
+{
+  "schema_version": "metabasis_pilot_v1",
+  "frozen_at_utc": "2026-11-27T11:56:35.334710+00:00",
+  "git_branch": "recovery/surrogate-learning-curve-v2-oom",
+  "git_commit": "f51f96d020953ffa5a6db0ba6419f2958e27a191",
+  "feature_version": "taillard_pfsp_features_v1",
+  "variants": [
+    "baseline",
+    "optuna",
+    "fuzzy",
+    "surrogate"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "n_instances": 36,
+  "n_runs": 432,
+  "predictor_columns": [
+    "n_jobs",
+    "n_machines",
+    "jobs_per_machine",
+    "machine_load_max_share",
+    "machine_load_min_share",
+    "machine_load_range_ratio",
+    "mean_machine_cv",
+    "std_machine_cv",
+    "max_machine_cv",
+    "processing_mean",
+    "processing_std",
+    "processing_cv",
+    "processing_min",
+    "processing_q25",
+    "processing_median",
+    "processing_q75",
+    "processing_max",
+    "job_load_mean",
+    "job_load_std",
+    "job_load_cv",
+    "job_load_min",
+    "job_load_q25",
+    "job_load_median",
+    "job_load_q75",
+    "job_load_max",
+    "machine_load_mean",
+    "machine_load_std",
+    "machine_load_cv",
+    "machine_load_min",
+    "machine_load_q25",
+    "machine_load_median",
+    "machine_load_q75",
+    "machine_load_max",
+    "adjacent_machine_corr_mean",
+    "adjacent_machine_corr_std"
+  ],
+  "metadata_feature_columns": [
+    "instance",
+    "sha256",
+    "feature_version"
+  ],
+  "primary_selection_metric": "per_instance_regret_vs_oracle",
+  "normalization": {
+    "preferred": "upper_bound_when_available",
+    "fallback": "rel_best_among_variant_means",
+    "note": "If any instance uses rel_best, do not interpret global mean_y as a homogeneous scale; prefer per-instance regret."
+  },
+  "hashes_sha256": {
+    "instance_features.csv": "0d4a7c4435596bc867ab69ac5624e81e82ccc78a33eb1c27b8ffc82bc2cd80a1",
+    "per_instance_targets.csv": "2891dc6c29bbbcfdb37237390cd5169b76723112f44e877bb0a656e72f422a35",
+    "instance_manifest.csv": "e5ecc06260339b8b401697aea9b09f0d4a0b3e1386f573bd6ee9d5ce7ae8c796",
+    "runs.csv": "177bd3ef67b382863f9ff71f46e69a01794aea840b5d84a58687d0bc086b744f"
+  },
+  "sources": {
+    "features": "C:/Users/roche/Documents/Github/GWO-environment/experiments/meta_learning/data/instance_features.csv",
+    "targets": "C:/Users/roche/Documents/Github/GWO-environment/results/meta_learning_metabasis_pilot_v1/analysis/per_instance_targets.csv",
+    "manifest": "C:/Users/roche/Documents/Github/GWO-environment/experiments/meta_learning/data/instance_manifest.csv",
+    "runs": "C:/Users/roche/Documents/Github/GWO-environment/results/meta_learning_metabasis_pilot_v1/runs.csv"
+  },
+  "notes": [
+    "Exploratory pilot freeze; not confirmatory Meta-Learning evidence.",
+    "Operational baseline to beat: always Fuzzy (also computed inside each train fold).",
+    "Surrogate budget remains unequal: 1530 exact + 15000 predictions vs 15030 exact."
+  ]
+}
