@@ -91,18 +91,34 @@ Protocolo: leave-one-instance-out; RF 200 árvores; seed 0; aleatório = média 
 
 Accuracy LOO: classifier 22,2%; regressor 47,2%. RF regressor empatou Fuzzy em regret; classifier piorou. Sem evidência de ganho operacional no piloto.
 
+## Auditoria crítica da avaliação LOO
+
+- A diferença pontual de regret entre RF regressor e sempre Fuzzy é de aproximadamente **−0,0000134** (0,0029053 contra 0,0029187), pequena demais para sustentar ganho operacional; o placar pareado é 5/3/28.
+- Os IC95 bootstrap se sobrepõem amplamente. O bootstrap dos 36 regrets descreve variação entre instâncias do piloto, mas não incorpora integralmente a variabilidade do processo de treinamento, seleção de modelo ou mudança de distribuição.
+- O LOO treina 36 modelos com 35 instâncias cada e 35 preditores. A relação amostra/dimensão é desfavorável; o resultado deve ser tratado como diagnóstico exploratório, não como estimativa confirmatória de generalização.
+- Os folds LOO compartilham grande parte dos dados de treino; não equivalem a um holdout independente. Nenhum holdout confirmatório foi reservado.
+- O fato de o melhor-global-do-treino coincidir com Fuzzy em todos os folds mostra que o seletor aprendido por frequência colapsa no baseline operacional neste piloto.
+
 ## Próximos passos recomendados
 
-1. Decidir expansão (10 seeds e/ou 60–120 instâncias) com base no custo já medido e neste resultado exploratório negativo/neutro.
-2. Se expandir: nova versão de meta-base (`metabasis_*_v2`); não retreinar silenciosamente sobre o freeze v1.
-3. Não retunar Surrogate nem misturar orçamentos sem reportar a diferença.
-4. Holdout confirmatório só após meta-base maior e critérios pré-registrados.
+1. Reproduzir o freeze por SHA-256 e repetir o LOO em diretório novo, sem sobrescrever os artefatos publicados (runbook atualizado).
+2. Após reprodução, decidir formalmente se a extensão continua. Se continuar, priorizar diversidade/número de instâncias, não apenas mais seeds.
+3. Criar `metabasis_v2` para qualquer expansão; `metabasis_pilot_v1` permanece imutável.
+4. Reservar holdout por instância antes de tuning/seleção final; manter avaliação LOO atual como desenvolvimento exploratório.
+5. Não retunar Surrogate nem misturar orçamentos sem reportar a diferença.
+
+**Gate atual:** Fase 5 não autorizada. A reprodução A–D do [runbook](2026-11-27-meta-learning-next-execution-runbook.md) e a decisão explícita de continuidade são pré-requisitos.
 
 ## Comandos de verificação
 
 ```bash
 python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
-python -m scripts.analyze_meta_learning_metabasis_pilot
-python -m scripts.freeze_meta_learning_metabasis_pilot
-python -m scripts.evaluate_meta_learning_selectors_pilot
+python -m scripts.evaluate_meta_learning_selectors_pilot --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 --seed 0 --random-repeats 100
 ```
+
+Não reexecute o freeze no diretório existente: o artefato é imutável. A reprodução LOO deve usar o diretório novo indicado no runbook.
+
+
+## Runbook vigente
+
+A próxima execução está detalhada em [2026-11-27-meta-learning-next-execution-runbook.md](2026-11-27-meta-learning-next-execution-runbook.md). Ele substitui as antigas etapas A–E de auditoria da meta-base, que já foram concluídas e registradas nos commits mais recentes.
