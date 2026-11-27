@@ -2,10 +2,11 @@
 
 **Data:** 27/11/2026  
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Status:** Fases 1–4 concluídas; meta-base piloto congelada (`metabasis_pilot_v1`); avaliação LOO exploratória de baselines/RF concluída (sem ganho vs sempre Fuzzy). Fase 5 (expansão) ainda não autorizada.  
+**Status:** Fases 1–4 concluídas; `metabasis_pilot_v1` congelada; LOO exploratório concluído sem ganho operacional útil vs sempre Fuzzy. Fase 5 ainda bloqueada por gate de reprodução/decisão.  
 **Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
 **Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).  
 **LOO exploratório:** [2026-11-27-meta-learning-selector-loo-exploratory.md](../reports/2026-11-27-meta-learning-selector-loo-exploratory.md).  
+**Próxima execução:** [runbook de reprodução e decisão](../reports/2026-11-27-meta-learning-next-execution-runbook.md).  
 **Freeze:** [2026-11-27-metabasis-pilot-v1-freeze.md](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md).
 
 > Este documento é um plano de execução futuro. Não afirma que as etapas pendentes, a meta-base, os modelos ou a avaliação final já existam.
@@ -197,12 +198,14 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Gate:** 36 instâncias são piloto de viabilidade, não evidência final de generalização. Não treinar um modelo final nem alegar desempenho generalizável nesta fase.
 
-### Fase 5 — Expandir e congelar a meta-base confirmatória
+### Fase 5 — Decidir expansão e construir meta-base confirmatória
 
-**Objetivo:** obter instâncias independentes suficientes para treinar e avaliar seleção de variantes.
+**Objetivo:** somente se a extensão for mantida após a reprodução do piloto, obter instâncias independentes suficientes para treinar e avaliar seleção de variantes.
 
-- [ ] Expandir de 36 para 60 instâncias após aprovação do piloto e do orçamento.
-- [ ] Avaliar cobertura por grupo/dimensão; se viável, ampliar para o benchmark completo de 120 instâncias.
+**Gate de entrada (ainda pendente):** reproduzir hashes do freeze e LOO em diretório separado conforme o runbook; revisar divergências; registrar uma decisão aprovada sobre continuidade. O resultado atual não demonstra ganho de RF sobre sempre Fuzzy. Não iniciar execução GWO até este gate ser aprovado.
+
+- [ ] Após decisão de continuidade, expandir prioritariamente a diversidade de 36 para 60 instâncias e planejar cobertura do benchmark de 120; não aumentar apenas seeds como substituto de novas instâncias.
+- [ ] Reservar holdout por instância antes de tuning/seleção final; definir seu tamanho e estratificação por dimensão no plano da expansão.
 - [ ] Priorizar 120 instâncias como objetivo de cobertura; se recursos impedirem, justificar quantitativamente o conjunto final e restringir as conclusões.
 - [ ] Aumentar o número de seeds por instância conforme custo: começar com 10 e considerar 20–30 na fase confirmatória, preservando pareamento entre variantes.
 - [ ] Executar configurações GWO congeladas; persistir checkpoints, logs e resultados por execução.
@@ -216,7 +219,7 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Dependências:** Fase 4 aprovada.
 
-**Gate:** congelar os dados antes de abrir o holdout ou ajustar modelos finais. Correções posteriores geram nova versão da meta-base.
+**Gate:** esta fase só começa após decisão explícita. Congelar os dados antes de abrir o holdout ou ajustar modelos finais. Correções posteriores geram nova versão da meta-base; `metabasis_pilot_v1` permanece imutável.
 
 ### Fase 6 — Construir os alvos e controlar incerteza
 
@@ -237,7 +240,7 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 ### Fase 7 — Treinar baselines, classificador e regressor
 
-**Objetivo:** implementar as duas estratégias de Meta-Learning sobre os mesmos folds.
+**Objetivo:** implementar e avaliar as estratégias de Meta-Learning sobre os mesmos folds. A implementação piloto já existe; a fase confirmatória (tuning, calibração e congelamento final) permanece pendente.
 
 - [x] Implementar seletores baselines: aleatório uniforme, cada variante fixa e melhor variante global do treino (`evaluate_meta_learning_selectors_pilot.py`).
 - [x] Implementar RandomForestClassifier para prever a variante vencedora (piloto LOO exploratório).
@@ -255,7 +258,7 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 ### Fase 8 — Avaliação externa e análise estatística
 
-**Objetivo:** medir se a seleção meta melhora a decisão em instâncias não vistas.
+**Objetivo:** medir se a seleção meta melhora a decisão em instâncias não vistas. O LOO atual é apenas exploratório: 36 instâncias, 35 preditores, folds fortemente sobrepostos e sem holdout reservado.
 
 - [ ] Reservar holdout de instâncias antes do tuning final, estratificando por grupos de dimensão quando possível.
 - [x] No piloto: Leave-One-Instance-Out agrupado; resultado declarado **exploratório** (n=36, 22 rótulos low-margin).
@@ -341,12 +344,13 @@ Se o modelo não superar os baselines, isso não invalida o experimento: a concl
 
 ## 9. Ordem prática recomendada para a próxima sessão
 
-1. Revisar o LOO exploratório: RF não supera sempre Fuzzy no piloto.
-2. Decidir explicitamente: (a) expandir seeds/instâncias, (b) encerrar Meta-Learning com conclusão negativa/insuficiente, ou (c) mudar formulação com decisão versionada.
-3. Se (a): planejar Fase 5 com orçamento do cost pilot; nova versão de meta-base.
-4. Não retunar Surrogate nem consultar holdout inexistente para “melhorar” o RF.
+1. Executar o runbook vigente: confirmar branch/HEAD, rodar testes, verificar os quatro hashes do freeze e reproduzir o LOO em diretório novo.
+2. Comparar os artefatos reproduzidos com o relatório LOO e investigar qualquer divergência sem sobrescrever o freeze.
+3. Registrar decisão: (a) expandir instâncias com novo freeze e holdout pré-reservado; (b) encerrar a extensão como resultado exploratório sem ganho demonstrado; ou (c) reformular a pergunta com novo protocolo.
+4. Se (a), priorizar 60–120 instâncias independentes; mais seeds refinam estimativas dentro de instâncias, mas não corrigem n pequeno.
+5. Não retunar Surrogate, RF ou features consultando holdout; não iniciar bateria GWO sem decisão registrada.
 
-**Não iniciar** bateria 60/120 sem decisão de expansão registrada.
+**Gate atual:** apenas reprodução e decisão. A expansão 60/120 não está autorizada.
 
 ## 10. Relação com outros planos e manutenção
 
