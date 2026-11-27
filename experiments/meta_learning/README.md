@@ -417,3 +417,8 @@ Comandos corretos a partir da raiz do repositório:
 python -m pytest -q tests/test_gwo_population_observer.py
 python -m scripts.run_gwo_population_distribution_audit --surrogate-dir results/meta_learning_cost_pilot_v2/surrogates
 ```
+
+
+## Índice e execução integrada
+
+Para executar as próximas baterias sem confundir os dois problemas, consulte o [índice operacional](PIPELINE_EXECUTION_INDEX.md) e o [runbook mestre de execução](../../docs/reports/2026-11-27-master-execution-runbook-surrogate-and-meta-learning.md). Eles consolidam gates, ordem de execução, métricas top-k, comparação de modelos, diagnóstico da distribuição GWO, decisão 60→120, proteção do holdout e checklist de retomada.
