@@ -58,3 +58,12 @@ Reprodução A–D aprovada sem regenerar este diretório. Detalhes: [2026-11-27
 | Decisão de expansão | **pendente** |
 
 Este freeze continua imutável. Qualquer expansão cria nova versão (`metabasis_v2`…), nunca sobrescreve `metabasis_pilot_v1`.
+
+
+## Aditivo de decisão — expansão v2 aprovada (2026-11-27)
+
+A decisão posterior de continuidade foi aprovada em [2026-11-27-meta-learning-expansion-v2.md](2026-11-27-meta-learning-expansion-v2.md). Ela **não altera este freeze**: metabasis_pilot_v1 continua imutável e seus 36 casos pertencem somente ao conjunto de desenvolvimento.
+
+A nova versão será construída em metabasis_v2, com checkpoint de 60 instâncias (48 desenvolvimento + 12 holdout selado) e alvo de 120 (96 desenvolvimento + 24 holdout). O split deve ser congelado antes de novas execuções GWO. O holdout não será aberto no checkpoint de 60 se houver intenção de avançar a 120.
+
+A coleta está autorizada apenas após inventário, split pré-registrado e adaptação/testes dos scripts para schema v2. Ver [runbook atualizado](../reports/2026-11-27-meta-learning-next-execution-runbook.md).
