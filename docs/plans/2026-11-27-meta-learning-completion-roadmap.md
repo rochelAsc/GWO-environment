@@ -2,7 +2,7 @@
 
 **Data:** 27/11/2026  
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Status:** Fases 1–3 concluídas; Fase 4 (piloto 36×3×4) em execução em 2026-11-27. Pipeline de treino/avaliação meta ainda não iniciado.  
+**Status:** Fases 1–4 concluídas (piloto 36×3×4 = 432/432 e análise agregada). Pipeline de treino/avaliação meta ainda não iniciado.  
 **Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
 **Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).
 
@@ -180,12 +180,12 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Objetivo:** medir a viabilidade da meta-base antes de comprometer uma bateria grande.
 
-- [ ] Expandir o conjunto de 12 para 36 instâncias, buscando três instâncias por grupo de dimensão quando a disponibilidade/proveniência permitir.
-- [ ] Garantir diversidade de jobs, máquinas e regimes; evitar selecionar apenas instâncias convenientes ou quase duplicadas.
-- [ ] Executar as quatro variantes em 3–5 seeds pareadas por instância, reutilizando resultados Week 6 apenas após validação de hashes/configuração.
-- [ ] Medir runtime, custo de avaliação exata, inferência, falhas e armazenamento por grupo de dimensão.
-- [ ] Estimar custo total para 60 e 120 instâncias com margem para retomada e reexecução.
-- [ ] Auditar a meta-base piloto: completude, duplicatas, proveniência, contadores e consistência entre resultados e alvos.
+- [x] Expandir o conjunto de 12 para 36 instâncias (3 por grupo; espelho PISCO).
+- [x] Garantir diversidade de jobs/máquinas via estratificação pelos 12 grupos Taillard.
+- [x] Executar as quatro variantes em 3 seeds pareadas por instância (`meta_learning_metabasis_pilot_v1`, 432/432).
+- [x] Medir runtime e custo por grupo (`meta_learning_cost_pilot_v3` + runs do piloto).
+- [x] Estimar custo para expansão (≈1,06 h com 3 seeds; ≈3,54 h com 10 seeds no hardware local).
+- [x] Auditar/agregar a meta-base piloto (`analyze_meta_learning_metabasis_pilot.py`; Fuzzy 17/36 wins; 22 rótulos de baixa margem).
 
 **Aceite:** piloto de 36 instâncias concluído ou justificativa documentada de inviabilidade; estimativa de custo baseada em medições; decisão explícita de avançar, ajustar ou interromper.
 
