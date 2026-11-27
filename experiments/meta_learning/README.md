@@ -30,7 +30,6 @@ O RF regressor não demonstrou superioridade: IC95 se sobrepõem amplamente e h�
 Comandos (raiz do repositório; reprodução em diretório novo):
 
 ```bash
-python -m scripts.analyze_meta_learning_metabasis_pilot
 python -m scripts.evaluate_meta_learning_selectors_pilot --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 --seed 0 --random-repeats 100
 python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py
 ```
