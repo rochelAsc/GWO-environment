@@ -1,0 +1,11 @@
+{
+  "status": "completed",
+  "models_completed": [
+    "extra_trees",
+    "hist_gradient_boosting",
+    "mlp_64x64",
+    "random_forest"
+  ],
+  "results_csv": "results\\meta_learning_surrogate_model_comparison_pilot\\pilot_results.csv",
+  "metadata": "results\\meta_learning_surrogate_model_comparison_pilot\\pilot_metadata.json"
+}
