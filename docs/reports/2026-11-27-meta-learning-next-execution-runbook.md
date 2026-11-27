@@ -29,9 +29,9 @@ O benchmark-alvo tem 12 grupos de dimensão e 10 instâncias por grupo (120). Co
 | 60 instâncias | 48 (4/grupo) | 12 (1/grupo) | 60 |
 | 120 instâncias | 96 (8/grupo) | 24 (2/grupo) | 120 |
 
-As 36 instâncias de metabasis_pilot_v1 pertencem ao desenvolvimento. Em cada grupo, das 7 instâncias ainda não usadas, selecionar 5 para desenvolvimento e 2 para holdout, com seed de split fixada e sem observar qualquer resultado de algoritmo. No checkpoint de 60, entram 1 desenvolvimento + 1 holdout por grupo; ao avançar para 120, entram mais 4 desenvolvimento + 1 holdout por grupo.
+As 36 instâncias de metabasis_pilot_v1 pertencem ao desenvolvimento. Em cada grupo, das 7 instâncias ainda não usadas, selecionar 5 para desenvolvimento e 2 para holdout, com seed de split fixada e sem observar qualquer resultado de algoritmo. Acrescentar ao manifesto um campo stage. Entre as 5 de desenvolvimento, sortear 1 para stage=60 e 4 para stage=120; entre as 2 de holdout, sortear 1 para stage=60 e 1 para stage=120. Assim, no checkpoint de 60 entram 1 desenvolvimento + 1 holdout por grupo; ao avançar para 120, entram mais 4 desenvolvimento + 1 holdout por grupo.
 
-O manifesto de split deve ser criado e congelado antes da primeira execução GWO v2. Registrar: ID, grupo, origem, SHA-256, dimensões, bounds, partição, seed/algoritmo de split e hash do manifesto. Não usar makespan, winner, UB/LB ou resultados GWO na seleção do split.
+O manifesto de split deve ser criado e congelado antes da primeira execução GWO v2. Registrar: ID, grupo, origem, SHA-256, dimensões, bounds, partição, estágio (60/120), seed/algoritmo de split e hash do manifesto. Não usar makespan, winner, UB/LB ou resultados GWO na seleção do split.
 
 ### 2.2 Regra para abrir o holdout
 
@@ -112,7 +112,7 @@ A inspeção do código atual encontrou acoplamento explícito ao piloto:
 1. Obter os arquivos Taillard faltantes a partir da fonte espelho documentada em data/benchmarks/taillard/README.md; manter formato original e registrar proveniência.
 2. Inventariar o conjunto de 120 esperado: 12 grupos × 10 instâncias. Confirmar IDs, dimensões, bounds disponíveis e hashes. Não presumir que um arquivo é válido apenas pelo nome.
 3. Revalidar os 36 arquivos já usados contra os hashes registrados; não alterá-los.
-4. Em cada grupo, separar as 3 instâncias do piloto das 7 restantes. Aplicar o split pré-registrado: 5 novas para desenvolvimento e 2 para holdout.
+4. Em cada grupo, separar as 3 instâncias do piloto das 7 restantes. Com seed fixada, sortear 5 novas para desenvolvimento e 2 para holdout; sortear também a ordem dentro de cada partição para atribuir stage=60 (1 desenvolvimento + 1 holdout) e stage=120 (4 desenvolvimento + 1 holdout).
 5. Congelar o manifesto e seu SHA-256 antes de observar novos resultados GWO.
 6. Gerar features determinísticas das instâncias elegíveis. Features do holdout podem ser extraídas da matriz P (são entradas disponíveis na inferência), mas seus targets e resultados de GWO devem permanecer selados.
 
