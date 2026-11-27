@@ -160,3 +160,7 @@ O planejamento da extensão de Meta-Learning está em [`experiments/meta_learnin
 O roteiro metodológico aprovado para a próxima fase está em [docs/research/gwo_pfsp_experimental_roadmap_2026-11-27.md](docs/research/gwo_pfsp_experimental_roadmap_2026-11-27.md), com o registro das decisões em [docs/decisions/2026-11-27-gwo-pfsp-research-roadmap.md](docs/decisions/2026-11-27-gwo-pfsp-research-roadmap.md) e a [revisão de literatura](docs/research/gwo_pfsp_literature_review_2026-11-27.md).
 
 O novo planejamento mantém PFSP clássico/makespan e GWO como escopo central; prevê Taillard estratificado em 72 instâncias de desenvolvimento e 48 de holdout, orçamento por avaliações exatas com checkpoints Fibonacci calibrados no piloto, sementes progressivas e avaliação final iniciando em 40 seeds com expansão condicionada à precisão estatística. O Meta-Learning fica pausado até a construção e auditoria de uma base experimental ampla. Esses documentos registram decisões e planos; não significam que a nova bateria tenha sido executada.
+
+## Pipeline operacional — próximas tarefas
+
+O backlog executável, com checklist por fase, dependências, entregáveis e gates de aceite, está em [docs/research/gwo_pfsp_execution_todo_2026-11-27.md](docs/research/gwo_pfsp_execution_todo_2026-11-27.md). Ele operacionaliza o roteiro experimental e indica que a próxima sessão deve começar pela auditoria do estado do repositório, do inventário Taillard e dos contadores de avaliações exatas — antes do piloto.
