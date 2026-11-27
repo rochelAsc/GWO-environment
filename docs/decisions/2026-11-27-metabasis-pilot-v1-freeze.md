@@ -39,3 +39,5 @@ Conteúdo imutável desta versão:
 
 `results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1/`  
 (LOO por instância; RF classifier/regressor + baselines). Não é holdout confirmatório.
+
+Relatório: [2026-11-27-meta-learning-selector-loo-exploratory.md](../reports/2026-11-27-meta-learning-selector-loo-exploratory.md).

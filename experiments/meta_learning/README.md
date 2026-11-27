@@ -1,8 +1,27 @@
 # Plano de Meta-Learning: classificação e regressão
 
-**Status:** planejamento metodológico aprovado para implementação futura. O pipeline de Meta-Learning que seleciona variantes GWO (classificação/regressão) ainda não foi implementado nem avaliado. Isso é distinto da extensão experimental de surrogate descrita abaixo.
+**Status (2026-11-27):** piloto de meta-base 36×3×4 executado, auditado e congelado como `metabasis_pilot_v1`. Avaliação LOO exploratória de baselines + RF classifier/regressor concluída: **sem ganho vs sempre Fuzzy**. Holdout confirmatório e expansão 60/120 ainda não autorizados. A curva/comparação de surrogate abaixo é trilho distinto.
 
-Este plano define um pipeline único para comparar duas estratégias de Meta-Learning — classificação e regressão — usando a mesma base experimental. É uma extensão opcional do projeto, não uma etapa obrigatória do roteiro do professor e não substitui as Semanas 1–6.
+Este documento define o pipeline metodológico e aponta o estado real dos artefatos. É uma extensão opcional do projeto, não etapa obrigatória do roteiro do professor e não substitui as Semanas 1–6.
+
+### Estado do trilho Meta-Learning (seleção de variantes)
+
+| Artefato | Caminho |
+|---|---|
+| Freeze da meta-base | [`data/metabasis_pilot_v1/`](data/metabasis_pilot_v1/) |
+| Decisão de freeze | [`docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md`](../../docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md) |
+| Status das fases | [`docs/reports/2026-11-27-meta-learning-phase-status.md`](../../docs/reports/2026-11-27-meta-learning-phase-status.md) |
+| Relatório LOO exploratório | [`docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md`](../../docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md) |
+| Roadmap | [`docs/plans/2026-11-27-meta-learning-completion-roadmap.md`](../../docs/plans/2026-11-27-meta-learning-completion-roadmap.md) |
+
+Comandos (raiz do repositório):
+
+```bash
+python -m scripts.analyze_meta_learning_metabasis_pilot
+python -m scripts.freeze_meta_learning_metabasis_pilot
+python -m scripts.evaluate_meta_learning_selectors_pilot
+python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py
+```
 
 ## Trabalho concluído relacionado: curva de aprendizagem do surrogate
 
@@ -13,7 +32,7 @@ Foi executada e analisada uma extensão separada para avaliar o efeito do tamanh
 - [Protocolo v2 de amostragem e diagnósticos](reports/surrogate_learning_curve_v2_protocol.md).
 - [Relatório de recuperação da execução interrompida](reports/surrogate_learning_curve_v2_recovery.md).
 
-Essa curva **não é a meta-base de Meta-Learning** descrita neste documento: ela estuda o surrogate de makespan, não aprende a escolher entre variantes GWO. Portanto, a afirmação de que o pipeline de Meta-Learning ainda não foi executado continua válida.
+Essa curva **não é a meta-base de Meta-Learning** descrita neste documento: ela estuda o surrogate de makespan, não aprende a escolher entre variantes GWO. O trilho de seleção de variantes tem piloto próprio (`metabasis_pilot_v1` + LOO exploratório); não misturar as duas conclusões.
 
 ## 1. Objetivo
 
@@ -238,34 +257,32 @@ A melhor variante por média pode mudar com as seeds. Portanto:
 - repetir análise excluindo ou ponderando esses casos como sensibilidade, sem removê-los silenciosamente;
 - não afirmar que a classe prevista é universal quando as diferenças observadas são praticamente equivalentes.
 
-## 11. Estrutura de diretórios proposta
+## 11. Estrutura de diretórios (estado atual)
 
-A implementação futura deve ficar isolada, sem alterar scripts/artefatos das Semanas 2–6:
+Scripts/artefatos das Semanas 2–6 permanecem intactos. Layout do trilho meta:
 
 ```text
 experiments/meta_learning/
 ├── README.md
-├── config/
-│   └── meta_learning_v1.json
 ├── data/
-│   ├── instance_features.csv
-│   ├── run_results.csv
-│   └── meta_dataset.csv
+│   ├── instance_features.csv          # features v1 (36 instâncias)
+│   ├── instance_manifest.csv
+│   └── metabasis_pilot_v1/            # freeze: features, targets, runs, hashes
 ├── scripts/
 │   ├── extract_instance_features.py
-│   ├── build_meta_dataset.py
-│   ├── train_classifier.py
-│   ├── train_regressor.py
-│   ├── evaluate_meta_models.py
-│   └── run_meta_learning.py
-├── models/
-├── reports/
-├── tests/
-└── results/
-    └── meta_learning_v1/
+│   └── … (runners surrogate learning curve / model comparison)
+├── reports/                           # trilho surrogate
+└── referencias.md
 ```
 
-Os arquivos de dados/modelos/resultados só serão criados durante a implementação/execução. Não versionar artefatos vazios nem colocar resultados fictícios no repositório. Configurações, scripts, testes e relatórios devem ser versionados. Cada execução deve registrar commit, hashes das instâncias, versão do extrator, parâmetros, seeds, ambiente e timestamp.
+Scripts do trilho de seleção de variantes ficam em `scripts/` na raiz do repositório:
+
+- `run_meta_learning_metabasis_pilot.py`
+- `analyze_meta_learning_metabasis_pilot.py`
+- `freeze_meta_learning_metabasis_pilot.py`
+- `evaluate_meta_learning_selectors_pilot.py`
+
+Não versionar artefatos vazios nem resultados fictícios. Cada execução registra commit, hashes, versão do extrator, seeds e timestamp (`freeze_manifest.json`).
 
 ## 12. Pipeline operacional
 
@@ -290,25 +307,26 @@ flowchart TD
 
 ## 13. Critérios de aceite antes de qualquer conclusão
 
-- [ ] Conjunto de instâncias ampliado e diversidade documentada.
-- [ ] Piloto de custo concluído antes de definir a bateria final.
-- [ ] Features independentes dos resultados e sem vazamento.
-- [ ] Resultados das quatro variantes íntegros, com seeds e contadores auditáveis.
-- [ ] Meta-base com uma linha por instância e proveniência rastreável.
-- [ ] Divisões exclusivamente por instância.
-- [ ] Baselines simples calculados sem consultar o teste.
-- [ ] Classificação e regressão avaliadas sobre os mesmos folds/holdout.
-- [ ] Regret, incerteza dos rótulos e custos reportados.
-- [ ] Testes automatizados, relatório e reprodução documentados.
+- [x] Conjunto piloto ampliado para 36 instâncias (3 por grupo); 60/120 ainda pendente.
+- [x] Piloto de custo concluído (`meta_learning_cost_pilot_v3`).
+- [x] Features independentes dos resultados e sem vazamento (`taillard_pfsp_features_v1`).
+- [x] Resultados das quatro variantes íntegros (432/432) com seeds e hashes auditáveis.
+- [x] Meta-base com uma linha por instância e proveniência (`metabasis_pilot_v1`).
+- [x] Divisões exclusivamente por instância (LOO exploratório).
+- [x] Baselines simples calculados sem consultar o fold de teste.
+- [x] Classificação e regressão avaliadas nos mesmos folds LOO (exploratório).
+- [x] Regret, rótulos low-confidence e comparação vs Fuzzy reportados.
+- [ ] Holdout confirmatório / meta-base ≥60 com critérios pré-registrados.
+- [x] Testes automatizados e reprodução do piloto documentados.
 
 ## 14. Limitações e decisão de escopo
 
-- As duas instâncias atuais não sustentam treinamento/avaliação de Meta-Learning.
-- A meta-base exige novas execuções e pode custar milhares de runs; não executar sem piloto e estimativa de recursos.
-- Random Forest é um ponto de partida, não uma escolha comprovadamente ótima.
-- O resultado será válido para a distribuição de instâncias representada no dataset; generalização para outras famílias de scheduling não está garantida.
-- Meta-Learning é uma extensão independente e opcional. A entrega principal continua sendo a linha PFSP/Taillard e os resultados auditados das Semanas 2–6.
-- O documento define o plano, não afirma que código, modelos ou experimentos de Meta-Learning já existem.
+- O piloto 36×3×4 é exploratório; 22/36 rótulos têm margem &lt; 0,5%.
+- LOO mostrou RF sem ganho operacional vs sempre Fuzzy; não alegar benefício confirmatório.
+- Expansão 60/120 e mais seeds exigem decisão explícita de Fase 5 e nova versão de meta-base.
+- Random Forest é ponto de partida, não vencedor presumido.
+- Generalização vale só para a distribuição representada; outras famílias de scheduling não estão cobertas.
+- Meta-Learning permanece extensão opcional. A entrega principal continua sendo PFSP/Taillard e as Semanas 2–6.
 
 
 ## Referências e curva de aprendizagem do surrogate
@@ -337,7 +355,7 @@ A curva v1 foi executada para ta071 e ta111, com 300, 573, 1.095, 2.093 e 4.000 
 
 Conclusão: mais amostras melhoraram RMSE e ranking, mas a qualidade ainda é insuficiente, principalmente na ta111. Não aumentar N imediatamente. Primeiro comparar MLP com GBDT/HistGradientBoosting e ExtraTrees, investigar ranking pareado e avaliar candidatos extraídos de trajetórias GWO. A execução v1 chamou o braço LHS em blocos de até 512 draws; por isso, não descrevê-lo como um LHS global de N pontos.
 
-**Meta-Learning por instância:** a expansão de 12 para 36 instâncias Taillard é recomendada como próximo piloto (três instâncias por grupo), com possível avanço para 60 e depois o benchmark completo de 120 instâncias. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância. Ver o relatório de auditoria antes de iniciar a bateria.
+**Meta-Learning por instância:** o piloto 36 (3 por grupo) já foi executado, congelado e avaliado em LOO exploratório sem ganho vs Fuzzy. Próximo passo é decisão de expansão (60/120 e/ou mais seeds), não retreino silencioso. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância.
 
 
 ### Curva de aprendizagem v2 — LHS global e diagnósticos

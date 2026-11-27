@@ -4,7 +4,9 @@
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
 **Status:** Fases 1–4 concluídas; meta-base piloto congelada (`metabasis_pilot_v1`); avaliação LOO exploratória de baselines/RF concluída (sem ganho vs sempre Fuzzy). Fase 5 (expansão) ainda não autorizada.  
 **Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
-**Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).
+**Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).  
+**LOO exploratório:** [2026-11-27-meta-learning-selector-loo-exploratory.md](../reports/2026-11-27-meta-learning-selector-loo-exploratory.md).  
+**Freeze:** [2026-11-27-metabasis-pilot-v1-freeze.md](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md).
 
 > Este documento é um plano de execução futuro. Não afirma que as etapas pendentes, a meta-base, os modelos ou a avaliação final já existam.
 

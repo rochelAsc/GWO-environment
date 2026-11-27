@@ -74,6 +74,8 @@ Protocolo: média de makespan em 3 seeds por variante; normalização por UB pub
 
 ## Avaliação exploratória LOO (36 instâncias)
 
+Relatório completo: [2026-11-27-meta-learning-selector-loo-exploratory.md](2026-11-27-meta-learning-selector-loo-exploratory.md).
+
 Protocolo: leave-one-instance-out; RF 200 árvores; seed 0; aleatório = média de 100 sorteios/fold. Fonte: `selector_eval_exploratory_v1/summary.json`.
 
 | Seletor | Regret médio | IC95 | vs Fuzzy (melhor/pior/empate) |
