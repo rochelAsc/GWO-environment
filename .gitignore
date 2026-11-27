@@ -42,3 +42,6 @@ Thumbs.db
 # Local experiment outputs (keep tracked, curated results under results/)
 # Uncomment only if raw outputs should be ignored:
 # results/raw/
+
+# Large experimental population datasets
+results/gwo_population_distribution_audit_v1/
