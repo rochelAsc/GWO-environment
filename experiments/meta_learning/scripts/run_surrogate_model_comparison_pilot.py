@@ -11,6 +11,7 @@ import gc
 import hashlib
 import json
 import platform
+import threading
 import time
 from pathlib import Path
 from typing import Any
@@ -19,6 +20,10 @@ import joblib
 import numpy as np
 import scipy
 import sklearn
+try:
+    import psutil
+except ImportError:  # Optional: metrics remain usable without psutil.
+    psutil = None
 from sklearn.ensemble import ExtraTreesRegressor, HistGradientBoostingRegressor, RandomForestRegressor
 from threadpoolctl import threadpool_limits
 
@@ -57,6 +62,41 @@ def _unique_rows(permutations: np.ndarray) -> bool:
             return False
         seen.add(key)
     return True
+
+
+class _PeakRSSSampler:
+    """Sample process RSS during one fit/predict block when psutil is available."""
+
+    def __init__(self, interval_seconds: float = 0.05) -> None:
+        self.interval_seconds = interval_seconds
+        self.peak_bytes: int | None = None
+        self._stop = threading.Event()
+        self._thread: threading.Thread | None = None
+
+    def _sample(self) -> None:
+        process = psutil.Process()
+        while not self._stop.is_set():
+            try:
+                rss = process.memory_info().rss
+                self.peak_bytes = max(self.peak_bytes or 0, rss)
+            except psutil.Error:
+                pass
+            self._stop.wait(self.interval_seconds)
+
+    def __enter__(self) -> "_PeakRSSSampler":
+        if psutil is not None:
+            self._thread = threading.Thread(target=self._sample, daemon=True)
+            self._thread.start()
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        self._stop.set()
+        if self._thread is not None:
+            self._thread.join()
+
+    @property
+    def peak_mb(self) -> float | None:
+        return self.peak_bytes / (1024 ** 2) if self.peak_bytes is not None else None
 
 
 def _make_estimators(seed: int) -> dict[str, Any]:
@@ -232,6 +272,7 @@ def run_pilot(
         },
         "execution": {
             "device": "CPU",
+            "rss_sampling": "psutil process RSS sampled every 50 ms when installed; includes resident data arrays and runtime, not model-only memory",
             "thread_limit": 1,
             "sequential_models": True,
         },
@@ -262,12 +303,13 @@ def run_pilot(
             continue
         print(f"START {model_name}: X_train={X_train.shape}, X_test={X_test.shape}")
         fit_start = time.perf_counter()
-        with threadpool_limits(limits=1):
-            estimator.fit(X_train, y_train)
-            training_seconds = time.perf_counter() - fit_start
-            inference_start = time.perf_counter()
-            predictions = estimator.predict(X_test)
-            inference_seconds = time.perf_counter() - inference_start
+        with _PeakRSSSampler() as memory_sampler:
+            with threadpool_limits(limits=1):
+                estimator.fit(X_train, y_train)
+                training_seconds = time.perf_counter() - fit_start
+                inference_start = time.perf_counter()
+                predictions = estimator.predict(X_test)
+                inference_seconds = time.perf_counter() - inference_start
         metrics = evaluate_predictions(y_test, predictions)
         if not np.all(np.isfinite(predictions)):
             raise ValueError(f"{model_name} produced non-finite predictions")
@@ -281,6 +323,8 @@ def run_pilot(
             "training_seconds": training_seconds,
             "inference_seconds_batch": inference_seconds,
             "inference_microseconds_per_sample": inference_seconds * 1e6 / len(y_test),
+            "peak_process_rss_mb_during_fit_predict": memory_sampler.peak_mb,
+            "rss_measurement_available": psutil is not None,
             "train_samples": len(y_train),
             "test_samples": len(y_test),
             **metrics,
