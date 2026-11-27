@@ -1,8 +1,19 @@
 # Plano de Meta-Learning: classificação e regressão
 
-**Status:** planejamento metodológico aprovado para implementação futura. **Nenhum experimento de Meta-Learning foi executado por este documento.**
+**Status:** planejamento metodológico aprovado para implementação futura. O pipeline de Meta-Learning que seleciona variantes GWO (classificação/regressão) ainda não foi implementado nem avaliado. Isso é distinto da extensão experimental de surrogate descrita abaixo.
 
 Este plano define um pipeline único para comparar duas estratégias de Meta-Learning — classificação e regressão — usando a mesma base experimental. É uma extensão opcional do projeto, não uma etapa obrigatória do roteiro do professor e não substitui as Semanas 1–6.
+
+## Trabalho concluído relacionado: curva de aprendizagem do surrogate
+
+Foi executada e analisada uma extensão separada para avaliar o efeito do tamanho do conjunto de treinamento do MLP surrogate da Semana 4. Os resultados cobrem `ta071` e `ta111`, LHS e amostragem uniforme, de 300 a 32.000 amostras, com cinco repetições por ponto e teste fixo por instância.
+
+- [Análise estatística consolidada e IC95%](reports/surrogate_learning_curve_v2_extension_statistical_analysis.md).
+- [Protocolo da próxima etapa: comparação de modelos](reports/surrogate_model_comparison_protocol.md).
+- [Protocolo v2 de amostragem e diagnósticos](reports/surrogate_learning_curve_v2_protocol.md).
+- [Relatório de recuperação da execução interrompida](reports/surrogate_learning_curve_v2_recovery.md).
+
+Essa curva **não é a meta-base de Meta-Learning** descrita neste documento: ela estuda o surrogate de makespan, não aprende a escolher entre variantes GWO. Portanto, a afirmação de que o pipeline de Meta-Learning ainda não foi executado continua válida.
 
 ## 1. Objetivo
 
