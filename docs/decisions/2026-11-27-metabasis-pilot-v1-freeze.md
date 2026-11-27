@@ -55,7 +55,7 @@ Reprodução A–D aprovada sem regenerar este diretório. Detalhes: [2026-11-27
 | Hashes dos 4 arquivos do freeze | OK vs `freeze_manifest.json` |
 | LOO recheck vs publicado | `summary.json` e predictions bit-idênticos |
 | HEAD da reprodução | `b5456d1f20523aca267c03ca379e58b3406c38fc` |
-| Decisão de expansão | **pendente** |
+| Decisão de expansão | **Aprovada posteriormente** | Ver aditivo e decisão v2 de 27/11/2026 |
 
 Este freeze continua imutável. Qualquer expansão cria nova versão (`metabasis_v2`…), nunca sobrescreve `metabasis_pilot_v1`.
 
