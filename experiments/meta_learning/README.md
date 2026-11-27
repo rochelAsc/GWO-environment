@@ -359,15 +359,20 @@ A execução compara MLP 64×64, Random Forest, Extra Trees e HistGradientBoosti
 
 ### Distribuição real de candidatos das trajetórias GWO
 
-A investigação seguinte ao piloto de comparação de modelos é coletar as populações completas geradas pelas quatro variantes GWO. Os resultados antigos da Semana 6 não preservam as populações completas: o trace Surrogate contém apenas candidatos selecionados e o trace Fuzzy contém somente variáveis do controlador.
+A coleta das populações completas das quatro variantes GWO foi executada em `ta111`, com seeds 0–4. Foram concluídas 20 execuções e registrados 300.600 candidatos com makespan exato diagnóstico. Os rótulos diagnósticos não influenciam a busca.
 
-A instrumentação opcional `population_observer` foi adicionada às três rotinas de otimização (Baseline/Optuna compartilham `gwo_pfs`). O callback recebe cópia defensiva da população inicial e de cada geração. O runner calcula permutações e makespans exatos apenas para diagnóstico; esses rótulos adicionais não influenciam a busca.
+- [Relatório dos resultados do piloto](../../docs/reports/2026-11-26-gwo-population-distribution-pilot.md).
+- [Protocolo, instrumentação e próximos passos](../../docs/reports/gwo_population_distribution_audit_protocol.md).
 
-Protocolo, custo esperado, critérios de validação e análise estão em [gwo_population_distribution_audit_protocol.md](../../docs/reports/gwo_population_distribution_audit_protocol.md).
+O piloto usou o surrogate Cost Pilot v2 para ta111, pois o artefato Week 4 original dessa instância não estava disponível. Essa diferença está registrada nos metadados e impede tratar a execução como reprodução exata do modelo Surrogate da Week 6.
+
+Arquivos compactos versionados: `results/gwo_population_distribution_audit_v1/metadata.json` e `runs.csv`. O `populations.csv` (~551,40 MB) permanece fora do GitHub por exceder o limite de 100 MB; deve ser preservado localmente e disponibilizado externamente antes da análise de distribuição.
+
+Antes de ampliar para 30 seeds, validar o CSV completo e revisar a deduplicação do runner para reduzir uso de memória. A análise estatística dos candidatos ainda não foi concluída. O piloto de cinco seeds é exploratório e não constitui dataset final para treino/teste.
+
+Comandos corretos a partir da raiz do repositório:
 
 ```bash
 python -m pytest -q tests/test_gwo_population_observer.py
-python -m experiments.meta_learning.scripts.run_gwo_population_distribution_audit
+python -m scripts.run_gwo_population_distribution_audit --surrogate-dir results/meta_learning_cost_pilot_v2/surrogates
 ```
-
-O piloto padrão usa ta111, quatro variantes e seeds 0–4 (300.600 candidatos esperados). **A execução local ainda não foi realizada.** O piloto deve validar custo e integridade antes de qualquer coleta ampliada ou treinamento de modelos com split por seed.
