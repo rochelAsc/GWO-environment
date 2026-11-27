@@ -41,3 +41,7 @@ Conteúdo imutável desta versão:
 (LOO por instância; RF classifier/regressor + baselines). Não é holdout confirmatório.
 
 Relatório: [2026-11-27-meta-learning-selector-loo-exploratory.md](../reports/2026-11-27-meta-learning-selector-loo-exploratory.md).
+
+## Resultado de seleção associado ao freeze
+
+A avaliação LOO exploratória (`selector_eval_exploratory_v1`) não mostrou ganho operacional útil de RF sobre sempre Fuzzy: regret médio 0,0029053 vs 0,0029187, placar pareado 5/3/28 e IC95 amplamente sobrepostos. O classificador teve regret médio 0,0052324. Assim, o freeze permanece válido como conjunto de desenvolvimento e auditoria, mas não autoriza alegação de benefício do Meta-Learning nem expansão automática. A próxima execução deve apenas reproduzir hashes/LOO conforme o runbook antes da decisão formal sobre Fase 5.
