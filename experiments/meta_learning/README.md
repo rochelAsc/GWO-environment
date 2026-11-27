@@ -344,7 +344,7 @@ flowchart TD
 
 - O piloto 36×3×4 é exploratório; 22/36 rótulos têm margem &lt; 0,5%.
 - LOO mostrou RF sem ganho operacional vs sempre Fuzzy; não alegar benefício confirmatório.
-- Expansão 60/120 e mais seeds exigem decisão explícita de Fase 5 e nova versão de meta-base.
+- Expansão 60/120 foi aprovada na Fase 5; depende de inventário, split pré-registrado e scripts v2. Seeds adicionais dependem de análise de variância e custo.
 - Random Forest é ponto de partida, não vencedor presumido.
 - Generalização vale só para a distribuição representada; outras famílias de scheduling não estão cobertas.
 - Meta-Learning permanece extensão opcional. A entrega principal continua sendo PFSP/Taillard e as Semanas 2–6.
@@ -376,7 +376,7 @@ A curva v1 foi executada para ta071 e ta111, com 300, 573, 1.095, 2.093 e 4.000 
 
 Conclusão: mais amostras melhoraram RMSE e ranking, mas a qualidade ainda é insuficiente, principalmente na ta111. Não aumentar N imediatamente. Primeiro comparar MLP com GBDT/HistGradientBoosting e ExtraTrees, investigar ranking pareado e avaliar candidatos extraídos de trajetórias GWO. A execução v1 chamou o braço LHS em blocos de até 512 draws; por isso, não descrevê-lo como um LHS global de N pontos.
 
-**Meta-Learning por instância:** o piloto 36 (3 por grupo) já foi executado, congelado e avaliado em LOO exploratório sem ganho vs Fuzzy. Próximo passo é decisão de expansão (60/120 e/ou mais seeds), não retreino silencioso. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância.
+**Meta-Learning por instância:** o piloto 36 (3 por grupo) já foi executado, congelado e avaliado em LOO exploratório sem ganho operacional demonstrado vs Fuzzy. A expansão v2 foi aprovada: checkpoint 60 e alvo 120, com holdout pré-reservado. Próximo passo é cumprir os gates do runbook, não retreinar silenciosamente. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância.
 
 
 ### Curva de aprendizagem v2 — LHS global e diagnósticos
