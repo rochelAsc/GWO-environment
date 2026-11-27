@@ -39,7 +39,7 @@ A investigação da distribuição real de candidatos pode orientar representaç
 
 - Semanas 2–6 do projeto GWO foram executadas e auditadas; a Semana 6 compara Baseline, Optuna, Surrogate e Fuzzy em `ta001` e `ta011`, com 30 seeds por instância.
 - O orçamento da variante Surrogate da Semana 6 é diferente: 1.530 avaliações exatas e 15.000 previsões por execução, contra 15.030 avaliações exatas nas outras variantes. Essa diferença deve permanecer explícita.
-- Há um extrator inicial de características em `scripts/extract_instance_features.py`, com testes existentes. Ainda precisa passar por validação sistemática e ter sua versão congelada para a meta-base.
+- O extrator `taillard_pfsp_features_v1` foi auditado e congelado para 36 instâncias; 35 preditores derivados somente da matriz P. A decisão está em `docs/decisions/2026-11-27-meta-feature-extractor-freeze.md`.
 - O conjunto Taillard versionado contém 12 instâncias, uma por grupo de dimensão. É adequado para validar infraestrutura e custo, mas insuficiente para alegar generalização de Meta-Learning.
 - O README de `experiments/meta_learning/` já propõe uma expansão progressiva: 36 instâncias, depois 60 e, se viável, o benchmark completo de 120 instâncias.
 - As curvas de aprendizagem e comparação de modelos surrogate já foram estudadas. Elas dizem respeito ao surrogate de makespan, não ao seletor meta de variantes.
@@ -50,7 +50,7 @@ O piloto de auditoria em `ta111` foi executado com quatro variantes e seeds 0–
 
 O piloto usou o modelo Cost Pilot v2 para `ta111`, pois o artefato original Week 4 para essa instância não estava disponível no caminho esperado. Portanto, não é reprodução exata do modelo Surrogate da Semana 6. Essa proveniência deve ser mantida em qualquer uso posterior.
 
-**Pendências imediatas:** disponibilizar o CSV bruto por armazenamento externo; validar sua integridade; revisar o consumo de memória/deduplicação do runner; analisar as distribuições antes de ampliar a coleta. Não iniciar 30 seeds adicionais antes desses gates.
+**Estado:** integridade do CSV, amostra estratificada, deduplicação em streaming e análise descritiva foram concluídas e documentadas na Fase 1. O bruto (~551 MB) permanece fora do GitHub; sua recuperação depende do armazenamento externo/local registrado. Não ampliar a coleta de populações: a decisão foi priorizar a meta-base multi-instância.
 
 Relatórios de referência:
 - [Piloto de distribuição dos candidatos GWO](../reports/2026-11-26-gwo-population-distribution-pilot.md).
@@ -61,7 +61,7 @@ Relatórios de referência:
 
 ### 2.3 Artefatos já existentes
 
-- `experiments/meta_learning/data/instance_features.csv`: extração inicial versionada; validar conteúdo, cobertura e proveniência antes de tratá-la como feature set congelado.
+- `experiments/meta_learning/data/metabasis_pilot_v1/`: freeze imutável com features, alvos, manifesto, 432 runs e hashes SHA-256.
 - `experiments/meta_learning/scripts/extract_instance_features.py`: extrator inicial.
 - `experiments/meta_learning/referencias.md`: referências sobre surrogate, seleção e otimização.
 - `experiments/meta_learning/README.md`: definição metodológica prévia de classificação/regressão.
