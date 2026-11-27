@@ -71,7 +71,7 @@ Tempos de execução registrados pelo runner:
 | Variante | Tempo médio por execução (s) |
 |---|---:|
 | Baseline | 112,93 |
-| Optuna | 116,00 |
+| Optuna | 114,00 |
 | Fuzzy | 115,95 |
 | Surrogate | 64,93 |
 
