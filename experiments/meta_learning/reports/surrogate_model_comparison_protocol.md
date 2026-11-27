@@ -1,7 +1,7 @@
 # Protocolo — comparação de modelos substitutos para PFSP
 
 **Data:** 26/11/2026  
-**Status:** runner do piloto implementado; execução local e resultados ainda pendentes.  
+**Status:** piloto CPU executado e analisado; expansão para repetições adicionais condicionada à decisão metodológica.  
 **Dependência:** análise consolidada em [surrogate_learning_curve_v2_extension_statistical_analysis.md](surrogate_learning_curve_v2_extension_statistical_analysis.md).
 
 ## 1. Objetivo
@@ -119,4 +119,53 @@ python -m experiments.meta_learning.scripts.run_surrogate_model_comparison_pilot
 
 Os quatro modelos são ajustados sequencialmente, com limite de uma thread, e cada modelo concluído é gravado em `pilot_checkpoints.jsonl`. A execução pode ser retomada pelo mesmo comando. Resultados finais/estado ficam em `pilot_results.csv` e `pilot_status.json`, dentro de `results/meta_learning_surrogate_model_comparison_pilot/`. O uso de memória RSS é amostrado via `psutil`, caso esteja instalado; caso contrário, o campo é explicitamente marcado como indisponível. A medição representa o RSS do processo (inclui arrays e runtime), não memória exclusiva do estimador.
 
-**Nenhum resultado do piloto foi fabricado ou presumido nesta atualização.** O runner e os testes foram versionados; a execução precisa ocorrer no computador que contém o checkout e os dados. Não foram adicionadas referências bibliográficas nesta etapa: os estimadores e hiperparâmetros seguem o protocolo já definido, sem nova alegação teórica que exija fonte adicional.
+
+
+
+## 10. Resultados observados do piloto (ta111, N=8.000)
+
+**Status:** execução concluída, quatro checkpoints presentes e `pilot_status.json` indica `completed`. Fonte primária: `results/meta_learning_surrogate_model_comparison_pilot/pilot_results.csv`; configuração e hashes em `pilot_metadata.json`.
+
+Condições efetivamente registradas:
+- ta111 (500 jobs × 20 máquinas), treino uniforme com 8.000 permutações, repetição 1;
+- teste fixo de 1.000 permutações;
+- mesma representação: posição normalizada por job;
+- CPU, limite de uma thread, modelos sequenciais;
+- Python 3.14.6, NumPy 2.5.1, SciPy 1.18.0, scikit-learn 1.9.0;
+- RSS amostrado com psutil a cada 50 ms. O pico é do processo inteiro, incluindo dados e runtime, não memória exclusiva do estimador.
+
+### Métricas preditivas e de seleção
+
+| Modelo | RMSE ↓ | R² ↑ | Spearman ↑ | Kendall τ-b ↑ | Recall top-10 ↑ | Regret top-10 ↓ |
+|---|---:|---:|---:|---:|---:|---:|
+| MLP 64×64 | 331.24 | 0.0086 | 0.2130 | 0.1431 | 0.00 | 270 |
+| Random Forest | 326.15 | 0.0387 | 0.2511 | 0.1693 | 0.00 | 367 |
+| Extra Trees | 326.35 | 0.0376 | 0.2445 | 0.1646 | 0.00 | 430 |
+| HistGradientBoosting | **321.02** | **0.0688** | **0.2652** | **0.1759** | 0.00 | 319 |
+
+HistGradientBoosting liderou nas métricas globais de erro e correlação. Isso não se traduziu em recuperação dos melhores candidatos: **nenhum modelo recuperou qualquer elemento do top-3 ou top-10 real**. No top-50, o recall foi 14% para MLP, 10% para Random Forest, 12% para Extra Trees e 6% para HistGradientBoosting. O regret top-50 foi 182 para todos os modelos.
+
+O melhor regret top-10 foi do MLP (270), apesar de sua correlação inferior. Isso ilustra por que RMSE/Spearman, isoladamente, não determinam utilidade para seleção. Também mostra que uma única repetição não permite declarar vencedor.
+
+### Custo observado
+
+| Modelo | Treinamento (s) ↓ | Inferência 1.000 (s) ↓ | RSS pico (MB) ↓ |
+|---|---:|---:|---:|
+| MLP 64×64 | **1.85** | **0.0048** | **300.4** |
+| Random Forest | 526.29 | 0.0886 | 350.0 |
+| Extra Trees | 173.81 | 0.0980 | 393.9 |
+| HistGradientBoosting | 7.45 | 0.0183 | 337.0 |
+
+Random Forest e Extra Trees foram muito mais lentos para treinar neste cenário. HistGradientBoosting foi o melhor compromisso de correlação entre os modelos tabulares, mas ainda não é um seletor confiável dos melhores candidatos. O MLP foi o mais rápido tanto no ajuste quanto na inferência.
+
+### Interpretação e decisão
+
+1. O problema não parece ser resolvido simplesmente trocando MLP por árvores: todos os modelos têm R² baixo e ranking fraco.
+2. O teste uniforme mede desempenho em permutações aleatórias, não necessariamente na distribuição de candidatos visitados pelo GWO. Não extrapolar estes números para o uso online no algoritmo.
+3. O resultado é apenas um piloto com uma instância, um tamanho e uma repetição. Não há base para inferência estatística nem para seleção definitiva de arquitetura.
+4. **Não integrar nenhum desses modelos ao Surrogate-assisted GWO ainda.**
+5. Próxima etapa recomendada: investigar a distribuição de candidatos gerados pelas populações/traços reais do GWO e medir a utilidade de ranking nessa distribuição, mantendo um conjunto de teste separado. Em paralelo, executar repetições pareadas em ta111 apenas se a avaliação sob distribuição uniforme ainda for uma pergunta relevante. Não aumentar N antes de resolver a discrepância entre métrica global e recuperação dos melhores candidatos.
+
+Limitações de rastreabilidade: o manifesto do piloto registra versões de software e hashes dos dados, mas não registra modelo de CPU, RAM física nem commit exato do código executado. Esses campos devem ser adicionados ao runner antes de uma campanha maior. O hardware informado para a execução foi Ryzen 5 5500 e 32 GB RAM, mas esses dados não constam no manifesto da execução.
+
+Não foram adicionadas referências bibliográficas: esta seção relata resultados empíricos do próprio repositório e não introduz alegações teóricas externas.
