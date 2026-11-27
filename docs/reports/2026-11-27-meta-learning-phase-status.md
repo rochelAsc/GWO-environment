@@ -119,16 +119,32 @@ Registro JSON: `results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_2
 | SHA predictions | `68edebba8e9e61c95b28e585f58687512cd22fef2adc4bd337c21a40fa14ae0d` |
 | Ambiente | Python 3.14.6; NumPy 2.5.1; pandas 2.3.3; scikit-learn 1.9.0 |
 | Divergências | nenhuma |
-| Decisão Fase 5 | **pendente** |
+| Decisão Fase 5 | **Aprovada posteriormente** | Decisão formal em 27/11/2026; ver documento de expansão v2 |
 
-## Próximos passos recomendados
+## Decisão Fase 5 e próximos passos
 
-1. **Decisão formal obrigatória** (ainda pendente; nenhuma opção pré-selecionada): (a) expandir instâncias → `metabasis_v2` + holdout pré-reservado; (b) encerrar extensão como exploratória sem ganho vs Fuzzy; (c) reformular pergunta com novo protocolo.
-2. Se (a): priorizar diversidade 60–120, não só mais seeds; `metabasis_pilot_v1` imutável.
-3. Não retunar Surrogate nem misturar orçamentos sem reportar a diferença.
-4. Não iniciar bateria GWO até a decisão estar registrada em documento de decisão.
+A expansão foi **aprovada**. A decisão formal está em [2026-11-27-meta-learning-expansion-v2.md](../decisions/2026-11-27-meta-learning-expansion-v2.md).
 
-**Gate atual:** reprodução A–D **aprovada e documentada**. Fase 5 **não** autorizada até decisão explícita (a/b/c).
+| Item | Estado |
+|---|---|
+| Preservar metabasis_pilot_v1 | Obrigatório; freeze imutável |
+| Preparar inventário Taillard completo | Pendente |
+| Pré-registrar split estratificado | Pendente; antes de qualquer nova execução GWO |
+| Adaptar runner/agregador/freezer para v2 | Pendente; scripts atuais ainda têm defaults/schema de piloto |
+| Checkpoint 60 | Aprovado como primeira etapa; 48 desenvolvimento + 12 holdout selado |
+| Alvo 120 | Aprovado condicionalmente ao checkpoint de custo/integridade |
+| Seeds iniciais | 3 pareadas: [0, 1, 2] |
+| Novas execuções GWO | Ainda não iniciadas |
+
+### Próximas ações
+
+1. Completar e validar inventário dos 120 arquivos (12 grupos × 10), com proveniência e SHA-256.
+2. Congelar split determinístico: em cada grupo, 5 das 7 instâncias ainda não usadas para desenvolvimento e 2 para holdout. No checkpoint 60 entram 1 de cada partição; as demais entram na expansão a 120.
+3. Adaptar/testar os scripts para schema metabasis_v2. O freezer atual é específico do piloto e não pode ser usado diretamente.
+4. Executar apenas as 12 novas instâncias de desenvolvimento no checkpoint 60; manter os 12 holdouts selados.
+5. Revisar custo, integridade e cobertura antes de decidir a conclusão em 60 ou a expansão para 120.
+
+**Runbook vigente:** [2026-11-27-meta-learning-next-execution-runbook.md](2026-11-27-meta-learning-next-execution-runbook.md). Não iniciar a bateria antes do gate técnico e do manifesto de split congelado.
 
 ## Comandos de verificação
 
