@@ -199,28 +199,40 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Gate:** 36 instâncias são piloto de viabilidade, não evidência final de generalização. Não treinar um modelo final nem alegar desempenho generalizável nesta fase.
 
-### Fase 5 — Decidir expansão e construir meta-base confirmatória
+### Fase 5 — Expandir e construir metabasis_v2
 
-**Objetivo:** somente se a extensão for mantida após a reprodução do piloto, obter instâncias independentes suficientes para treinar e avaliar seleção de variantes.
+**Objetivo:** ampliar a base de 36 para 60 e, se custo/integridade permitirem, para 120 instâncias independentes, com holdout estratificado pré-reservado.
 
-**Gate de entrada:** reprodução A–D **aprovada** ([relatório](../reports/2026-11-27-meta-learning-reproduction-ad.md)). Resta apenas registrar decisão explícita de continuidade. O resultado atual não demonstra ganho de RF sobre sempre Fuzzy. Não iniciar execução GWO até a decisão estar versionada.
+**Decisão:** aprovada em 27/11/2026; ver [decisão formal](../decisions/2026-11-27-meta-learning-expansion-v2.md). A reprodução A–D está aprovada. O resultado do piloto continua sem ganho operacional útil demonstrado sobre sempre Fuzzy; a expansão não deve ser tratada como confirmação antecipada de sucesso.
 
-- [ ] Após decisão de continuidade, expandir prioritariamente a diversidade de 36 para 60 instâncias e planejar cobertura do benchmark de 120; não aumentar apenas seeds como substituto de novas instâncias.
-- [ ] Reservar holdout por instância antes de tuning/seleção final; definir seu tamanho e estratificação por dimensão no plano da expansão.
-- [ ] Priorizar 120 instâncias como objetivo de cobertura; se recursos impedirem, justificar quantitativamente o conjunto final e restringir as conclusões.
-- [ ] Aumentar o número de seeds por instância conforme custo: começar com 10 e considerar 20–30 na fase confirmatória, preservando pareamento entre variantes.
-- [ ] Executar configurações GWO congeladas; persistir checkpoints, logs e resultados por execução.
-- [ ] Reutilizar Week 6 `ta001` e `ta011` somente quando hash, versão do algoritmo, configuração e definição de métricas forem compatíveis; registrar sua origem histórica.
-- [ ] Não misturar resultados da auditoria de população, cost pilot ou curva de aprendizagem do surrogate com resultados de execução GWO sem equivalência de protocolo.
-- [ ] Validar todas as combinações esperadas, duplicatas, falhas e contadores antes de agregar.
+Desenho congelado:
 
-**Aceite:** meta-base bruta congelada, versionada por schema e com cobertura documentada; cada resultado rastreável a instância, variante, seed, commit, configuração e ambiente.
+| Estágio | Desenvolvimento | Holdout selado | Total |
+|---|---:|---:|---:|
+| 60 | 48 (4/grupo) | 12 (1/grupo) | 60 |
+| 120 | 96 (8/grupo) | 24 (2/grupo) | 120 |
 
-**Verificação:** auditoria automatizada de completude e hashes; reexecução independente de amostra; relatório de falhas e exclusões.
+As 36 instâncias do piloto permanecem exclusivamente em desenvolvimento. Em cada grupo, das 7 instâncias ainda não usadas, selecionar 5 para desenvolvimento e 2 para holdout por split determinístico, estratificado e independente dos resultados. No checkpoint de 60, incluir 1 nova instância de cada partição por grupo; no estágio 120, incluir as 4 restantes de desenvolvimento e 1 restante de holdout por grupo.
 
-**Dependências:** Fase 4 aprovada.
+- [ ] Inventariar os 120 arquivos, confirmar IDs/dimensões, origem, bounds e SHA-256.
+- [ ] Congelar manifesto de split e hash antes de observar novos resultados GWO.
+- [ ] Adaptar runner, agregador e freezer para schema v2; o freezer atual grava schema piloto e não pode ser usado diretamente.
+- [ ] Criar testes de split, vazamento, retomada, completude, duplicatas, hashes e recusa de sobrescrita.
+- [ ] Reutilizar os 432 runs do piloto apenas após auditoria de compatibilidade e com proveniência histórica explícita.
+- [ ] Executar as 12 novas instâncias de desenvolvimento do checkpoint 60 (144 runs com 3 seeds × 4 variantes); manter os 12 holdouts selados.
+- [ ] Auditar custo real, cobertura, falhas e integridade; decidir avançar a 120 sem consultar holdout.
+- [ ] Se aprovado, executar as 48 instâncias de desenvolvimento restantes (576 runs) e preparar 12 holdouts restantes; completar 96 desenvolvimento + 24 holdout.
+- [ ] Congelar metabasis_v2 com dados, split, configurações, ambiente, commit e hashes.
 
-**Gate:** esta fase só começa após decisão explícita. Congelar os dados antes de abrir o holdout ou ajustar modelos finais. Correções posteriores geram nova versão da meta-base; `metabasis_pilot_v1` permanece imutável.
+Seeds iniciais: [0, 1, 2], pareadas entre variantes. Não aumentar seeds como substituto de instâncias. Manter orçamento desigual explícito: 15.030 avaliações exatas em Baseline/Optuna/Fuzzy; 1.530 exatas + 15.000 previsões em Surrogate.
+
+Estimativa inicial, não garantida: 1,06 h observada para 36×3; extrapolação linear ≈1,8 h para 60×3 e ≈3,5 h para 120×3. Medir por grupo, pois instâncias maiores e preparação do Surrogate podem alterar o custo.
+
+**Aceite:** meta-base v2 auditada e versionada; 60/120 com split íntegro; zero chaves ausentes/duplicadas; cada execução rastreável; holdout selado até congelar protocolo e modelos.
+
+**Gate:** nenhuma execução v2 antes de inventário, split e gate técnico. Abrir holdout uma única vez: 12 se encerrar em 60 ou 24 se completar 120. Se continuar a 120, não abrir os 12 do checkpoint de 60.
+
+**Dependências:** Fases 0–4 concluídas; decisão de expansão aprovada.
 
 ### Fase 6 — Construir os alvos e controlar incerteza
 
