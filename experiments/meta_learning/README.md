@@ -130,17 +130,9 @@ O benchmark atual usa `ta001` (20 jobs × 5 máquinas) e `ta011` (20 jobs × 10 
 
 É necessário ampliar o conjunto com instâncias Taillard de diferentes tamanhos e relações jobs/máquinas. A seleção deve ser estratificada por dimensão e cobrir diferentes regimes, não apenas muitas instâncias quase idênticas.
 
-**Subset piloto já versionado:** `data/benchmarks/taillard/` agora contém 12 instâncias, uma de cada grupo de dimensão do benchmark clássico: 20×5, 20×10, 20×20, 50×5, 50×10, 50×20, 100×5, 100×10, 100×20, 200×10, 200×20 e 500×20. As instâncias adicionais foram obtidas do espelho PISCO; a proveniência e a seleção estão registradas em `data/benchmarks/taillard/README.md`.
+**Subset piloto já versionado:** data/benchmarks/taillard/ contém 36 instâncias (3 por grupo). A expansão aprovada busca o benchmark-alvo de 120 instâncias (10 por grupo); os 84 arquivos restantes ainda precisam ser obtidos e validados. A lista dos grupos, proveniência e protocolo de split estão em data/benchmarks/taillard/README.md.
 
-Esse subconjunto serve para validar parser, características e custo em diferentes escalas. **Não deve ser tratado como meta-base suficiente para treinar ou avaliar generalização**: há apenas uma instância por grupo e doze unidades independentes no total.
-
-Plano em fases, sujeito a medição de custo:
-
-- **Piloto de viabilidade:** 12–20 instâncias diversas, poucas seeds (por exemplo, 3–5), apenas para validar extração, execução, persistência e custo. Não usar o piloto como evidência final de generalização.
-- **Meta-base exploratória:** alvo inicial de 30–50 instâncias, com 10 seeds por variante/instância, se o custo permitir. Esse tamanho ainda pode ser insuficiente para conclusões fortes; tratar resultados como exploratórios.
-- **Expansão confirmatória:** buscar 50–100 ou mais instâncias, com 20–30 seeds por variante/instância, se os recursos e o tempo permitirem. A suficiência deve ser julgada pela diversidade e pela incerteza, não apenas pela contagem.
-
-Os números são metas de planejamento, não garantia de poder estatístico. Antes de expandir, medir tempo por instância/variante no piloto. Priorizar cobertura de dimensões e integridade dos dados.
+O piloto de 36 é desenvolvimento e não fornece holdout confirmatório. A expansão v2 usa 48 instâncias de desenvolvimento + 12 holdout seladas no checkpoint 60; se avançar a 120, serão 96 desenvolvimento + 24 holdout. O split será pré-registrado, estratificado e independente dos resultados GWO. Não tratar 60 ou 120 como garantia automática de poder estatístico.
 
 Os resultados publicados de Semana 6 para `ta001` e `ta011` podem ser incorporados como observações históricas compatíveis, após validação de hashes, protocolo, variantes e seeds. Não duplicar essas linhas executando-as novamente sem necessidade. Registrar a proveniência de cada linha e manter o conjunto original imutável.
 
@@ -335,7 +327,8 @@ flowchart TD
 
 ## 13. Critérios de aceite antes de qualquer conclusão
 
-- [x] Conjunto piloto ampliado para 36 instâncias (3 por grupo); 60/120 ainda pendente.
+- [x] Piloto com 36 instâncias (3 por grupo), congelado e reproduzido.
+- [ ] Expansão v2 aprovada: checkpoint 60 e alvo 120; coleta ainda pendente dos gates técnicos.
 - [x] Piloto de custo concluído (`meta_learning_cost_pilot_v3`).
 - [x] Features independentes dos resultados e sem vazamento (`taillard_pfsp_features_v1`).
 - [x] Resultados das quatro variantes íntegros (432/432) com seeds e hashes auditáveis.
