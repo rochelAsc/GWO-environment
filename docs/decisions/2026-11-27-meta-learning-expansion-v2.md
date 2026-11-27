@@ -53,7 +53,7 @@ Antes de observar qualquer novo resultado GWO:
 
 1. inventariar e validar os 120 arquivos, dimensões, proveniência e SHA-256;
 2. em cada grupo, separar as 3 instâncias do piloto e as 7 restantes;
-3. selecionar, sem olhar resultados/targets, **5 das 7 restantes para desenvolvimento e 2 para holdout**, com seed de split fixada e registrada;
+3. selecionar, sem olhar resultados/targets, **5 das 7 restantes para desenvolvimento e 2 para holdout**, com seed de split fixada e registrada; sortear também a ordem em cada partição para marcar 1 desenvolvimento + 1 holdout como stage=60 e as outras 4 de desenvolvimento + 1 holdout como stage=120;
 4. congelar o manifesto completo de split e seu hash antes de executar novas variantes.
 
 A composição progressiva:
