@@ -1,290 +1,170 @@
-# Runbook de execução — próxima etapa do Meta-Learning
+# Runbook de execução — decisão e expansão do Meta-Learning
 
-**Data:** 27/11/2026  
-**Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Estado inicial:** Fases 1–4 concluídas; 36 instâncias, 4 variantes, 3 seeds, 432 execuções agregadas.  
-**Objetivo desta rodada:** auditar e congelar a meta-base piloto antes de implementar/treinar os seletores meta.
+**Atualizado:** 27/11/2026  
+**Branch:** `recovery/surrogate-learning-curve-v2-oom`  
+**Estado de entrada:** fases 1–4 concluídas; `metabasis_pilot_v1` congelada; avaliação LOO exploratória executada.  
+**Objetivo desta rodada:** reproduzir o freeze e a avaliação LOO, validar os artefatos publicados e preparar uma decisão explícita sobre a Fase 5. Não executar ainda novas baterias GWO.
 
-> **Importante:** execute as etapas na ordem e envie as saídas indicadas ao final de cada bloco. Não avance para expansão de 60/120 instâncias nem para uma bateria maior de seeds nesta rodada. O resultado de 36 instâncias é exploratório.
+> **Mudança em relação ao runbook anterior:** as auditorias A–E, a validação do agregador, o freeze da meta-base e o primeiro LOO já foram executados e publicados nos dois commits mais recentes. Não repita a construção do freeze nem sobrescreva os resultados. Esta rodada é de reprodução independente e decisão.
 
-## 1. Escopo e decisões que não devem mudar nesta rodada
+## 1. Estado confirmado — não refazer
 
-- O problema continua sendo PFSP/Taillard minimizando makespan.
-- As quatro opções continuam sendo variantes GWO existentes: `baseline`, `optuna`, `fuzzy`, `surrogate`.
-- Meta-Learning escolhe uma variante GWO para uma instância; não substitui GWO nem prevê permutações.
-- A unidade independente é a **instância**. As 3 seeds são repetições para estimar ruído, não 108 amostras independentes.
-- Features permitidas: somente estatísticas calculadas da matriz de processamento P, conforme `taillard_pfsp_features_v1`. Identificadores, hashes, caminho, UB/LB, makespan, seed e resultados GWO são metadados/alvos, nunca preditores.
-- Não retunar nem substituir o MLP da variante Surrogate congelada. Registrar separadamente seu orçamento: 1.530 avaliações exatas + 15.000 previsões, contra 15.030 avaliações exatas das outras variantes.
-- Não interpretar “Fuzzy venceu 17/36” como superioridade universal. O baseline operacional a superar é **sempre Fuzzy**, calculado também dentro de cada fold de treino quando usado como comparador aprendido.
-- Não ajustar features ou hiperparâmetros consultando o holdout.
+- 36 instâncias, 4 variantes GWO, 3 seeds pareadas: 432/432 execuções.
+- Integridade: 432 chaves únicas; zero ausentes, extras ou duplicadas; zero valores numéricos inválidos.
+- Normalização: UB publicado em 36/36 instâncias (`norm=ub`).
+- Features: `taillard_pfsp_features_v1`, 35 preditores derivados apenas da matriz P.
+- Freeze imutável: `experiments/meta_learning/data/metabasis_pilot_v1/`.
+- LOO: 36 folds por instância, RF classifier e regressor, mais seletores fixos e aleatório.
+- Resultado: RF não demonstrou ganho operacional útil sobre sempre Fuzzy. O regressor ficou praticamente empatado; o classificador foi pior.
+- Nenhum holdout confirmatório foi reservado. Os resultados continuam exploratórios.
 
-## 2. Diagnóstico que motiva esta rodada
+**Não execute:** `freeze_meta_learning_metabasis_pilot` sobre o diretório existente, expansão para 60/120, novas seeds, tuning, nem novas execuções das variantes GWO.
 
-O relatório do piloto aponta 36 instâncias, 432 execuções, 17 vitórias Fuzzy, 9 Baseline, 9 Optuna e 1 Surrogate; 22/36 rótulos têm margem inferior a 0,5%. Isso torna o regret por instância e a comparação contra seletores fixos tão importantes quanto accuracy.
+## 2. Interpretação que deve ser preservada
 
-Há três pontos que precisam ser verificados antes de treinar:
+A métrica primária é regret por instância em relação ao melhor resultado observado naquela instância. Accuracy é complementar, pois 22/36 rótulos vencedores têm margem inferior a 0,5%.
 
-1. O agregador atual `scripts/analyze_meta_learning_metabasis_pilot.py` agrupa resultados, mas não valida explicitamente todas as combinações esperadas de instância × variante × seed, duplicatas, valores não finitos ou divergências com o manifesto.
-2. A normalização usa UB quando disponível e, caso contrário, melhor média observada na própria instância. Precisamos inspecionar a coluna `norm` e a cobertura de UB. Se houver mistura, médias globais de `y` não devem ser interpretadas como uma escala comum; regret por instância continua sendo a métrica principal de seleção.
-3. A base derivada e as features precisam ter cobertura 1:1 por instância, sem colunas de metadados entrando nos preditores.
+| Seletor | Regret médio | IC95 bootstrap |
+|---|---:|---:|
+| Sempre Fuzzy | 0,0029187 | [0,0015889; 0,0044084] |
+| RF regressor | 0,0029053 | [0,0015437; 0,0042979] |
+| RF classifier | 0,0052324 | [0,0034233; 0,0070719] |
+| Aleatório | 0,0090548 | [0,0071697; 0,0109805] |
 
-Esta rodada primeiro reproduz e caracteriza o estado atual. Depois que você enviar os resultados, a próxima alteração de código será implementar validação rigorosa e testes do agregador, antes de treinar qualquer modelo.
+A diferença pontual entre RF regressor e sempre Fuzzy é aproximadamente `-0.0000134`, sem evidência de ganho relevante: 28/36 empates no comparativo pareado, 5 vitórias e 3 derrotas do regressor. Os intervalos se sobrepõem amplamente. Não declarar superioridade do regressor.
 
-## 3. Preparação — confirmar repositório e ambiente
+Limitações:
+- `n=36` instâncias independentes e 35 preditores: relação amostra/dimensão desfavorável e risco alto de sobreajuste.
+- LOO não equivale a holdout externo; os conjuntos de treino dos folds se sobrepõem fortemente.
+- O bootstrap sobre os 36 regrets descreve a dispersão entre instâncias deste piloto; não captura integralmente a variabilidade de treinamento/seleção do modelo.
+- Três seeds estimam ruído de execução, não aumentam o número de instâncias independentes.
+- Fuzzy é o melhor seletor operacional observado neste piloto, não um ótimo universal.
 
-Na raiz do repositório:
+## 3. Preparação — confirmar estado do repositório
+
+Na raiz:
 
 ```bash
 git status --short
 git branch --show-current
 git rev-parse HEAD
+git log -2 --oneline
 python --version
 ```
 
-**Critério:** branch `recovery/surrogate-learning-curve-v2-oom`, working tree compreensível e commit registrado. Se houver alterações locais não commitadas, não as descarte; informe quais são.
+**Critério:** branch correta; registrar o HEAD e os dois commits mais recentes. Não descartar alterações locais. Se houver arquivos modificados, informe antes de continuar.
 
-**Envie:** saída dos quatro comandos. Se estiver em outra branch, pare e informe antes de continuar.
+**Envie:** saída completa.
 
-## 4. Etapa A — executar testes de contratos já existentes
-
-```bash
-python -m pytest -q tests/test_meta_learning_features.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
-```
-
-Se algum teste falhar, não tente corrigir por conta própria nesta rodada: envie o traceback completo. Não rode a bateria completa do projeto ainda; estes testes verificam os contratos diretamente envolvidos.
-
-**Critério:** todos os testes passam. Warnings devem ser preservados na saída, não ocultados.
-
-**Envie:** saída completa do pytest, incluindo contagem de testes e warnings.
-
-## 5. Etapa B — reexecutar a agregação sem sobrescrever o resultado publicado
-
-O script atual aceita caminhos explícitos. Gere uma reprodução em diretório novo, preservando `analysis/` já publicado:
+## 4. Etapa A — testes de integridade
 
 ```bash
-python -m scripts.analyze_meta_learning_metabasis_pilot \
-  --runs results/meta_learning_metabasis_pilot_v1/runs.csv \
-  --manifest experiments/meta_learning/data/instance_manifest.csv \
-  --output results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127
+python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
 ```
 
-No PowerShell, o mesmo comando pode ser executado em uma linha:
+**Critério:** todos os testes passam. Preserve warnings e traceback se houver falha.
+
+**Envie:** saída completa do pytest.
+
+## 5. Etapa B — verificar hashes do freeze
+
+Execute na raiz. O script é somente leitura e compara os arquivos congelados com o manifesto:
+
+```bash
+python - <<'PY'
+import hashlib, json
+from pathlib import Path
+
+root = Path("experiments/meta_learning/data/metabasis_pilot_v1")
+manifest = json.loads((root / "freeze_manifest.json").read_text(encoding="utf-8"))
+print("SCHEMA", manifest["schema_version"])
+print("N_INSTANCES", manifest["n_instances"])
+print("N_RUNS", manifest["n_runs"])
+print("FEATURE_VERSION", manifest["feature_version"])
+print("PREDICTORS", len(manifest["predictor_columns"]))
+for name, expected in manifest["hashes_sha256"].items():
+    path = root / name
+    actual = hashlib.sha256(path.read_bytes()).hexdigest()
+    print(name, "OK" if actual == expected else "MISMATCH",
+          "expected=", expected, "actual=", actual)
+PY
+```
+
+**Critério:** schema `metabasis_pilot_v1`, 36 instâncias, 432 execuções, 35 preditores e quatro hashes iguais ao manifesto.
+
+**Envie:** saída completa. Se algum hash divergir, pare; não regenere nem sobrescreva o freeze.
+
+## 6. Etapa C — reproduzir o LOO em diretório novo
+
+Não escreva sobre `selector_eval_exploratory_v1/`. Use um diretório de recheck:
+
+```bash
+python -m scripts.evaluate_meta_learning_selectors_pilot \
+  --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 \
+  --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 \
+  --seed 0 --random-repeats 100
+```
+
+PowerShell em uma linha:
 
 ```powershell
-python -m scripts.analyze_meta_learning_metabasis_pilot --runs results/meta_learning_metabasis_pilot_v1/runs.csv --manifest experiments/meta_learning/data/instance_manifest.csv --output results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127
+python -m scripts.evaluate_meta_learning_selectors_pilot --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 --seed 0 --random-repeats 100
 ```
 
-**Critério esperado para reprodução:** `N_INST 36`, `N_RUNS 432`, mesmas contagens de vitórias e métricas do relatório vigente, salvo diferenças explicáveis por alterações de arquivo/commit. A reprodução não substitui a validação de completude da Etapa C.
+**Critérios de reprodução aproximados:**
+- 36 instâncias e 36 folds;
+- accuracy classifier ≈ 0,2222; regressor ≈ 0,4722;
+- regret médio RF classifier ≈ 0,005232;
+- regret médio RF regressor ≈ 0,002905;
+- regret médio sempre Fuzzy ≈ 0,002919;
+- placar pareado RF regressor vs Fuzzy: 5 melhores / 3 piores / 28 empates.
 
-**Envie:** saída completa do comando e os dois arquivos gerados:
-- `results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127/summary.json`
-- `results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127/per_instance_targets.csv`
+Pequenas diferenças podem ocorrer apenas se ambiente/bibliotecas divergirem; registre versões e não ajuste seed para forçar igualdade.
 
-## 6. Etapa C — auditoria independente da estrutura dos dados
+**Envie:**
+- saída completa do comando;
+- `selector_eval_recheck_20261127/summary.json`;
+- `selector_eval_recheck_20261127/per_instance_predictions.csv`.
 
-Execute este bloco Python a partir da raiz. Ele é somente leitura: não modifica os CSVs. Salve a saída em texto.
+## 7. Etapa D — confirmar versões do ambiente
 
 ```bash
 python - <<'PY'
-import csv
-from collections import Counter
-
-runs_path = "results/meta_learning_metabasis_pilot_v1/runs.csv"
-manifest_path = "experiments/meta_learning/data/instance_manifest.csv"
-targets_path = "results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127/per_instance_targets.csv"
-
-with open(runs_path, newline="", encoding="utf-8") as f:
-    runs = list(csv.DictReader(f))
-with open(manifest_path, newline="", encoding="utf-8") as f:
-    manifest = list(csv.DictReader(f))
-with open(targets_path, newline="", encoding="utf-8") as f:
-    targets = list(csv.DictReader(f))
-
-variants = {"baseline", "optuna", "fuzzy", "surrogate"}
-instances = {r["instance"] for r in manifest}
-expected = {(i, v, str(seed)) for i in instances for v in variants for seed in (0, 1, 2)}
-keys = [(r["instance"], r["variant"], r["seed"]) for r in runs]
-counts = Counter(keys)
-observed = set(keys)
-norm_counts = Counter(r.get("norm", "") for r in targets)
-ub_missing = [r["instance"] for r in manifest if not r.get("upper_bound", "").strip()]
-target_instances = {r["instance"] for r in targets}
-
-print("RUN_ROWS", len(runs))
-print("MANIFEST_INSTANCES", len(instances))
-print("VARIANTS", sorted({r["variant"] for r in runs}))
-print("SEEDS", sorted({r["seed"] for r in runs}))
-print("UNEXPECTED_VARIANTS", sorted({r["variant"] for r in runs} - variants))
-print("MISSING_KEYS", len(expected - observed))
-print("EXTRA_KEYS", len(observed - expected))
-print("DUPLICATE_KEYS", sum(n - 1 for n in counts.values() if n > 1))
-print("ROWS_PER_INSTANCE_VARIANT", sorted(Counter((r["instance"], r["variant"]) for r in runs).values()))
-print("TARGET_ROWS", len(targets))
-print("TARGET_INSTANCE_COVERAGE_MISSING", sorted(instances - target_instances))
-print("TARGET_INSTANCE_COVERAGE_EXTRA", sorted(target_instances - instances))
-print("NORMALIZATION_COUNTS", dict(norm_counts))
-print("MANIFEST_WITHOUT_UB", sorted(ub_missing))
-print("RUNS_WITH_EMPTY_INSTANCE_HASH", sum(not r.get("instance_sha256", "").strip() for r in runs))
-print("RUNS_WITH_EMPTY_SURROGATE_MODEL_HASH", sum(r["variant"] == "surrogate" and not r.get("model_sha256", "").strip() for r in runs))
+import sys, numpy, pandas, sklearn
+print("python", sys.version)
+print("numpy", numpy.__version__)
+print("pandas", pandas.__version__)
+print("scikit_learn", sklearn.__version__)
 PY
 ```
 
-Se estiver no PowerShell e o here-document não funcionar no terminal utilizado, rode o bloco no terminal Bash/WSL ou salve-o temporariamente como `scripts/_audit_meta_pilot_local.py` e execute `python scripts/_audit_meta_pilot_local.py`. Não versione esse arquivo temporário.
+**Envie:** saída. Ela será anexada à avaliação de reprodutibilidade.
 
-**Resultados esperados, a confirmar e não presumir:**
-- 432 linhas em `runs.csv`;
-- 36 instâncias no manifesto e na tabela derivada;
-- exatamente quatro variantes e seeds `0, 1, 2`;
-- 12 linhas por instância (4 variantes × 3 seeds);
-- zero chaves ausentes, extras ou duplicadas;
-- zero instâncias faltando/sobrando na tabela de alvos;
-- hash de instância preenchido em todas as execuções;
-- hash de modelo preenchido nas execuções Surrogate;
-- a distribuição de `norm` deve ser compatível com a cobertura real de UB. Se aparecer `rel_best`, reportar quantas instâncias usam cada regra; não comparar médias globais como se a escala fosse homogênea.
+## 8. Decisão que tomaremos com os resultados
 
-Se algum contador divergir, **pare aqui**. Não treine modelos nem tente “consertar” o CSV manualmente. Envie a saída para localizarmos a origem.
+Depois de revisar A–D, escolheremos e registraremos uma destas opções:
 
-**Envie:** saída completa do bloco.
+1. **Continuar Meta-Learning com expansão de instâncias:** preparar `metabasis_v2`, priorizando diversidade e cobertura até 120 instâncias. Manter inicialmente 3–5 seeds pareadas para controlar custo; aumentar seeds depois se a variância por execução justificar. Reservar holdout por instância antes de qualquer tuning.
+2. **Encerrar a extensão como resultado exploratório negativo/insuficiente:** documentar que, com 36 instâncias e 35 features, não houve ganho demonstrável sobre sempre Fuzzy. O projeto principal GWO continua completo.
+3. **Reformular a pergunta de pesquisa:** por exemplo, seleção condicionada a orçamento/tempo, mas somente com decisão metodológica explícita e novo protocolo; não reutilizar os resultados como se medissem a nova pergunta.
 
-## 7. Etapa D — verificar consistência numérica e alvos
+**Minha recomendação metodológica atual:** se a extensão for mantida, expandir primeiro o número de instâncias, não apenas o número de seeds. Mais seeds refinam as médias por instância, mas não resolvem a limitação de apenas 36 unidades independentes. Não iniciar a expansão antes de aprovar o desenho, custo e holdout.
 
-Ainda em modo somente leitura, execute:
+## 9. O que enviar ao final
 
-```bash
-python - <<'PY'
-import csv, math
+- [ ] Saída de preparação (branch, HEAD, log e Python).
+- [ ] Saída completa dos testes.
+- [ ] Saída da verificação SHA-256 do freeze.
+- [ ] Saída e dois artefatos do LOO reexecutado.
+- [ ] Versões de Python, NumPy, pandas e scikit-learn.
+- [ ] Qualquer divergência ou warning, sem omitir.
 
-paths = {
-    "runs": "results/meta_learning_metabasis_pilot_v1/runs.csv",
-    "targets": "results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127/per_instance_targets.csv",
-}
-for name, path in paths.items():
-    with open(path, newline="", encoding="utf-8") as f:
-        rows = list(csv.DictReader(f))
-    print("\n", name.upper(), "rows=", len(rows))
-    numeric_fields = (
-        ["best_makespan", "runtime_seconds", "exact_evaluations", "surrogate_predictions"]
-        if name == "runs" else
-        ["margin_y", "mean_baseline", "mean_optuna", "mean_fuzzy", "mean_surrogate",
-         "y_baseline", "y_optuna", "y_fuzzy", "y_surrogate"]
-    )
-    for field in numeric_fields:
-        if field not in rows[0]:
-            print(field, "MISSING_COLUMN")
-            continue
-        vals = []
-        invalid = 0
-        for row in rows:
-            try:
-                value = float(row[field])
-                if not math.isfinite(value):
-                    invalid += 1
-                else:
-                    vals.append(value)
-            except (TypeError, ValueError):
-                invalid += 1
-        print(field, "invalid=", invalid,
-              "min=", min(vals) if vals else None,
-              "max=", max(vals) if vals else None)
-PY
-```
+Com esse pacote, revisarei a reprodução, atualizarei o status e definiremos a Fase 5. Até lá, não rode novas execuções GWO nem amplie a meta-base.
 
-**Critério:** nenhuma métrica numérica ausente/não finita; makespan e runtime positivos; contadores de avaliações não negativos. Valores de makespan acima do UB publicado não são, isoladamente, erro: o UB é referência conhecida, não garantia de que toda execução heurística o alcance.
+## 10. Documentos de referência
 
-**Envie:** saída completa. Se houver `MISSING_COLUMN` ou valores inválidos, pare e envie também o cabeçalho do arquivo.
-
-## 8. Etapa E — verificar alinhamento entre features e alvos
-
-Confirme que os arquivos estão presentes:
-
-```bash
-python -c "from pathlib import Path; paths=['experiments/meta_learning/data/instance_features.csv','results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127/per_instance_targets.csv','experiments/meta_learning/data/instance_manifest.csv']; [print(p, Path(p).exists(), Path(p).stat().st_size if Path(p).exists() else None) for p in paths]"
-```
-
-Depois envie os cabeçalhos (primeira linha) e contagem de registros de features e alvos:
-
-```bash
-python - <<'PY'
-import csv
-for path in [
-    "experiments/meta_learning/data/instance_features.csv",
-    "results/meta_learning_metabasis_pilot_v1/analysis_recheck_20261127/per_instance_targets.csv",
-]:
-    with open(path, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
-        print("\nFILE", path)
-        print("COLUMNS", reader.fieldnames)
-        print("ROWS", len(rows))
-        print("INSTANCE_UNIQUE", len({r.get("instance") for r in rows}))
-PY
-```
-
-**Critério:** uma linha por instância em cada arquivo, 36 instâncias, identificadores compatíveis e nenhum campo de resultado/identificador/hash/path/UB/LB incluído no conjunto de preditores. Os metadados podem continuar nos CSVs; a separação será aplicada no pipeline de treinamento.
-
-**Envie:** saída completa e, se possível, os dois CSVs. Não remova colunas manualmente.
-
-## 9. O que ainda NÃO executar
-
-Até revisar suas saídas, não execute:
-
-- expansão para 60 ou 120 instâncias;
-- aumento para 10, 20 ou 30 seeds;
-- treinamento de RandomForest;
-- tuning de hiperparâmetros;
-- seleção de features olhando o dataset inteiro;
-- avaliação em holdout ainda não reservado;
-- qualquer nova execução das variantes GWO.
-
-Motivo: primeiro precisamos provar completude, integridade, escala dos alvos e alinhamento das features. Treinar antes disso pode produzir métricas aparentemente boas sobre uma base inconsistente ou com vazamento.
-
-## 10. Próximo trabalho após você enviar os resultados
-
-Após receber as saídas das Etapas A–E, a sequência de implementação será:
-
-1. adicionar validação explícita de schema, instâncias, variantes, seeds, chaves únicas, valores numéricos, hashes e cobertura ao agregador;
-2. adicionar testes unitários para CSV completo, linha ausente, duplicata, variante inválida, seed inesperada, valor não finito e manifesto incompleto;
-3. definir e registrar formalmente o tratamento de normalização por UB versus `rel_best`; reportar regret por instância como métrica primária de seleção;
-4. congelar `metabasis_pilot_v1` com manifesto, hashes e proveniência;
-5. implementar baselines e validação agrupada por instância, primeiro como análise exploratória;
-6. somente depois treinar RF classifier/regressor, comparando-os com sempre Fuzzy e os demais seletores fixos.
-
-### Baselines e avaliação que serão implementados depois
-
-- aleatório uniforme (repetido com seeds próprias e reportado como distribuição);
-- sempre Baseline, sempre Optuna, sempre Fuzzy e sempre Surrogate;
-- melhor variante global calculada somente no treino de cada fold;
-- RandomForestClassifier;
-- RandomForestRegressor (multioutput ou quatro modelos, decisão técnica documentada).
-
-Métricas primárias: regret por instância, média/mediana do regret, intervalo de confiança e comparação pareada com sempre Fuzzy. Accuracy, balanced accuracy, macro-F1, matriz de confusão, MAE/RMSE e qualidade do ranking serão métricas complementares. Toda divisão será por instância; nenhuma instância pode aparecer simultaneamente em treino e teste.
-
-## 11. Pacote que você deve me devolver
-
-Envie, de preferência em um único upload ou resposta:
-
-1. saída de preparação (branch, commit, Python);
-2. saída integral do pytest;
-3. saída da reexecução do agregador;
-4. `summary.json` e `per_instance_targets.csv` da pasta `analysis_recheck_20261127`;
-5. saídas das Etapas C, D e E;
-6. eventuais erros/tracebacks completos.
-
-Com isso, consigo fazer a auditoria cruzada e implementar a próxima parte com base em evidências, sem pedir que você rode uma bateria grande desnecessária.
-
-## 12. Registro de execução
-
-Preencher após a execução local:
-
-| Item | Resultado |
-|---|---|
-| Data/hora | 2026-11-27 |
-| Branch / commit | `recovery/surrogate-learning-curve-v2-oom` / `f51f96d020953ffa5a6db0ba6419f2958e27a191` |
-| Python | 3.14.6 |
-| Testes | 19 passed (contratos) + 10 passed (`test_meta_learning_metabasis_pilot`) |
-| Agregação reproduzida | `analysis_recheck_20261127` idêntico ao publicado (Fuzzy 17/36, low-conf 22) |
-| Completude das chaves | 432/432; 0 missing/extra/duplicata |
-| Integridade numérica | 0 inválidos; norm=`ub` 36/36 |
-| Alinhamento features/alvos | 36/36; 35 preditores |
-| Decisão | Freeze `metabasis_pilot_v1` aprovado; LOO exploratório executado (RF não supera Fuzzy) |
-
+- [Status das fases](2026-11-27-meta-learning-phase-status.md)
+- [Avaliação LOO exploratória](2026-11-27-meta-learning-selector-loo-exploratory.md)
+- [Decisão de freeze](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md)
+- [Roadmap de conclusão](../plans/2026-11-27-meta-learning-completion-roadmap.md)
+- [README de Meta-Learning](../../experiments/meta_learning/README.md)
