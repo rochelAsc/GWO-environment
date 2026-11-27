@@ -1,7 +1,7 @@
 # Protocolo — comparação de modelos substitutos para PFSP
 
 **Data:** 26/11/2026  
-**Status:** protocolo para piloto; nenhum resultado desta comparação foi produzido ainda.  
+**Status:** runner do piloto implementado; execução local e resultados ainda pendentes.  
 **Dependência:** análise consolidada em [surrogate_learning_curve_v2_extension_statistical_analysis.md](surrogate_learning_curve_v2_extension_statistical_analysis.md).
 
 ## 1. Objetivo
@@ -95,3 +95,28 @@ A métrica de decisão primária deve ser a qualidade de seleção (regret e top
 - Checkpoint por ajuste para permitir retomada.
 - Testes devem verificar que todos os modelos recebem exatamente os mesmos arrays, que o split não muda e que as métricas de ranking/regret são calculadas corretamente.
 - Não versionar modelos grandes sem decisão explícita; versionar resultados tabulares, configuração e metadados necessários à reprodução.
+
+
+## 9. Runner do piloto (26/11/2026)
+
+Implementação: [`run_surrogate_model_comparison_pilot.py`](../scripts/run_surrogate_model_comparison_pilot.py). Testes unitários: [`test_surrogate_model_comparison_pilot.py`](../../../tests/test_surrogate_model_comparison_pilot.py).
+
+**Correção de localização dos artefatos:** os dados originais completos estão na branch `recovery/surrogate-learning-curve-v2-oom`, em `results/meta_learning_surrogate_learning_curve_v2_extension/`. A pasta `..._recovered/` contém somente os artefatos complementares da recuperação e não deve ser usada como raiz dos dados completos do piloto.
+
+O piloto usa especificamente:
+- `results/meta_learning_surrogate_learning_curve_v2_extension/ta111/ta111_uniform_permutations_n8000_rep1_diagnostics.npz`;
+- `results/meta_learning_surrogate_learning_curve_v2_extension/ta111/fixed_test_set.npz`;
+- `data/benchmarks/taillard/ta111.txt`.
+
+O runner valida dimensões, unicidade, ausência de sobreposição treino/teste, reconstrução das features a partir das permutações e hashes dos três arquivos. Os alvos de treino são recalculados pelo makespan exato da instância. Os NPZs originais são somente leitura.
+
+Execução a partir da raiz do repositório:
+
+```bash
+python -m pytest -q tests/test_surrogate_model_comparison_pilot.py
+python -m experiments.meta_learning.scripts.run_surrogate_model_comparison_pilot
+```
+
+Os quatro modelos são ajustados sequencialmente, com limite de uma thread, e cada modelo concluído é gravado em `pilot_checkpoints.jsonl`. A execução pode ser retomada pelo mesmo comando. Resultados finais/estado ficam em `pilot_results.csv` e `pilot_status.json`, dentro de `results/meta_learning_surrogate_model_comparison_pilot/`. O uso de memória RSS é amostrado via `psutil`, caso esteja instalado; caso contrário, o campo é explicitamente marcado como indisponível. A medição representa o RSS do processo (inclui arrays e runtime), não memória exclusiva do estimador.
+
+**Nenhum resultado do piloto foi fabricado ou presumido nesta atualização.** O runner e os testes foram versionados; a execução precisa ocorrer no computador que contém o checkout e os dados. Não foram adicionadas referências bibliográficas nesta etapa: os estimadores e hiperparâmetros seguem o protocolo já definido, sem nova alegação teórica que exija fonte adicional.
