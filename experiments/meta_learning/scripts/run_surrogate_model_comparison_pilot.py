@@ -16,7 +16,6 @@ import time
 from pathlib import Path
 from typing import Any
 
-import joblib
 import numpy as np
 import scipy
 import sklearn
@@ -28,7 +27,7 @@ from sklearn.ensemble import ExtraTreesRegressor, HistGradientBoostingRegressor,
 from threadpoolctl import threadpool_limits
 
 from scripts.pfs_taillard import load_taillard_instance, makespan
-from scripts.run_week4_surrogate import build_model, permutation_features, sha256
+from scripts.run_week4_surrogate import build_model, sha256
 from experiments.meta_learning.scripts.run_surrogate_learning_curve_v2 import evaluate_predictions
 
 
@@ -300,6 +299,7 @@ def run_pilot(
     for model_name, estimator in estimators.items():
         if model_name in completed:
             print(f"SKIP {model_name}: valid checkpoint already exists")
+            estimators[model_name] = None
             continue
         print(f"START {model_name}: X_train={X_train.shape}, X_test={X_test.shape}")
         fit_start = time.perf_counter()
@@ -338,6 +338,7 @@ def run_pilot(
             f"fit={training_seconds:.1f}s"
         )
         del estimator, predictions
+        estimators[model_name] = None
         gc.collect()
 
     _write_csv(output / "pilot_results.csv", rows)
