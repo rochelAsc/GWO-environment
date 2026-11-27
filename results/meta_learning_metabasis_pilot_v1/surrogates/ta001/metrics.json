@@ -1,0 +1,12 @@
+{
+  "protocol": "week4_taillard_pfsp_surrogate_v2_metabasis_pilot_v1",
+  "instance": "ta001",
+  "instance_sha256": "fa586022d3a4a759f2d26c4b61c5267e71c00e4016f3307bbe706982df2b42c3",
+  "jobs": 20,
+  "machines": 5,
+  "sample_count_requested": 2000,
+  "unique_permutations": 2000,
+  "train_samples": 1600,
+  "training_seconds": 0.4982042999472469,
+  "model_sha256": "3f7bb977e4e03ab8a928a343486a36aad57f57838ba12a6d17dc9ef72a712a1b"
+}

@@ -1,25 +1,25 @@
-# Taillard PFSP pilot subset
+# Taillard PFSP Meta-Learning pilot subset
 
-This directory contains a stratified 12-instance subset of the classical Taillard PFSP benchmark.
+This directory contains a stratified **36-instance** subset of the classical Taillard PFSP benchmark (3 instances × 12 size groups).
 
 ## Selection
 
-| Instance | Jobs | Machines | Group |
-|---|---:|---:|---|
-| ta001 | 20 | 5 | 20×5 |
-| ta011 | 20 | 10 | 20×10 |
-| ta021 | 20 | 20 | 20×20 |
-| ta031 | 50 | 5 | 50×5 |
-| ta041 | 50 | 10 | 50×10 |
-| ta051 | 50 | 20 | 50×20 |
-| ta061 | 100 | 5 | 100×5 |
-| ta071 | 100 | 10 | 100×10 |
-| ta081 | 100 | 20 | 100×20 |
-| ta091 | 200 | 10 | 200×10 |
-| ta101 | 200 | 20 | 200×20 |
-| ta111 | 500 | 20 | 500×20 |
+| Group | Instances |
+|---|---|
+| 20×5 | ta001, ta002, ta003 |
+| 20×10 | ta011, ta012, ta013 |
+| 20×20 | ta021, ta022, ta023 |
+| 50×5 | ta031, ta032, ta033 |
+| 50×10 | ta041, ta042, ta043 |
+| 50×20 | ta051, ta052, ta053 |
+| 100×5 | ta061, ta062, ta063 |
+| 100×10 | ta071, ta072, ta073 |
+| 100×20 | ta081, ta082, ta083 |
+| 200×10 | ta091, ta092, ta093 |
+| 200×20 | ta101, ta102, ta103 |
+| 500×20 | ta111, ta112, ta113 |
 
-One instance was selected from each of the 12 standard Taillard size groups. This is a **technical pilot subset**, not a statistically sufficient training or test dataset. Additional replicates from each group should be considered only after measuring runtime and validating the feature extractor.
+This is a **viability / meta-base pilot subset**. It is not by itself confirmatory evidence of Meta-Learning generalization. Larger expansions (60–120) remain conditional on cost and coverage.
 
 ## Provenance
 

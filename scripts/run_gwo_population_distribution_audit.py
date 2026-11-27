@@ -47,6 +47,15 @@ def read_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(stream))
 
 
+def count_rows(path: Path) -> int:
+    if not path.exists() or path.stat().st_size == 0:
+        return 0
+    with path.open(newline="", encoding="utf-8") as stream:
+        reader = csv.reader(stream)
+        next(reader, None)
+        return sum(1 for _ in reader)
+
+
 def append_rows(path: Path, fields: list[str], rows: list[dict]) -> None:
     if not rows:
         return
@@ -60,16 +69,35 @@ def append_rows(path: Path, fields: list[str], rows: list[dict]) -> None:
 
 
 def deduplicate(path: Path, keys: list[str]) -> None:
-    rows = read_rows(path)
-    if not rows:
+    """Keep last row per key without loading the full CSV into memory."""
+    if not path.exists() or path.stat().st_size == 0:
         return
-    unique = {}
-    for row in rows:
-        unique[tuple(row[key] for key in keys)] = row
-    with path.open("w", newline="", encoding="utf-8") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
-        writer.writeheader()
-        writer.writerows(unique.values())
+    last_index: dict[tuple[str, ...], int] = {}
+    fields: list[str] | None = None
+    n_rows = 0
+    with path.open(newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream)
+        fields = list(reader.fieldnames or [])
+        if not fields:
+            return
+        for index, row in enumerate(reader):
+            last_index[tuple(row[key] for key in keys)] = index
+            n_rows += 1
+    if n_rows == 0:
+        return
+    if len(last_index) == n_rows:
+        return
+    keep = set(last_index.values())
+    tmp_path = path.with_suffix(path.suffix + ".tmp")
+    with path.open(newline="", encoding="utf-8") as source:
+        reader = csv.DictReader(source)
+        with tmp_path.open("w", newline="", encoding="utf-8") as target:
+            writer = csv.DictWriter(target, fieldnames=fields)
+            writer.writeheader()
+            for index, row in enumerate(reader):
+                if index in keep:
+                    writer.writerow(row)
+    tmp_path.replace(path)
 
 
 def main() -> None:
@@ -209,7 +237,7 @@ def main() -> None:
     (args.output / "metadata.json").write_text(
         json.dumps(metadata, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    print(f"population rows: {len(read_rows(populations_path))}")
+    print(f"population rows: {count_rows(populations_path)}")
     print(f"diagnostic exact labels: {metadata['diagnostic_exact_labels_total']}")
     print(f"output: {args.output}")
 

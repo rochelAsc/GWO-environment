@@ -2,8 +2,9 @@
 
 **Data:** 27/11/2026  
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Status:** plano incremental; o pipeline de Meta-Learning por instância ainda não foi implementado nem avaliado.  
-**Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.
+**Status:** Fases 1–3 concluídas; Fase 4 (piloto 36×3×4) em execução em 2026-11-27. Pipeline de treino/avaliação meta ainda não iniciado.  
+**Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
+**Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).
 
 > Este documento é um plano de execução futuro. Não afirma que as etapas pendentes, a meta-base, os modelos ou a avaliação final já existam.
 
@@ -123,13 +124,13 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Objetivo:** fechar a auditoria do piloto antes de aumentar o volume.
 
-- [ ] Preservar o `populations.csv` local e disponibilizá-lo por armazenamento externo; registrar tamanho e SHA-256.
-- [ ] Validar número de linhas, chaves, variantes, seeds, gerações, lobos por geração e correspondência com `runs.csv`.
-- [ ] Recalcular independentemente permutações e makespan de uma amostra estratificada por variante, seed e geração.
-- [ ] Confirmar que callbacks e rótulos diagnósticos não alteram resultados dos algoritmos.
-- [ ] Revisar deduplicação/checkpoint do runner para processamento em streaming ou memória limitada.
-- [ ] Produzir análise descritiva por geração e execução: diversidade de permutações, frequências posicionais, entropia, precedência de pares, Kendall quando viável, distribuição de makespan e convergência.
-- [ ] Decidir, com base na análise, se é necessário coletar seeds 0–29 para a auditoria de distribuição. Essa coleta é opcional para o Meta-Learning e não deve ser confundida com a meta-base.
+- [x] Preservar o `populations.csv` local; registrar tamanho e SHA-256 (`ca6212d2…`; 551,69 MB). Armazenamento externo ainda pendente.
+- [x] Validar número de linhas, chaves, variantes, seeds, gerações, lobos por geração e correspondência com `runs.csv`.
+- [x] Recalcular independentemente permutações e makespan de uma amostra estratificada (80/80 OK).
+- [x] Confirmar que callbacks e rótulos diagnósticos não alteram resultados dos algoritmos (testes do observador).
+- [x] Revisar deduplicação/checkpoint do runner para processamento em streaming ou memória limitada.
+- [x] Produzir análise descritiva por geração e execução (entropia/unique/makespan; Kendall full pulado por custo).
+- [x] Decidir expansão 0–29 da auditoria de população: **não** agora; foco na meta-base 36 instâncias.
 
 **Aceite:** bruto íntegro e recuperável; análise reproduzível; limitações da amostra explícitas; decisão documentada sobre expansão.
 
@@ -143,12 +144,12 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Objetivo:** garantir que os resultados usados na meta-base correspondam a uma definição comparável da variante Surrogate.
 
-- [ ] Separar conclusões de qualidade global do surrogate de sua utilidade para ranking/seleção top-k.
-- [ ] Usar a distribuição real de candidatos para comparar erro, Spearman/Kendall, recall top-k, regret e custo, mantendo separação por run/seed.
-- [ ] Comparar candidatos a modelos/representações apenas em protocolo de desenvolvimento; não usar instâncias de teste confirmatório para escolher o modelo.
-- [ ] Definir modelo e artefatos Surrogate congelados, com hash, instância/escopo de treinamento e custo de preparação.
-- [ ] Revalidar que a variante continua usando fitness exato para atualizar líderes e que previsões não são tratadas como makespan verdadeiro.
-- [ ] Se não houver surrogate suficientemente confiável, manter a variante histórica congelada e documentar a limitação; não retunar silenciosamente a Semana 6.
+- [x] Separar conclusões de qualidade global do surrogate de sua utilidade para ranking/seleção top-k.
+- [x] Usar a distribuição real de candidatos para comparar erro, Spearman, recall top-k e regret (por geração/seed).
+- [x] Comparar candidatos a modelos apenas em protocolo de desenvolvimento (piloto uniforme + ranking GWO); sem holdout confirmatório para escolha.
+- [x] Definir modelo e artefatos Surrogate congelados (`docs/decisions/2026-11-27-surrogate-variant-freeze.md`).
+- [x] Revalidar que a variante continua usando fitness exato para atualizar líderes (`tests/test_week6_surrogate.py`).
+- [x] Surrogate fraco em ranking: manter variante histórica MLP Week 4; não retunar silenciosamente.
 
 **Aceite:** especificação única e reproduzível da variante Surrogate para novos experimentos; protocolo de custo explícito; decisão registrada sobre manter ou alterar a implementação.
 
@@ -162,12 +163,12 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Objetivo:** transformar a extração inicial em um contrato estável e sem vazamento.
 
-- [ ] Auditar `scripts/extract_instance_features.py` e `instance_features.csv` contra todas as instâncias disponíveis.
-- [ ] Testar invariância a caminho/nome, determinismo, dimensões extremas, valores constantes e dados inválidos.
-- [ ] Confirmar que todas as features usam somente a matriz de processamento.
-- [ ] Revisar correlações, escalas e colunas redundantes; manter um conjunto pequeno, interpretável e pré-especificado.
-- [ ] Versionar o schema e a versão do extrator; documentar unidade e definição matemática de cada coluna.
-- [ ] Garantir que normalização, imputação e seleção de features aprendidas ocorram dentro dos folds de treino.
+- [x] Auditar extrator e `instance_features.csv` contra as 36 instâncias disponíveis.
+- [x] Testar invariância a caminho/nome, determinismo e dados inválidos.
+- [x] Confirmar que todas as features usam somente a matriz de processamento.
+- [x] Manter conjunto v1 interpretável e pré-especificado (35 preditores); revisão de redundância adiada a ablação pós-piloto.
+- [x] Versionar schema (`taillard_pfsp_features_v1`); ver decisão de freeze.
+- [x] Registrar que normalização/seleção aprendida só ocorre dentro dos folds (contrato; implementação no treino meta).
 
 **Aceite:** extrator determinístico, testado, documentado e versionado; dataset de features reproduzível a partir das instâncias e hashes.
 
