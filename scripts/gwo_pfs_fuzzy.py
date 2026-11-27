@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import time
+from typing import Callable
 import numpy as np
 
 from scripts.fuzzy_controller import MamdaniGWOController, population_diversity
@@ -29,6 +30,7 @@ def gwo_pfs_fuzzy(
     stagnation_window: int = 20,
     a_start: float = 2.0,
     a_end: float = 0.0,
+    population_observer: Callable[[int, np.ndarray], None] | None = None,
 ) -> FuzzyGWOResult:
     """Run GWO under the Week 5 fixed evaluation budget."""
     p = np.asarray(processing_times)
@@ -52,6 +54,8 @@ def gwo_pfs_fuzzy(
         return value
 
     positions = rng.uniform(0.0, 1.0, size=(n_wolves, n_jobs))
+    if population_observer is not None:
+        population_observer(-1, positions.copy())
     fitness = np.asarray([evaluate(w) for w in positions], dtype=np.int64)
     evaluations = n_wolves
     order = np.argsort(fitness, kind="stable")[:3]
@@ -79,6 +83,8 @@ def gwo_pfs_fuzzy(
             distance = np.abs(C * leader[None, :] - positions)
             candidates.append(leader[None, :] - A * distance)
         new_positions = np.clip(np.mean(candidates, axis=0), 0.0, 1.0)
+        if population_observer is not None:
+            population_observer(iteration, new_positions.copy())
         new_fitness = np.asarray([evaluate(w) for w in new_positions], dtype=np.int64)
         evaluations += n_wolves
 

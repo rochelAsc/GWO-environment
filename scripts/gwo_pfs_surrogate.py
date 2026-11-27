@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import time
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 
@@ -37,6 +37,7 @@ def gwo_pfs_surrogate(
     a_start: float = 2.0,
     a_end: float = 0.0,
     a_exponent: float = 1.0,
+    population_observer: Callable[[int, np.ndarray], None] | None = None,
 ) -> SurrogateGWOResult:
     """Run GWO, using the model only to screen candidates before exact evaluation.
 
@@ -75,6 +76,8 @@ def gwo_pfs_surrogate(
         exact_evaluations += 1
         return value
 
+    if population_observer is not None:
+        population_observer(-1, positions.copy())
     initial_fitness = np.asarray([evaluate_exact(w) for w in positions], dtype=np.int64)
     order = np.argsort(initial_fitness, kind="stable")[:3]
     leaders = positions[order].copy()
@@ -101,6 +104,8 @@ def gwo_pfs_surrogate(
             distance = np.abs(C * leader[None, :] - positions)
             candidates.append(leader[None, :] - A * distance)
         new_positions = np.clip(np.mean(candidates, axis=0), 0.0, 1.0)
+        if population_observer is not None:
+            population_observer(iteration, new_positions.copy())
 
         infer_start = time.perf_counter()
         features = np.vstack([random_keys_features(row) for row in new_positions])

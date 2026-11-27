@@ -1,0 +1,121 @@
+{
+  "protocol": "leave_one_instance_out",
+  "n_instances": 36,
+  "feature_version": "taillard_pfsp_features_v1",
+  "seed": 0,
+  "random_repeats": 100,
+  "exploratory": true,
+  "primary_metric": "per_instance_regret_vs_oracle",
+  "selector_regret": {
+    "rf_classifier": {
+      "mean": 0.005232367139964405,
+      "median": 0.0030903813587793705,
+      "ci95": [
+        0.003423265009305775,
+        0.007071887095202884
+      ]
+    },
+    "rf_regressor": {
+      "mean": 0.0029053110115303477,
+      "median": 9.491268033412492e-05,
+      "ci95": [
+        0.0015437354605318285,
+        0.004297910920434709
+      ]
+    },
+    "best_global_train": {
+      "mean": 0.0029187377013105884,
+      "median": 0.00011140819964350346,
+      "ci95": [
+        0.0015888557070047541,
+        0.004408388895383875
+      ]
+    },
+    "random_mean": {
+      "mean": 0.009054752411256292,
+      "median": 0.008788316187648072,
+      "ci95": [
+        0.007169714095937119,
+        0.010980460306870908
+      ]
+    },
+    "always_baseline": {
+      "mean": 0.006144357463629241,
+      "median": 0.004604732137413636,
+      "ci95": [
+        0.004249942436582482,
+        0.008285870877798307
+      ]
+    },
+    "always_optuna": {
+      "mean": 0.0068104837555774895,
+      "median": 0.004679605885658411,
+      "ci95": [
+        0.004450228531675696,
+        0.00919557623577961
+      ]
+    },
+    "always_fuzzy": {
+      "mean": 0.0029187377013105884,
+      "median": 0.00011140819964350346,
+      "ci95": [
+        0.0015888557070047541,
+        0.004408388895383875
+      ]
+    },
+    "always_surrogate": {
+      "mean": 0.019307767340242865,
+      "median": 0.017644255347091686,
+      "ci95": [
+        0.014728520797097643,
+        0.023879749256042696
+      ]
+    }
+  },
+  "accuracy": {
+    "rf_classifier": 0.2222222222222222,
+    "rf_regressor": 0.4722222222222222
+  },
+  "paired_vs_always_fuzzy": {
+    "rf_classifier": {
+      "a_better": 8,
+      "b_better": 17,
+      "ties": 11
+    },
+    "rf_regressor": {
+      "a_better": 5,
+      "b_better": 3,
+      "ties": 28
+    },
+    "best_global_train": {
+      "a_better": 0,
+      "b_better": 0,
+      "ties": 36
+    },
+    "random_mean": {
+      "a_better": 6,
+      "b_better": 29,
+      "ties": 1
+    },
+    "always_baseline": {
+      "a_better": 12,
+      "b_better": 22,
+      "ties": 2
+    },
+    "always_optuna": {
+      "a_better": 12,
+      "b_better": 23,
+      "ties": 1
+    },
+    "always_surrogate": {
+      "a_better": 3,
+      "b_better": 32,
+      "ties": 1
+    }
+  },
+  "notes": [
+    "Pilot exploratory evaluation only; n=36, many low-margin labels.",
+    "Do not claim confirmatory generalization.",
+    "Operational comparator: always_fuzzy."
+  ]
+}

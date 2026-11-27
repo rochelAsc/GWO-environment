@@ -2,8 +2,12 @@
 from __future__ import annotations
 from dataclasses import dataclass
 import time
+from typing import Callable
 import numpy as np
 from scripts.pfs_taillard import makespan
+
+PopulationObserver = Callable[[int, np.ndarray], None]
+
 
 @dataclass
 class GWOResult:
@@ -14,18 +18,25 @@ class GWOResult:
     final_population: np.ndarray
     exact_evaluation_seconds: float
 
+
 def decode_random_keys(keys: np.ndarray) -> np.ndarray:
     keys = np.asarray(keys, dtype=float)
     if keys.ndim != 1 or keys.size == 0 or not np.all(np.isfinite(keys)):
         raise ValueError("keys must be a non-empty finite vector")
     return np.argsort(keys, kind="stable")
 
+
 def gwo_pfs(
     processing_times: np.ndarray, *, n_wolves: int = 30, iterations: int = 500,
     seed: int = 0, a_start: float = 2.0, a_end: float = 0.0,
     a_exponent: float = 1.0,
+    population_observer: PopulationObserver | None = None,
 ) -> GWOResult:
-    """Run synchronous GWO with configurable power-law a schedule."""
+    """Run synchronous GWO; observer receives copied random-key populations.
+
+    Observer generations are -1 (initial population) and 0..iterations-1.
+    The observer is diagnostic only and cannot mutate the optimizer's state.
+    """
     p = np.asarray(processing_times)
     if p.ndim != 2 or p.shape[0] == 0 or p.shape[1] == 0:
         raise ValueError("processing_times must be a non-empty matrix")
@@ -52,6 +63,8 @@ def gwo_pfs(
         return value
 
     positions = rng.uniform(0.0, 1.0, size=(n_wolves, n_jobs))
+    if population_observer is not None:
+        population_observer(-1, positions.copy())
     fitness = np.asarray([evaluate(w) for w in positions], dtype=np.int64)
     evaluations = n_wolves
     leader_indices = np.argsort(fitness, kind="stable")[:3]
@@ -77,6 +90,8 @@ def gwo_pfs(
             D = np.abs(C[leader_idx] * leader[None, :] - positions)
             candidates.append(leader[None, :] - A[leader_idx] * D)
         new_positions = np.clip(np.mean(candidates, axis=0), 0.0, 1.0)
+        if population_observer is not None:
+            population_observer(iteration, new_positions.copy())
         new_fitness = np.asarray([evaluate(w) for w in new_positions], dtype=np.int64)
         evaluations += n_wolves
         pool_positions = np.vstack((leaders, new_positions))

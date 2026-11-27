@@ -1,0 +1,171 @@
+{
+  "protocol": "meta_learning_cost_pilot_v3",
+  "seed": 0,
+  "surrogate_samples": 500,
+  "instances_measured": [
+    "ta001",
+    "ta011",
+    "ta021",
+    "ta031",
+    "ta041",
+    "ta051",
+    "ta061",
+    "ta071",
+    "ta081",
+    "ta091",
+    "ta101",
+    "ta111"
+  ],
+  "projection_by_size_group": [
+    {
+      "jobs": 20,
+      "machines": 5,
+      "seconds_four_variants_one_seed": 3.8009403001051396,
+      "surrogate_prep_seconds": 0.18585280003026128,
+      "estimate_3_instances_x_3_seeds_seconds": 34.20846270094626,
+      "estimate_3_instances_x_3_seeds_hours": 0.00950235075026285,
+      "mean_seconds_baseline": 0.9291886000428349,
+      "mean_seconds_optuna": 1.128503300016746,
+      "mean_seconds_fuzzy": 1.1094642002135515,
+      "mean_seconds_surrogate": 0.6337841998320073
+    },
+    {
+      "jobs": 20,
+      "machines": 10,
+      "seconds_four_variants_one_seed": 5.710354000329971,
+      "surrogate_prep_seconds": 0.17236849991604686,
+      "estimate_3_instances_x_3_seeds_seconds": 51.39318600296974,
+      "estimate_3_instances_x_3_seeds_hours": 0.014275885000824929,
+      "mean_seconds_baseline": 1.6010263999924064,
+      "mean_seconds_optuna": 1.561759800184518,
+      "mean_seconds_fuzzy": 1.7953828000463545,
+      "mean_seconds_surrogate": 0.7521850001066923
+    },
+    {
+      "jobs": 20,
+      "machines": 20,
+      "seconds_four_variants_one_seed": 9.254290499957278,
+      "surrogate_prep_seconds": 0.32162029994651675,
+      "estimate_3_instances_x_3_seeds_seconds": 83.2886144996155,
+      "estimate_3_instances_x_3_seeds_hours": 0.023135726249893195,
+      "mean_seconds_baseline": 2.787809600122273,
+      "mean_seconds_optuna": 2.654690499883145,
+      "mean_seconds_fuzzy": 2.927048600045964,
+      "mean_seconds_surrogate": 0.8847417999058962
+    },
+    {
+      "jobs": 50,
+      "machines": 5,
+      "seconds_four_variants_one_seed": 7.060408000135794,
+      "surrogate_prep_seconds": 0.19428419996984303,
+      "estimate_3_instances_x_3_seeds_seconds": 63.54367200122215,
+      "estimate_3_instances_x_3_seeds_hours": 0.017651020000339485,
+      "mean_seconds_baseline": 1.9736594001296908,
+      "mean_seconds_optuna": 1.9334058999083936,
+      "mean_seconds_fuzzy": 2.242717199958861,
+      "mean_seconds_surrogate": 0.910625500138849
+    },
+    {
+      "jobs": 50,
+      "machines": 10,
+      "seconds_four_variants_one_seed": 11.481348600238562,
+      "surrogate_prep_seconds": 0.3012572000734508,
+      "estimate_3_instances_x_3_seeds_seconds": 103.33213740214705,
+      "estimate_3_instances_x_3_seeds_hours": 0.028703371500596403,
+      "mean_seconds_baseline": 3.7216282000299543,
+      "mean_seconds_optuna": 3.5613615000620484,
+      "mean_seconds_fuzzy": 3.241758300224319,
+      "mean_seconds_surrogate": 0.9566005999222398
+    },
+    {
+      "jobs": 50,
+      "machines": 20,
+      "seconds_four_variants_one_seed": 20.02783630019985,
+      "surrogate_prep_seconds": 0.3059988000895828,
+      "estimate_3_instances_x_3_seeds_seconds": 180.25052670179866,
+      "estimate_3_instances_x_3_seeds_hours": 0.05006959075049963,
+      "mean_seconds_baseline": 6.310283600119874,
+      "mean_seconds_optuna": 6.203666100045666,
+      "mean_seconds_fuzzy": 6.291193100158125,
+      "mean_seconds_surrogate": 1.2226934998761863
+    },
+    {
+      "jobs": 100,
+      "machines": 5,
+      "seconds_four_variants_one_seed": 11.666161400265992,
+      "surrogate_prep_seconds": 0.2693231999874115,
+      "estimate_3_instances_x_3_seeds_seconds": 104.99545260239393,
+      "estimate_3_instances_x_3_seeds_hours": 0.029165403500664978,
+      "mean_seconds_baseline": 3.436824900098145,
+      "mean_seconds_optuna": 3.4805670001078397,
+      "mean_seconds_fuzzy": 3.729677899973467,
+      "mean_seconds_surrogate": 1.01909160008654
+    },
+    {
+      "jobs": 100,
+      "machines": 10,
+      "seconds_four_variants_one_seed": 20.9628200000152,
+      "surrogate_prep_seconds": 0.3121915999799967,
+      "estimate_3_instances_x_3_seeds_seconds": 188.6653800001368,
+      "estimate_3_instances_x_3_seeds_hours": 0.052407050000038,
+      "mean_seconds_baseline": 6.620085600065067,
+      "mean_seconds_optuna": 6.280799799831584,
+      "mean_seconds_fuzzy": 6.748050200054422,
+      "mean_seconds_surrogate": 1.3138844000641257
+    },
+    {
+      "jobs": 100,
+      "machines": 20,
+      "seconds_four_variants_one_seed": 38.00674350000918,
+      "surrogate_prep_seconds": 0.5728062998969108,
+      "estimate_3_instances_x_3_seeds_seconds": 342.0606915000826,
+      "estimate_3_instances_x_3_seeds_hours": 0.09501685875002294,
+      "mean_seconds_baseline": 12.019607699941844,
+      "mean_seconds_optuna": 11.997623699950054,
+      "mean_seconds_fuzzy": 12.10097280004993,
+      "mean_seconds_surrogate": 1.8885393000673503
+    },
+    {
+      "jobs": 200,
+      "machines": 10,
+      "seconds_four_variants_one_seed": 39.74794079991989,
+      "surrogate_prep_seconds": 0.5500668999738991,
+      "estimate_3_instances_x_3_seeds_seconds": 357.731467199279,
+      "estimate_3_instances_x_3_seeds_hours": 0.09936985199979972,
+      "mean_seconds_baseline": 12.654908400028944,
+      "mean_seconds_optuna": 12.237859699875116,
+      "mean_seconds_fuzzy": 12.780727399978787,
+      "mean_seconds_surrogate": 2.0744453000370413
+    },
+    {
+      "jobs": 200,
+      "machines": 20,
+      "seconds_four_variants_one_seed": 73.59435819997452,
+      "surrogate_prep_seconds": 0.9105626000091434,
+      "estimate_3_instances_x_3_seeds_seconds": 662.3492237997707,
+      "estimate_3_instances_x_3_seeds_hours": 0.1839858954999363,
+      "mean_seconds_baseline": 23.423595499945804,
+      "mean_seconds_optuna": 23.17362580006011,
+      "mean_seconds_fuzzy": 23.710505799856037,
+      "mean_seconds_surrogate": 3.2866311001125723
+    },
+    {
+      "jobs": 500,
+      "machines": 20,
+      "seconds_four_variants_one_seed": 183.30738290026784,
+      "surrogate_prep_seconds": 2.266481300117448,
+      "estimate_3_instances_x_3_seeds_seconds": 1649.7664461024106,
+      "estimate_3_instances_x_3_seeds_hours": 0.4582684572506696,
+      "mean_seconds_baseline": 57.91673460020684,
+      "mean_seconds_optuna": 58.96987170004286,
+      "mean_seconds_fuzzy": 59.13570440001786,
+      "mean_seconds_surrogate": 7.285072200000286
+    }
+  ],
+  "estimate_36_instances_3_seeds_four_variants_hours": 1.061551461253548,
+  "estimate_36_instances_10_seeds_four_variants_hours": 3.53850487084516,
+  "notes": [
+    "Surrogate models here use 500 LHS samples for cost only; confirmatory meta-base should use Week4 sample policy.",
+    "Estimates assume three instances per size group scale like the measured representative."
+  ]
+}

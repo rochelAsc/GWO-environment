@@ -1,0 +1,78 @@
+{
+  "record_version": "meta_learning_reproduction_ad_v1",
+  "reproduced_at_local_date": "2026-11-27",
+  "runbook": "docs/reports/2026-11-27-meta-learning-next-execution-runbook.md",
+  "git_branch": "recovery/surrogate-learning-curve-v2-oom",
+  "git_commit": "b5456d1f20523aca267c03ca379e58b3406c38fc",
+  "recent_commits": [
+    "b5456d1 docs: avoid overwriting published meta-learning analysis",
+    "5dec18e docs: fix LOO report section numbering and safe reproduction path"
+  ],
+  "environment": {
+    "python": "3.14.6",
+    "numpy": "2.5.1",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.9.0"
+  },
+  "tests": {
+    "command": "python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py",
+    "result": "29 passed",
+    "warnings": "2 external dependency warnings (anyio CallSpec2; dateutil utcfromtimestamp)"
+  },
+  "freeze": {
+    "path": "experiments/meta_learning/data/metabasis_pilot_v1",
+    "schema_version": "metabasis_pilot_v1",
+    "n_instances": 36,
+    "n_runs": 432,
+    "feature_version": "taillard_pfsp_features_v1",
+    "n_predictors": 35,
+    "hashes_verified": {
+      "instance_features.csv": {
+        "sha256": "0d4a7c4435596bc867ab69ac5624e81e82ccc78a33eb1c27b8ffc82bc2cd80a1",
+        "status": "OK"
+      },
+      "per_instance_targets.csv": {
+        "sha256": "2891dc6c29bbbcfdb37237390cd5169b76723112f44e877bb0a656e72f422a35",
+        "status": "OK"
+      },
+      "instance_manifest.csv": {
+        "sha256": "e5ecc06260339b8b401697aea9b09f0d4a0b3e1386f573bd6ee9d5ce7ae8c796",
+        "status": "OK"
+      },
+      "runs.csv": {
+        "sha256": "177bd3ef67b382863f9ff71f46e69a01794aea840b5d84a58687d0bc086b744f",
+        "status": "OK"
+      }
+    },
+    "freeze_regenerated": false
+  },
+  "loo_recheck": {
+    "command": "python -m scripts.evaluate_meta_learning_selectors_pilot --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 --seed 0 --random-repeats 100",
+    "published_dir": "results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1",
+    "recheck_dir": "results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127",
+    "summary_identical": true,
+    "predictions_identical": true,
+    "artifact_sha256": {
+      "published_summary.json": "218c448f80f4f16a2aab7afca43a511665420824c2f0484328ef4351ec70a2ba",
+      "recheck_summary.json": "218c448f80f4f16a2aab7afca43a511665420824c2f0484328ef4351ec70a2ba",
+      "published_per_instance_predictions.csv": "68edebba8e9e61c95b28e585f58687512cd22fef2adc4bd337c21a40fa14ae0d",
+      "recheck_per_instance_predictions.csv": "68edebba8e9e61c95b28e585f58687512cd22fef2adc4bd337c21a40fa14ae0d"
+    },
+    "key_metrics": {
+      "n_instances": 36,
+      "accuracy_rf_classifier": 0.2222222222222222,
+      "accuracy_rf_regressor": 0.4722222222222222,
+      "regret_mean_always_fuzzy": 0.0029187377013105884,
+      "regret_mean_rf_regressor": 0.0029053110115303477,
+      "regret_mean_rf_classifier": 0.005232367139964405,
+      "paired_rf_regressor_vs_fuzzy": {"a_better": 5, "b_better": 3, "ties": 28}
+    }
+  },
+  "divergences": [],
+  "phase5_decision": "pending",
+  "notes": [
+    "Reproduction only; freeze directory was not overwritten.",
+    "No new GWO runs, no expansion, no hyperparameter tuning.",
+    "Decision options remain: expand instances, close extension, or reformulate question."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "instance": "ta061",
+  "instance_sha256": "d225a8261499d4e25a6b710ba72d6f15f8074b4b8b42de4fba67e109f3c82475",
+  "jobs": 100,
+  "machines": 5,
+  "samples": 500,
+  "unique_permutations": 500,
+  "train_samples": 400,
+  "training_seconds": 0.2693231999874115,
+  "protocol": "week4_taillard_pfsp_surrogate_v2_cost_pilot_v3",
+  "model_sha256_after_save": "8306367a4c05240e6ebf3b909eb025a5648880cda498e6bc4223874f4ed38a46"
+}

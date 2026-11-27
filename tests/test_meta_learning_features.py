@@ -24,6 +24,33 @@ def test_features_do_not_depend_on_filename_or_benchmark_metadata():
     assert extract_instance_features(p) == extract_instance_features(p.copy())
 
 
+def test_extractor_is_invariant_to_path_and_filename(tmp_path):
+    from pathlib import Path
+    import shutil
+
+    from experiments.meta_learning.scripts.extract_instance_features import (
+        FEATURE_VERSION,
+        extract_directory,
+        extract_instance_features,
+    )
+    from scripts.pfs_taillard import load_taillard_instance
+
+    src = Path("data/benchmarks/taillard/ta001.txt")
+    a = tmp_path / "alpha"
+    b = tmp_path / "beta" / "nested"
+    a.mkdir()
+    b.mkdir(parents=True)
+    shutil.copy(src, a / "ta001.txt")
+    shutil.copy(src, b / "ta001.txt")
+    feats = extract_instance_features(load_taillard_instance(src).processing_times)
+    assert extract_instance_features(load_taillard_instance(a / "ta001.txt").processing_times) == feats
+    assert extract_instance_features(load_taillard_instance(b / "ta001.txt").processing_times) == feats
+    frame = extract_directory(a)
+    assert frame.loc[0, "feature_version"] == FEATURE_VERSION
+    assert frame.loc[0, "instance"] == "ta001"
+    assert frame.loc[0, "sha256"] == frame.loc[0, "sha256"]
+
+
 @pytest.mark.parametrize(
     "matrix",
     [

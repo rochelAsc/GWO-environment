@@ -1,8 +1,68 @@
 # Plano de Meta-Learning: classificação e regressão
 
-**Status:** planejamento metodológico aprovado para implementação futura. **Nenhum experimento de Meta-Learning foi executado por este documento.**
+**Status (2026-11-27):** piloto 36 congelado; LOO sem ganho vs Fuzzy; expansão aprovada; **checkpoint 60 development concluído** (576/576 runs; 48 instâncias; holdout selado). Decisão 60→120 pendente. A curva/comparação de surrogate abaixo é trilho distinto.
 
-Este plano define um pipeline único para comparar duas estratégias de Meta-Learning — classificação e regressão — usando a mesma base experimental. É uma extensão opcional do projeto, não uma etapa obrigatória do roteiro do professor e não substitui as Semanas 1–6.
+Este documento define o pipeline metodológico e aponta o estado real dos artefatos. É uma extensão opcional do projeto, não etapa obrigatória do roteiro do professor e não substitui as Semanas 1–6.
+
+### Estado do trilho Meta-Learning (seleção de variantes)
+
+| Artefato | Caminho |
+|---|---|
+| Freeze da meta-base | [`data/metabasis_pilot_v1/`](data/metabasis_pilot_v1/) |
+| Decisão de freeze | [`docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md`](../../docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md) |
+| Status das fases | [`docs/reports/2026-11-27-meta-learning-phase-status.md`](../../docs/reports/2026-11-27-meta-learning-phase-status.md) |
+| Relatório LOO exploratório | [`docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md`](../../docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md) |
+| Reprodução A–D | [`docs/reports/2026-11-27-meta-learning-reproduction-ad.md`](../../docs/reports/2026-11-27-meta-learning-reproduction-ad.md) |
+| Decisão de expansão v2 | [`docs/decisions/2026-11-27-meta-learning-expansion-v2.md`](../../docs/decisions/2026-11-27-meta-learning-expansion-v2.md) |
+| Fase A inventário/split | [`docs/reports/2026-11-27-meta-learning-v2-phase-a-inventory-split.md`](../../docs/reports/2026-11-27-meta-learning-v2-phase-a-inventory-split.md) |
+| Checkpoint 60 development | [`docs/reports/2026-11-27-meta-learning-v2-checkpoint60-dev.md`](../../docs/reports/2026-11-27-meta-learning-v2-checkpoint60-dev.md) |
+| Split congelado | [`data/metabasis_v2/split_manifest.csv`](data/metabasis_v2/split_manifest.csv) |
+| Roadmap | [`docs/plans/2026-11-27-meta-learning-completion-roadmap.md`](../../docs/plans/2026-11-27-meta-learning-completion-roadmap.md) |
+| Runbook | [`docs/reports/2026-11-27-meta-learning-next-execution-runbook.md`](../../docs/reports/2026-11-27-meta-learning-next-execution-runbook.md) |
+
+### Resultado do piloto de seleção
+
+| Seletor | Regret médio | Leitura |
+|---|---:|---|
+| Sempre Fuzzy | 0,0029187 | baseline operacional atual |
+| RF regressor | 0,0029053 | diferença pontual mínima; 5/3/28 no pareado vs Fuzzy |
+| RF classifier | 0,0052324 | pior que sempre Fuzzy |
+
+O RF regressor não demonstrou superioridade: IC95 se sobrepõem amplamente e há 28 empates em 36 instâncias. O piloto tem 36 unidades independentes e 35 preditores; LOO não substitui holdout externo. Aumentar seeds não resolve a limitação do número de instâncias. Ver [relatório LOO](../../docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md).
+
+**Próxima ação:** decisão formal 60→120 (sem abrir holdout). Ver [checkpoint 60](../../docs/reports/2026-11-27-meta-learning-v2-checkpoint60-dev.md).
+
+```bash
+python -m scripts.build_meta_learning_metabasis_v2_checkpoint60_dev
+# se avançar:
+python -m scripts.run_meta_learning_metabasis_v2 --stages 120 --partitions development
+```
+
+
+
+### Expansão aprovada: metabasis_v2
+
+A decisão formal autoriza uma expansão em dois estágios. O piloto de 36 instâncias permanece exclusivamente no desenvolvimento.
+
+| Estágio | Desenvolvimento | Holdout selado | Total |
+|---|---:|---:|---:|
+| 60 | 48 (4 por grupo) | 12 (1 por grupo) | 60 |
+| 120 | 96 (8 por grupo) | 24 (2 por grupo) | 120 |
+
+Em cada grupo Taillard, as 7 instâncias ainda não usadas serão divididas deterministicamente em 5 para desenvolvimento e 2 para holdout, sem consultar resultados. Seed pré-registrada: 20261127, usando numpy.random.default_rng e grupos em ordem lexicográfica; registrar versão NumPy e hash do inventário. Se houver expansão a 120, os 12 holdouts do checkpoint de 60 continuam selados; o holdout final de 24 só será aberto uma vez, depois do congelamento do pipeline. Seeds iniciais: 0, 1 e 2 pareadas. Não aumentar seeds como substituto de instâncias independentes.
+
+Scripts v2 prontos (`run_meta_learning_metabasis_v2.py`, `freeze_meta_learning_metabasis_v2.py`, `build_meta_learning_metabasis_v2_checkpoint60_dev.py`). Checkpoint 60 development **já coletado e agregado** (576/576); holdout selado. Freeze piloto v1 permanece imutável.
+
+## Trabalho concluído relacionado: curva de aprendizagem do surrogate
+
+Foi executada e analisada uma extensão separada para avaliar o efeito do tamanho do conjunto de treinamento do MLP surrogate da Semana 4. Os resultados cobrem `ta071` e `ta111`, LHS e amostragem uniforme, de 300 a 32.000 amostras, com cinco repetições por ponto e teste fixo por instância.
+
+- [Análise estatística consolidada e IC95%](reports/surrogate_learning_curve_v2_extension_statistical_analysis.md).
+- [Protocolo da próxima etapa: comparação de modelos](reports/surrogate_model_comparison_protocol.md).
+- [Protocolo v2 de amostragem e diagnósticos](reports/surrogate_learning_curve_v2_protocol.md).
+- [Relatório de recuperação da execução interrompida](reports/surrogate_learning_curve_v2_recovery.md).
+
+Essa curva **não é a meta-base de Meta-Learning** descrita neste documento: ela estuda o surrogate de makespan, não aprende a escolher entre variantes GWO. O trilho de seleção de variantes tem piloto próprio (`metabasis_pilot_v1` + LOO exploratório); não misturar as duas conclusões.
 
 ## 1. Objetivo
 
@@ -72,17 +132,9 @@ O benchmark atual usa `ta001` (20 jobs × 5 máquinas) e `ta011` (20 jobs × 10 
 
 É necessário ampliar o conjunto com instâncias Taillard de diferentes tamanhos e relações jobs/máquinas. A seleção deve ser estratificada por dimensão e cobrir diferentes regimes, não apenas muitas instâncias quase idênticas.
 
-**Subset piloto já versionado:** `data/benchmarks/taillard/` agora contém 12 instâncias, uma de cada grupo de dimensão do benchmark clássico: 20×5, 20×10, 20×20, 50×5, 50×10, 50×20, 100×5, 100×10, 100×20, 200×10, 200×20 e 500×20. As instâncias adicionais foram obtidas do espelho PISCO; a proveniência e a seleção estão registradas em `data/benchmarks/taillard/README.md`.
+**Subset piloto já versionado:** data/benchmarks/taillard/ contém 36 instâncias (3 por grupo). A expansão aprovada busca o benchmark-alvo de 120 instâncias (10 por grupo); os 84 arquivos restantes ainda precisam ser obtidos e validados. A lista dos grupos, proveniência e protocolo de split estão em data/benchmarks/taillard/README.md.
 
-Esse subconjunto serve para validar parser, características e custo em diferentes escalas. **Não deve ser tratado como meta-base suficiente para treinar ou avaliar generalização**: há apenas uma instância por grupo e doze unidades independentes no total.
-
-Plano em fases, sujeito a medição de custo:
-
-- **Piloto de viabilidade:** 12–20 instâncias diversas, poucas seeds (por exemplo, 3–5), apenas para validar extração, execução, persistência e custo. Não usar o piloto como evidência final de generalização.
-- **Meta-base exploratória:** alvo inicial de 30–50 instâncias, com 10 seeds por variante/instância, se o custo permitir. Esse tamanho ainda pode ser insuficiente para conclusões fortes; tratar resultados como exploratórios.
-- **Expansão confirmatória:** buscar 50–100 ou mais instâncias, com 20–30 seeds por variante/instância, se os recursos e o tempo permitirem. A suficiência deve ser julgada pela diversidade e pela incerteza, não apenas pela contagem.
-
-Os números são metas de planejamento, não garantia de poder estatístico. Antes de expandir, medir tempo por instância/variante no piloto. Priorizar cobertura de dimensões e integridade dos dados.
+O piloto de 36 é desenvolvimento e não fornece holdout confirmatório. A expansão v2 usa 48 instâncias de desenvolvimento + 12 holdout seladas no checkpoint 60; se avançar a 120, serão 96 desenvolvimento + 24 holdout. O split será pré-registrado, estratificado e independente dos resultados GWO. Não tratar 60 ou 120 como garantia automática de poder estatístico.
 
 Os resultados publicados de Semana 6 para `ta001` e `ta011` podem ser incorporados como observações históricas compatíveis, após validação de hashes, protocolo, variantes e seeds. Não duplicar essas linhas executando-as novamente sem necessidade. Registrar a proveniência de cada linha e manter o conjunto original imutável.
 
@@ -227,34 +279,32 @@ A melhor variante por média pode mudar com as seeds. Portanto:
 - repetir análise excluindo ou ponderando esses casos como sensibilidade, sem removê-los silenciosamente;
 - não afirmar que a classe prevista é universal quando as diferenças observadas são praticamente equivalentes.
 
-## 11. Estrutura de diretórios proposta
+## 11. Estrutura de diretórios (estado atual)
 
-A implementação futura deve ficar isolada, sem alterar scripts/artefatos das Semanas 2–6:
+Scripts/artefatos das Semanas 2–6 permanecem intactos. Layout do trilho meta:
 
 ```text
 experiments/meta_learning/
 ├── README.md
-├── config/
-│   └── meta_learning_v1.json
 ├── data/
-│   ├── instance_features.csv
-│   ├── run_results.csv
-│   └── meta_dataset.csv
+│   ├── instance_features.csv          # features v1 (36 instâncias)
+│   ├── instance_manifest.csv
+│   └── metabasis_pilot_v1/            # freeze: features, targets, runs, hashes
 ├── scripts/
 │   ├── extract_instance_features.py
-│   ├── build_meta_dataset.py
-│   ├── train_classifier.py
-│   ├── train_regressor.py
-│   ├── evaluate_meta_models.py
-│   └── run_meta_learning.py
-├── models/
-├── reports/
-├── tests/
-└── results/
-    └── meta_learning_v1/
+│   └── … (runners surrogate learning curve / model comparison)
+├── reports/                           # trilho surrogate
+└── referencias.md
 ```
 
-Os arquivos de dados/modelos/resultados só serão criados durante a implementação/execução. Não versionar artefatos vazios nem colocar resultados fictícios no repositório. Configurações, scripts, testes e relatórios devem ser versionados. Cada execução deve registrar commit, hashes das instâncias, versão do extrator, parâmetros, seeds, ambiente e timestamp.
+Scripts do trilho de seleção de variantes ficam em `scripts/` na raiz do repositório:
+
+- `run_meta_learning_metabasis_pilot.py`
+- `analyze_meta_learning_metabasis_pilot.py`
+- `freeze_meta_learning_metabasis_pilot.py`
+- `evaluate_meta_learning_selectors_pilot.py`
+
+Não versionar artefatos vazios nem resultados fictícios. Cada execução registra commit, hashes, versão do extrator, seeds e timestamp (`freeze_manifest.json`).
 
 ## 12. Pipeline operacional
 
@@ -279,25 +329,27 @@ flowchart TD
 
 ## 13. Critérios de aceite antes de qualquer conclusão
 
-- [ ] Conjunto de instâncias ampliado e diversidade documentada.
-- [ ] Piloto de custo concluído antes de definir a bateria final.
-- [ ] Features independentes dos resultados e sem vazamento.
-- [ ] Resultados das quatro variantes íntegros, com seeds e contadores auditáveis.
-- [ ] Meta-base com uma linha por instância e proveniência rastreável.
-- [ ] Divisões exclusivamente por instância.
-- [ ] Baselines simples calculados sem consultar o teste.
-- [ ] Classificação e regressão avaliadas sobre os mesmos folds/holdout.
-- [ ] Regret, incerteza dos rótulos e custos reportados.
-- [ ] Testes automatizados, relatório e reprodução documentados.
+- [x] Piloto com 36 instâncias (3 por grupo), congelado e reproduzido.
+- [ ] Expansão v2 aprovada: checkpoint 60 e alvo 120; coleta ainda pendente dos gates técnicos.
+- [x] Piloto de custo concluído (`meta_learning_cost_pilot_v3`).
+- [x] Features independentes dos resultados e sem vazamento (`taillard_pfsp_features_v1`).
+- [x] Resultados das quatro variantes íntegros (432/432) com seeds e hashes auditáveis.
+- [x] Meta-base com uma linha por instância e proveniência (`metabasis_pilot_v1`).
+- [x] Divisões exclusivamente por instância (LOO exploratório).
+- [x] Baselines simples calculados sem consultar o fold de teste.
+- [x] Classificação e regressão avaliadas nos mesmos folds LOO (exploratório).
+- [x] Regret, rótulos low-confidence e comparação vs Fuzzy reportados.
+- [ ] Holdout confirmatório / meta-base ≥60 com critérios pré-registrados.
+- [x] Testes automatizados e reprodução do piloto documentados.
 
 ## 14. Limitações e decisão de escopo
 
-- As duas instâncias atuais não sustentam treinamento/avaliação de Meta-Learning.
-- A meta-base exige novas execuções e pode custar milhares de runs; não executar sem piloto e estimativa de recursos.
-- Random Forest é um ponto de partida, não uma escolha comprovadamente ótima.
-- O resultado será válido para a distribuição de instâncias representada no dataset; generalização para outras famílias de scheduling não está garantida.
-- Meta-Learning é uma extensão independente e opcional. A entrega principal continua sendo a linha PFSP/Taillard e os resultados auditados das Semanas 2–6.
-- O documento define o plano, não afirma que código, modelos ou experimentos de Meta-Learning já existem.
+- O piloto 36×3×4 é exploratório; 22/36 rótulos têm margem &lt; 0,5%.
+- LOO mostrou RF sem ganho operacional vs sempre Fuzzy; não alegar benefício confirmatório.
+- Expansão 60/120 foi aprovada na Fase 5; depende de inventário, split pré-registrado e scripts v2. Seeds adicionais dependem de análise de variância e custo.
+- Random Forest é ponto de partida, não vencedor presumido.
+- Generalização vale só para a distribuição representada; outras famílias de scheduling não estão cobertas.
+- Meta-Learning permanece extensão opcional. A entrega principal continua sendo PFSP/Taillard e as Semanas 2–6.
 
 
 ## Referências e curva de aprendizagem do surrogate
@@ -326,9 +378,47 @@ A curva v1 foi executada para ta071 e ta111, com 300, 573, 1.095, 2.093 e 4.000 
 
 Conclusão: mais amostras melhoraram RMSE e ranking, mas a qualidade ainda é insuficiente, principalmente na ta111. Não aumentar N imediatamente. Primeiro comparar MLP com GBDT/HistGradientBoosting e ExtraTrees, investigar ranking pareado e avaliar candidatos extraídos de trajetórias GWO. A execução v1 chamou o braço LHS em blocos de até 512 draws; por isso, não descrevê-lo como um LHS global de N pontos.
 
-**Meta-Learning por instância:** a expansão de 12 para 36 instâncias Taillard é recomendada como próximo piloto (três instâncias por grupo), com possível avanço para 60 e depois o benchmark completo de 120 instâncias. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância. Ver o relatório de auditoria antes de iniciar a bateria.
+**Meta-Learning por instância:** o piloto 36 (3 por grupo) já foi executado, congelado e avaliado em LOO exploratório sem ganho operacional demonstrado vs Fuzzy. A expansão v2 foi aprovada: checkpoint 60 e alvo 120, com holdout pré-reservado. Próximo passo é cumprir os gates do runbook, não retreinar silenciosamente. A quantidade de instâncias é distinta da quantidade de permutações usadas para treinar um surrogate por instância.
 
 
 ### Curva de aprendizagem v2 — LHS global e diagnósticos
 
-A correção metodológica está implementada em [run_surrogate_learning_curve_v2.py](scripts/run_surrogate_learning_curve_v2.py), com testes em [test_meta_learning_learning_curve_v2.py](../../tests/test_meta_learning_learning_curve_v2.py) e protocolo em [surrogate_learning_curve_v2_protocol.md](reports/surrogate_learning_curve_v2_protocol.md). A v1 e seus resultados permanecem preservados. A v2 gera um LHS global por tamanho/repetição, descarta designs inteiros quando a decodificação gera colisões e registra métricas de distribuição, hashes e versões de software. Os arrays completos e as permutações podem ser persistidos opcionalmente via flags; o CI está aprovado; a bateria experimental v2 ainda precisa ser executada.
+A correção metodológica está implementada em [run_surrogate_learning_curve_v2.py](scripts/run_surrogate_learning_curve_v2.py), com testes em [test_meta_learning_learning_curve_v2.py](../../tests/test_meta_learning_learning_curve_v2.py) e protocolo em [surrogate_learning_curve_v2_protocol.md](reports/surrogate_learning_curve_v2_protocol.md). A v1 e seus resultados permanecem preservados. A curva v2 original foi executada e publicada; a extensão até 32.000 amostras foi recuperada e publicada em diretório separado. A análise estatística consolidada está em [surrogate_learning_curve_v2_extension_statistical_analysis.md](reports/surrogate_learning_curve_v2_extension_statistical_analysis.md). O próximo experimento é a comparação controlada de modelos, definida em [surrogate_model_comparison_protocol.md](reports/surrogate_model_comparison_protocol.md).
+
+
+### Comparação de modelos substitutos — piloto CPU
+
+O protocolo e runner do piloto estão documentados em [surrogate_model_comparison_protocol.md](reports/surrogate_model_comparison_protocol.md) e [run_surrogate_model_comparison_pilot.py](scripts/run_surrogate_model_comparison_pilot.py). O piloto usa os artefatos originais da branch de recuperação, sem regenerar ou modificar os NPZs.
+
+```bash
+python -m pytest -q tests/test_surrogate_model_comparison_pilot.py
+python -m experiments.meta_learning.scripts.run_surrogate_model_comparison_pilot
+```
+
+A execução compara MLP 64×64, Random Forest, Extra Trees e HistGradientBoosting em `ta111`, 8.000 permutações uniformes (repetição 1) e teste fixo de 1.000 permutações. Treina sequencialmente em CPU, grava checkpoints por modelo e permite retomada. A execução foi concluída. Resultados, métricas de custo e interpretação estão na seção 10 de [surrogate_model_comparison_protocol.md](reports/surrogate_model_comparison_protocol.md). O piloto é exploratório (uma repetição, uma instância) e não autoriza integração de modelo ao GWO.
+
+
+### Distribuição real de candidatos das trajetórias GWO
+
+A coleta das populações completas das quatro variantes GWO foi executada em `ta111`, com seeds 0–4. Foram concluídas 20 execuções e registrados 300.600 candidatos com makespan exato diagnóstico. Os rótulos diagnósticos não influenciam a busca.
+
+- [Relatório dos resultados do piloto](../../docs/reports/2026-11-26-gwo-population-distribution-pilot.md).
+- [Protocolo, instrumentação e próximos passos](../../docs/reports/gwo_population_distribution_audit_protocol.md).
+
+O piloto usou o surrogate Cost Pilot v2 para ta111, pois o artefato Week 4 original dessa instância não estava disponível. Essa diferença está registrada nos metadados e impede tratar a execução como reprodução exata do modelo Surrogate da Week 6.
+
+Arquivos compactos versionados: `results/gwo_population_distribution_audit_v1/metadata.json` e `runs.csv`. O `populations.csv` (~551,40 MB) permanece fora do GitHub por exceder o limite de 100 MB; deve ser preservado localmente e disponibilizado externamente antes da análise de distribuição.
+
+Antes de ampliar para 30 seeds, validar o CSV completo e revisar a deduplicação do runner para reduzir uso de memória. A análise estatística dos candidatos ainda não foi concluída. O piloto de cinco seeds é exploratório e não constitui dataset final para treino/teste.
+
+Comandos corretos a partir da raiz do repositório:
+
+```bash
+python -m pytest -q tests/test_gwo_population_observer.py
+python -m scripts.run_gwo_population_distribution_audit --surrogate-dir results/meta_learning_cost_pilot_v2/surrogates
+```
+
+
+## Índice e execução integrada
+
+Para executar as próximas baterias sem confundir os dois problemas, consulte o [índice operacional](PIPELINE_EXECUTION_INDEX.md) e o [runbook mestre de execução](../../docs/reports/2026-11-27-master-execution-runbook-surrogate-and-meta-learning.md). Eles consolidam gates, ordem de execução, métricas top-k, comparação de modelos, diagnóstico da distribuição GWO, decisão 60→120, proteção do holdout e checklist de retomada.

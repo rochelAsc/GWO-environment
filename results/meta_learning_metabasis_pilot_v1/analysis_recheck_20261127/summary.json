@@ -1,0 +1,124 @@
+{
+  "n_instances": 36,
+  "n_runs": 432,
+  "wins": {
+    "optuna": 9,
+    "fuzzy": 17,
+    "baseline": 9,
+    "surrogate": 1
+  },
+  "low_confidence_labels_margin_lt_0.5pct": 22,
+  "normalization_counts": {
+    "ub": 36
+  },
+  "mean_normalized_y": {
+    "baseline": 1.0493435223541752,
+    "optuna": 1.0500096486461232,
+    "fuzzy": 1.0461179025918563,
+    "surrogate": 1.0625069322307885
+  },
+  "mean_regret_vs_oracle_if_always": {
+    "baseline": 0.00614435746362922,
+    "optuna": 0.006810483755577511,
+    "fuzzy": 0.002918737701310576,
+    "surrogate": 0.019307767340242855
+  },
+  "mean_runtime_seconds": {
+    "baseline": 11.150457792583403,
+    "optuna": 11.198440174054769,
+    "fuzzy": 11.443371504650848,
+    "surrogate": 1.9317903842699404
+  },
+  "wins_by_group": {
+    "100x10": {
+      "fuzzy": 3
+    },
+    "100x20": {
+      "fuzzy": 2,
+      "baseline": 1
+    },
+    "100x5": {
+      "baseline": 1,
+      "surrogate": 1,
+      "optuna": 1
+    },
+    "200x10": {
+      "baseline": 1,
+      "optuna": 2
+    },
+    "200x20": {
+      "fuzzy": 2,
+      "optuna": 1
+    },
+    "20x10": {
+      "fuzzy": 2,
+      "baseline": 1
+    },
+    "20x20": {
+      "baseline": 1,
+      "fuzzy": 1,
+      "optuna": 1
+    },
+    "20x5": {
+      "optuna": 2,
+      "fuzzy": 1
+    },
+    "500x20": {
+      "fuzzy": 2,
+      "baseline": 1
+    },
+    "50x10": {
+      "fuzzy": 1,
+      "optuna": 1,
+      "baseline": 1
+    },
+    "50x20": {
+      "baseline": 1,
+      "fuzzy": 2
+    },
+    "50x5": {
+      "optuna": 1,
+      "fuzzy": 1,
+      "baseline": 1
+    }
+  },
+  "pairwise_mean_y": {
+    "baseline_vs_optuna": {
+      "a_wins": 17,
+      "b_wins": 18,
+      "ties": 1
+    },
+    "baseline_vs_fuzzy": {
+      "a_wins": 12,
+      "b_wins": 22,
+      "ties": 2
+    },
+    "baseline_vs_surrogate": {
+      "a_wins": 31,
+      "b_wins": 4,
+      "ties": 1
+    },
+    "optuna_vs_fuzzy": {
+      "a_wins": 12,
+      "b_wins": 23,
+      "ties": 1
+    },
+    "optuna_vs_surrogate": {
+      "a_wins": 33,
+      "b_wins": 1,
+      "ties": 2
+    },
+    "fuzzy_vs_surrogate": {
+      "a_wins": 32,
+      "b_wins": 3,
+      "ties": 1
+    }
+  },
+  "primary_selection_metric": "per_instance_regret_vs_oracle",
+  "notes": [
+    "Unit=instance; 3 seeds per variant aggregated by mean makespan.",
+    "Normalization: UB when available else relative to best mean among variants (rel_best).",
+    "When norm mixes ub and rel_best, do not treat global mean_y as one common scale; use per-instance regret.",
+    "Pilot only; not confirmatory Meta-Learning evaluation."
+  ]
+}

@@ -1,0 +1,393 @@
+{
+  "protocol": "taillard_meta_learning_inventory_v1",
+  "source_mirror": "https://github.com/arnaud-m/pisco/tree/master/pisco-shop/src/main/benchmarks/instances/flow-shop/taillard",
+  "n_instances": 36,
+  "groups": {
+    "100x10": [
+      "ta071",
+      "ta072",
+      "ta073"
+    ],
+    "100x20": [
+      "ta081",
+      "ta082",
+      "ta083"
+    ],
+    "100x5": [
+      "ta061",
+      "ta062",
+      "ta063"
+    ],
+    "200x10": [
+      "ta091",
+      "ta092",
+      "ta093"
+    ],
+    "200x20": [
+      "ta101",
+      "ta102",
+      "ta103"
+    ],
+    "20x10": [
+      "ta011",
+      "ta012",
+      "ta013"
+    ],
+    "20x20": [
+      "ta021",
+      "ta022",
+      "ta023"
+    ],
+    "20x5": [
+      "ta001",
+      "ta002",
+      "ta003"
+    ],
+    "500x20": [
+      "ta111",
+      "ta112",
+      "ta113"
+    ],
+    "50x10": [
+      "ta041",
+      "ta042",
+      "ta043"
+    ],
+    "50x20": [
+      "ta051",
+      "ta052",
+      "ta053"
+    ],
+    "50x5": [
+      "ta031",
+      "ta032",
+      "ta033"
+    ]
+  },
+  "instances": [
+    {
+      "instance": "ta001",
+      "path": "data/benchmarks/taillard/ta001.txt",
+      "jobs": 20,
+      "machines": 5,
+      "upper_bound": 1278,
+      "lower_bound": 1232,
+      "sha256": "fa586022d3a4a759f2d26c4b61c5267e71c00e4016f3307bbe706982df2b42c3"
+    },
+    {
+      "instance": "ta002",
+      "path": "data/benchmarks/taillard/ta002.txt",
+      "jobs": 20,
+      "machines": 5,
+      "upper_bound": 1359,
+      "lower_bound": 1290,
+      "sha256": "176f47cd6377b96d343246fdbe2821649fd68395a24ee1aad6c95f0547cd5eb5"
+    },
+    {
+      "instance": "ta003",
+      "path": "data/benchmarks/taillard/ta003.txt",
+      "jobs": 20,
+      "machines": 5,
+      "upper_bound": 1081,
+      "lower_bound": 1073,
+      "sha256": "b2803b6aaf276ee3689ca32230b65f2e835e056b429516ef9a5fab71353394c4"
+    },
+    {
+      "instance": "ta011",
+      "path": "data/benchmarks/taillard/ta011.txt",
+      "jobs": 20,
+      "machines": 10,
+      "upper_bound": 1582,
+      "lower_bound": 1448,
+      "sha256": "16b1e1b2bf1464e5af0f28b7c1aaeed4d65ff00bce51d10f583dfd3fa12a02b6"
+    },
+    {
+      "instance": "ta012",
+      "path": "data/benchmarks/taillard/ta012.txt",
+      "jobs": 20,
+      "machines": 10,
+      "upper_bound": 1659,
+      "lower_bound": 1479,
+      "sha256": "efddb49311a2c2c11f2df85d23efea8fbaddc195697dc65de008a8951a8d4575"
+    },
+    {
+      "instance": "ta013",
+      "path": "data/benchmarks/taillard/ta013.txt",
+      "jobs": 20,
+      "machines": 10,
+      "upper_bound": 1496,
+      "lower_bound": 1407,
+      "sha256": "6af00c4d256549f2cf6783bccf0ea6fc2e24e74b20a5f0243f14ee6d53d76205"
+    },
+    {
+      "instance": "ta021",
+      "path": "data/benchmarks/taillard/ta021.txt",
+      "jobs": 20,
+      "machines": 20,
+      "upper_bound": 2297,
+      "lower_bound": 1911,
+      "sha256": "969611f632804e01e431616eaa299b5ee063c8e546e3f453f6b9ce9b13618973"
+    },
+    {
+      "instance": "ta022",
+      "path": "data/benchmarks/taillard/ta022.txt",
+      "jobs": 20,
+      "machines": 20,
+      "upper_bound": 2100,
+      "lower_bound": 1711,
+      "sha256": "ec058e9649bdbd2dbe89e228177ac0d84ff32a5a7ca98bb017417cf26d00ec5d"
+    },
+    {
+      "instance": "ta023",
+      "path": "data/benchmarks/taillard/ta023.txt",
+      "jobs": 20,
+      "machines": 20,
+      "upper_bound": 2326,
+      "lower_bound": 1844,
+      "sha256": "f4475035f5beebf63b63dba36e05da87ba837c1ccea2e0a7d177b216ace3553d"
+    },
+    {
+      "instance": "ta031",
+      "path": "data/benchmarks/taillard/ta031.txt",
+      "jobs": 50,
+      "machines": 5,
+      "upper_bound": 2724,
+      "lower_bound": 2712,
+      "sha256": "1c162f821aa8e3d61a347837ecd31375426c02ca6452c7c04bd0df702de975e6"
+    },
+    {
+      "instance": "ta032",
+      "path": "data/benchmarks/taillard/ta032.txt",
+      "jobs": 50,
+      "machines": 5,
+      "upper_bound": 2834,
+      "lower_bound": 2808,
+      "sha256": "9a474a4af8aea3e4674f91db45235d0c93a66031d9f4e683908228f35786b5ca"
+    },
+    {
+      "instance": "ta033",
+      "path": "data/benchmarks/taillard/ta033.txt",
+      "jobs": 50,
+      "machines": 5,
+      "upper_bound": 2621,
+      "lower_bound": 2596,
+      "sha256": "83c4be033a518b6f15835f84ebdda1813b5a3b7bd82041f81ab945fda2785113"
+    },
+    {
+      "instance": "ta041",
+      "path": "data/benchmarks/taillard/ta041.txt",
+      "jobs": 50,
+      "machines": 10,
+      "upper_bound": 3025,
+      "lower_bound": 2907,
+      "sha256": "32f309b32c8c562c16c00ba857e1521d517e90988dfbfb57956637dad383873f"
+    },
+    {
+      "instance": "ta042",
+      "path": "data/benchmarks/taillard/ta042.txt",
+      "jobs": 50,
+      "machines": 10,
+      "upper_bound": 2892,
+      "lower_bound": 2821,
+      "sha256": "239249c5add532ad2eac833e3cbc8ebb45919e7a17db21038b00acd572e05c44"
+    },
+    {
+      "instance": "ta043",
+      "path": "data/benchmarks/taillard/ta043.txt",
+      "jobs": 50,
+      "machines": 10,
+      "upper_bound": 2864,
+      "lower_bound": 2801,
+      "sha256": "e1f994c560beeb4c4455fa25497c9b954cdb3cdffa465e873ec16d965e8ebed5"
+    },
+    {
+      "instance": "ta051",
+      "path": "data/benchmarks/taillard/ta051.txt",
+      "jobs": 50,
+      "machines": 20,
+      "upper_bound": 3875,
+      "lower_bound": 3480,
+      "sha256": "0636bc92d99b59e8773b9622c6369c98aee0ea9e03d1def98da3f2ff046000bd"
+    },
+    {
+      "instance": "ta052",
+      "path": "data/benchmarks/taillard/ta052.txt",
+      "jobs": 50,
+      "machines": 20,
+      "upper_bound": 3715,
+      "lower_bound": 3424,
+      "sha256": "e109efaffb021324e809d3edc9d00065ae188bfde435c695686dd3230d4074c3"
+    },
+    {
+      "instance": "ta053",
+      "path": "data/benchmarks/taillard/ta053.txt",
+      "jobs": 50,
+      "machines": 20,
+      "upper_bound": 3668,
+      "lower_bound": 3351,
+      "sha256": "6331a9e1ed2261b830ae34c731ad7e738685ede2befa46d8b82b923b76ae08ed"
+    },
+    {
+      "instance": "ta061",
+      "path": "data/benchmarks/taillard/ta061.txt",
+      "jobs": 100,
+      "machines": 5,
+      "upper_bound": 5493,
+      "lower_bound": 5437,
+      "sha256": "d225a8261499d4e25a6b710ba72d6f15f8074b4b8b42de4fba67e109f3c82475"
+    },
+    {
+      "instance": "ta062",
+      "path": "data/benchmarks/taillard/ta062.txt",
+      "jobs": 100,
+      "machines": 5,
+      "upper_bound": 5268,
+      "lower_bound": 5208,
+      "sha256": "2eb4a5291f374eb3893a3dbb24bae76c5ccf66fadae7429013f1ecf502b108ba"
+    },
+    {
+      "instance": "ta063",
+      "path": "data/benchmarks/taillard/ta063.txt",
+      "jobs": 100,
+      "machines": 5,
+      "upper_bound": 5175,
+      "lower_bound": 5130,
+      "sha256": "f8f40848a40ef7c2f9dbacb15221b11a6866b3e745cccd40bbaffc77ae1d9ed8"
+    },
+    {
+      "instance": "ta071",
+      "path": "data/benchmarks/taillard/ta071.txt",
+      "jobs": 100,
+      "machines": 10,
+      "upper_bound": 5770,
+      "lower_bound": 5759,
+      "sha256": "763dcae34b9fe2eb586ec6ef66f9a92c0bbf909cacf7a8647921c7e1f602f7d9"
+    },
+    {
+      "instance": "ta072",
+      "path": "data/benchmarks/taillard/ta072.txt",
+      "jobs": 100,
+      "machines": 10,
+      "upper_bound": 5349,
+      "lower_bound": 5345,
+      "sha256": "01df385a37e7dd7652b4cc2ef3a080660cfb99f955e0f0c5eb3de8c9933f0a72"
+    },
+    {
+      "instance": "ta073",
+      "path": "data/benchmarks/taillard/ta073.txt",
+      "jobs": 100,
+      "machines": 10,
+      "upper_bound": 5677,
+      "lower_bound": 5623,
+      "sha256": "2a7f03c348624cda40e60bcd0e60c90e14b61890637e74cae6baa95ae0089198"
+    },
+    {
+      "instance": "ta081",
+      "path": "data/benchmarks/taillard/ta081.txt",
+      "jobs": 100,
+      "machines": 20,
+      "upper_bound": 6286,
+      "lower_bound": 5851,
+      "sha256": "d3f6c832f9a03ff8da0861bfc10c44614bb0aeefbeef3d2aa15ed2087fa09d8a"
+    },
+    {
+      "instance": "ta082",
+      "path": "data/benchmarks/taillard/ta082.txt",
+      "jobs": 100,
+      "machines": 20,
+      "upper_bound": 6241,
+      "lower_bound": 6099,
+      "sha256": "aa3761035ddf1c4045184abbeb49d2a9242b4cc93dbadbfb5cb184cd77f53b6a"
+    },
+    {
+      "instance": "ta083",
+      "path": "data/benchmarks/taillard/ta083.txt",
+      "jobs": 100,
+      "machines": 20,
+      "upper_bound": 6329,
+      "lower_bound": 6099,
+      "sha256": "8d259a00e24539663d2082770f72568106587ae3c50bec31564547e8a1958986"
+    },
+    {
+      "instance": "ta091",
+      "path": "data/benchmarks/taillard/ta091.txt",
+      "jobs": 200,
+      "machines": 10,
+      "upper_bound": 10868,
+      "lower_bound": 10816,
+      "sha256": "23535ea9398800871af510796bbcf20e451e81b8770bc8eb58dd21e26d9cd87d"
+    },
+    {
+      "instance": "ta092",
+      "path": "data/benchmarks/taillard/ta092.txt",
+      "jobs": 200,
+      "machines": 10,
+      "upper_bound": 10494,
+      "lower_bound": 10422,
+      "sha256": "a5f791d14eafd99a47c76659a23349c40917464a9c436261bd0b3aa7ab051a92"
+    },
+    {
+      "instance": "ta093",
+      "path": "data/benchmarks/taillard/ta093.txt",
+      "jobs": 200,
+      "machines": 10,
+      "upper_bound": 10922,
+      "lower_bound": 10886,
+      "sha256": "7c10fa836391b28fc8b14fa8c652d15e9c91ce10e6c292c4cc492e3398ae9781"
+    },
+    {
+      "instance": "ta101",
+      "path": "data/benchmarks/taillard/ta101.txt",
+      "jobs": 200,
+      "machines": 20,
+      "upper_bound": 11294,
+      "lower_bound": 10979,
+      "sha256": "9a6992113be9aa8630bd3ea7cd3ae6166b7b21062c449b685cb7a660e5e37c86"
+    },
+    {
+      "instance": "ta102",
+      "path": "data/benchmarks/taillard/ta102.txt",
+      "jobs": 200,
+      "machines": 20,
+      "upper_bound": 11420,
+      "lower_bound": 10947,
+      "sha256": "2a7dc77c43927a1e7443757e118b7785ed8cfd80e501fd935d1fb168a2a5237b"
+    },
+    {
+      "instance": "ta103",
+      "path": "data/benchmarks/taillard/ta103.txt",
+      "jobs": 200,
+      "machines": 20,
+      "upper_bound": 11446,
+      "lower_bound": 11150,
+      "sha256": "416e6af923e0c661774f02c2f1ad709897b6b418dd0e7904b492727c9df3c5e4"
+    },
+    {
+      "instance": "ta111",
+      "path": "data/benchmarks/taillard/ta111.txt",
+      "jobs": 500,
+      "machines": 20,
+      "upper_bound": 26189,
+      "lower_bound": 25922,
+      "sha256": "9f51c10368fa9d8c43f0c476f52c33499b86be42336f73da76a5c6d5e8895fe9"
+    },
+    {
+      "instance": "ta112",
+      "path": "data/benchmarks/taillard/ta112.txt",
+      "jobs": 500,
+      "machines": 20,
+      "upper_bound": 26629,
+      "lower_bound": 26353,
+      "sha256": "c8b841584fe47c92a4a7b7cf684c9caacf7dc5a835c8ecd9a1821dc4c2c10f0e"
+    },
+    {
+      "instance": "ta113",
+      "path": "data/benchmarks/taillard/ta113.txt",
+      "jobs": 500,
+      "machines": 20,
+      "upper_bound": 26458,
+      "lower_bound": 26320,
+      "sha256": "0ed2d7544d507c467b3cef55bd7ded54e2b41927457e38ed30956744818049e2"
+    }
+  ]
+}

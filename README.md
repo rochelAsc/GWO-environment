@@ -22,6 +22,12 @@ python -m pytest -q
 
 O CI executa a suíte em Python 3.12. A suíte também foi executada localmente em Python 3.14: 63 testes passaram. Um aviso de depreciação vem do plugin AnyIO instalado no ambiente, não do código do projeto.
 
+## Extensão experimental — curva de aprendizagem do surrogate
+
+A curva v2 e sua extensão recuperada investigam como o tamanho do conjunto de treinamento afeta o surrogate MLP da Semana 4 em `ta071` e `ta111`. A análise estatística consolidada, incluindo IC95%, análise diferencial e limitações, está em [surrogate_learning_curve_v2_extension_statistical_analysis.md](experiments/meta_learning/reports/surrogate_learning_curve_v2_extension_statistical_analysis.md).
+
+**Decisão atual:** não ampliar ainda para 64k/128k. O próximo passo é comparar MLP, Random Forest, Extra Trees e HistGradientBoosting nos mesmos dados e testes, conforme o [protocolo de comparação de modelos](experiments/meta_learning/reports/surrogate_model_comparison_protocol.md). Essa extensão é independente das entregas obrigatórias das Semanas 1–6.
+
 ## Semana 2 — reconstrução do baseline Taillard/PFSP
 
 > **Auditoria da correção:** [causa, impacto, testes e sequência de reexecução](docs/audits/2026-11-23-gwo-population-freeze-correction.md).

@@ -1,0 +1,57 @@
+{
+  "protocol": "surrogate_model_comparison_pilot_v1",
+  "branch_context": "recovery/surrogate-learning-curve-v2-oom",
+  "instance": "ta111",
+  "sampling_method": "uniform_permutations",
+  "sample_count": 8000,
+  "repetition": 1,
+  "model_seed": 20770128,
+  "models": {
+    "mlp_64x64": "scripts.run_week4_surrogate.build_model",
+    "random_forest": {
+      "n_estimators": 300,
+      "min_samples_leaf": 2,
+      "max_features": 1.0,
+      "n_jobs": 1
+    },
+    "extra_trees": {
+      "n_estimators": 300,
+      "min_samples_leaf": 2,
+      "max_features": 1.0,
+      "n_jobs": 1
+    },
+    "hist_gradient_boosting": {
+      "max_iter": 300,
+      "learning_rate": 0.08,
+      "max_leaf_nodes": 31,
+      "l2_regularization": 1.0,
+      "early_stopping": true
+    }
+  },
+  "data": {
+    "instance": "ta111",
+    "jobs": 500,
+    "machines": 20,
+    "instance_sha256": "9f51c10368fa9d8c43f0c476f52c33499b86be42336f73da76a5c6d5e8895fe9",
+    "training_npz": "results\\meta_learning_surrogate_learning_curve_v2_extension\\ta111\\ta111_uniform_permutations_n8000_rep1_diagnostics.npz",
+    "training_npz_sha256": "f800c8ba7982f07f97a338bd2a29ae12241f24eaa755bd4d34b18d357791f772",
+    "fixed_test_npz": "results\\meta_learning_surrogate_learning_curve_v2_extension\\ta111\\fixed_test_set.npz",
+    "fixed_test_npz_sha256": "3ccb8cc28c339ac81d5d89b39feb3d99eb96fcbcdd6699b6772186c967a7bbf6",
+    "training_permutations_sha256": "e09009d65e369ec58607b6e42ec97b9dd2810afc5c5066d3fbd4a003b9e25e0d",
+    "test_permutations_sha256": "0c3f6426b291cf7de05345c1db771bf960b8adfed73db3137fd0d6bc04e474f4",
+    "train_samples": 8000,
+    "test_samples": 1000
+  },
+  "software": {
+    "python": "3.14.6",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "scikit_learn": "1.9.0"
+  },
+  "execution": {
+    "device": "CPU",
+    "rss_sampling": "psutil process RSS sampled every 50 ms when installed; includes resident data arrays and runtime, not model-only memory",
+    "thread_limit": 1,
+    "sequential_models": true
+  }
+}

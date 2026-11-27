@@ -1,0 +1,65 @@
+﻿# Cursor AI context — keep indexing off heavy/generated/secret paths.
+# Syntax matches .gitignore. Gitignored paths are already skipped; this
+# catches tracked binaries and large experiment dumps still in the tree.
+#
+# Workflow: Cursor runs tests + writes docs; another AI interprets data.
+# So results/ stays out of context except tiny status JSON.
+
+# --- secrets ---
+.env
+.env.*
+!.env.example
+
+# --- python / tooling caches ---
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+.eggs/
+build/
+dist/
+wheels/
+
+# --- editor / local ---
+.idea/
+.vscode/
+.cursor/.supermemory/
+.ipynb_checkpoints/
+
+# --- model / binary artifacts anywhere ---
+*.joblib
+*.pkl
+*.pickle
+*.npz
+*.h5
+*.hdf5
+*.pt
+*.pth
+*.onnx
+*.db
+*.sqlite
+*.sqlite3
+*.zip
+*.7z
+*.tar
+*.gz
+*.parquet
+*.feather
+*.npy
+*.npz.gz
+
+# --- results: ignore all dumps; allow dirs + status JSON only ---
+results/**
+!results/**/
+!results/**/summary.json
+!results/**/metadata.json
+!results/**/split_summary.json
