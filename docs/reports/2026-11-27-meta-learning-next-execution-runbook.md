@@ -213,3 +213,8 @@ Não usar `--allow-holdout` até o protocolo confirmatório estar congelado.
 - [Freeze imutável v1](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md)
 - [README Meta-Learning](../../experiments/meta_learning/README.md)
 - [Inventário Taillard](../../data/benchmarks/taillard/README.md)
+
+
+## Runbook integrado
+
+Este documento detalha exclusivamente a expansão `metabasis_v2`. Para coordenar esta bateria com a investigação independente do surrogate de makespan, incluindo correção das métricas top-k, comparação de modelos e análise de candidatos GWO, siga também o [runbook mestre](2026-11-27-master-execution-runbook-surrogate-and-meta-learning.md) e o [índice operacional](../../experiments/meta_learning/PIPELINE_EXECUTION_INDEX.md).
