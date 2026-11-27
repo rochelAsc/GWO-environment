@@ -1,10 +1,10 @@
-# Taillard PFSP Meta-Learning pilot subset
+# Taillard PFSP benchmark — inventário para Meta-Learning
 
-This directory contains a stratified **36-instance** subset of the classical Taillard PFSP benchmark (3 instances × 12 size groups).
+Este diretório contém atualmente o subconjunto de **36 instâncias** utilizado no piloto metabasis_pilot_v1 (3 instâncias em cada um dos 12 grupos de dimensão). A expansão aprovada tem como alvo o inventário completo de **120 instâncias** (10 por grupo), sujeito à validação dos arquivos e da proveniência.
 
-## Selection
+## Cobertura atualmente versionada
 
-| Group | Instances |
+| Grupo | Instâncias |
 |---|---|
 | 20×5 | ta001, ta002, ta003 |
 | 20×10 | ta011, ta012, ta013 |
@@ -19,13 +19,23 @@ This directory contains a stratified **36-instance** subset of the classical Tai
 | 200×20 | ta101, ta102, ta103 |
 | 500×20 | ta111, ta112, ta113 |
 
-This is a **viability / meta-base pilot subset**. It is not by itself confirmatory evidence of Meta-Learning generalization. Larger expansions (60–120) remain conditional on cost and coverage.
+## Alvo de expansão
 
-## Provenance
+O inventário-alvo é 10 instâncias em cada grupo acima (120 no total). Os 36 arquivos atuais já foram usados em desenvolvimento e não podem integrar o holdout confirmatório. Antes de qualquer nova execução GWO:
+
+1. obter os arquivos faltantes a partir da fonte espelho;
+2. validar parser, dimensões, metadados/bounds e SHA-256;
+3. registrar origem e proveniência de cada arquivo;
+4. congelar split determinístico por grupo: das 7 instâncias ainda não usadas em cada grupo, 5 para desenvolvimento e 2 para holdout;
+5. registrar seed, algoritmo e hash do manifesto de split.
+
+A composição por estágio será 60 = 48 desenvolvimento + 12 holdout selado; 120 = 96 desenvolvimento + 24 holdout selado. Se o estudo avançar de 60 para 120, os 12 holdouts iniciais não serão consultados nem usados para decidir a expansão. Ver [decisão de expansão](../../docs/decisions/2026-11-27-meta-learning-expansion-v2.md) e [runbook](../../docs/reports/2026-11-27-meta-learning-next-execution-runbook.md).
+
+## Proveniência
 
 - Benchmark: Taillard (1993), *Benchmarks for basic scheduling problems*, European Journal of Operational Research, 64(2), 278–285. DOI: https://doi.org/10.1016/0377-2217(93)90182-M
 - Source mirror: [PISCO Taillard PFSP instances](https://github.com/arnaud-m/pisco/tree/master/pisco-shop/src/main/benchmarks/instances/flow-shop/taillard)
-- Source files are retained in their plain-text benchmark format. The parser reads dimensions, processing times and, where available, published seed/upper/lower-bound metadata.
-- The instance feature extractor records SHA-256 for each local file when generating the feature table.
+- Os arquivos devem permanecer no formato original do benchmark. O parser lê dimensões, tempos de processamento e, quando disponíveis, metadados de seed/upper/lower bound.
+- O extrator registra SHA-256 por arquivo. Hash, origem e bounds são metadados de proveniência, nunca preditores.
 
-Do not overwrite existing benchmark files or experimental results. New subsets or corrected source copies must be versioned and documented separately.
+Não sobrescrever arquivos de benchmark ou resultados experimentais existentes. Novos arquivos devem ser validados e registrados; cópias corrigidas devem ser versionadas separadamente.
