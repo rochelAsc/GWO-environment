@@ -2,7 +2,7 @@
 
 **Data:** 27/11/2026  
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Status:** Fases 1–4 concluídas; freeze + LOO exploratório reproduzidos (A–D aprovada). Sem ganho operacional útil vs sempre Fuzzy. Fase 5 bloqueada **somente** pela decisão formal (continuar / encerrar / reformular).  
+**Status:** Fases 1–4 concluídas; freeze + LOO reproduzidos; expansão Fase 5 **aprovada**. Próximos gates: inventário Taillard 120, split pré-registrado, adaptação técnica v2 e coleta em estágios 60 → 120.  
 **Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
 **Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).  
 **Reprodução A–D:** [2026-11-27-meta-learning-reproduction-ad.md](../reports/2026-11-27-meta-learning-reproduction-ad.md).  
@@ -41,7 +41,7 @@ A investigação da distribuição real de candidatos pode orientar representaç
 - Semanas 2–6 do projeto GWO foram executadas e auditadas; a Semana 6 compara Baseline, Optuna, Surrogate e Fuzzy em `ta001` e `ta011`, com 30 seeds por instância.
 - O orçamento da variante Surrogate da Semana 6 é diferente: 1.530 avaliações exatas e 15.000 previsões por execução, contra 15.030 avaliações exatas nas outras variantes. Essa diferença deve permanecer explícita.
 - O extrator `taillard_pfsp_features_v1` foi auditado e congelado para 36 instâncias; 35 preditores derivados somente da matriz P. A decisão está em `docs/decisions/2026-11-27-meta-feature-extractor-freeze.md`.
-- O conjunto Taillard versionado contém 12 instâncias, uma por grupo de dimensão. É adequado para validar infraestrutura e custo, mas insuficiente para alegar generalização de Meta-Learning.
+- O diretório Taillard atualmente versionado contém o subconjunto de 36 instâncias (3 por grupo) usado no piloto. A expansão aprovada requer inventariar o benchmark-alvo de 120 instâncias (10 por grupo), validar os 84 arquivos adicionais e congelar o split antes de novas execuções.
 - O README de `experiments/meta_learning/` já propõe uma expansão progressiva: 36 instâncias, depois 60 e, se viável, o benchmark completo de 120 instâncias.
 - As curvas de aprendizagem e comparação de modelos surrogate já foram estudadas. Elas dizem respeito ao surrogate de makespan, não ao seletor meta de variantes.
 
@@ -345,13 +345,13 @@ Se o modelo não superar os baselines, isso não invalida o experimento: a concl
 
 ## 9. Ordem prática recomendada para a próxima sessão
 
-1. ~~Executar o runbook vigente (hashes + LOO recheck).~~ **Feito** — ver [reprodução A–D](../reports/2026-11-27-meta-learning-reproduction-ad.md).
-2. ~~Comparar artefatos reproduzidos.~~ **Feito** — bit-idênticos; sem divergência.
-3. **Pendente:** registrar decisão em `docs/decisions/`: (a) expandir instâncias com `metabasis_v2` e holdout pré-reservado; (b) encerrar a extensão como exploratória sem ganho demonstrado; ou (c) reformular a pergunta com novo protocolo.
-4. Se (a), priorizar 60–120 instâncias independentes; mais seeds refinam estimativas dentro de instâncias, mas não corrigem n pequeno.
-5. Não retunar Surrogate, RF ou features consultando holdout; não iniciar bateria GWO sem decisão registrada.
+1. ~~Executar reprodução A–D e comparar artefatos.~~ **Feito** — hashes 4/4 e LOO bit-idêntico.
+2. **Executar Fase 5 conforme decisão aprovada:** inventário 120, split pré-registrado, adaptação técnica v2 e checkpoint 60.
+3. Revisar custo/integridade/cobertura e decidir se completa 120, sem abrir holdout.
+4. Treinar e selecionar modelos somente em desenvolvimento; congelar pipeline antes do holdout.
+5. Abrir holdout uma vez (12 ou 24 instâncias, conforme tamanho final) e avaliar regret vs sempre Fuzzy.
 
-**Gate atual:** reprodução A–D aprovada e documentada. Falta só a decisão formal (§9 item 3). Expansão 60/120 não autorizada.
+**Gate atual:** expansão autorizada, mas coleta bloqueada até inventário, split e gate técnico.
 
 ## 10. Relação com outros planos e manutenção
 
