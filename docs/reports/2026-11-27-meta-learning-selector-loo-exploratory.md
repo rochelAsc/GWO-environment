@@ -63,19 +63,19 @@ A relação de 35 preditores para apenas 36 instâncias independentes é desfavo
 
 Conclusão honestamente delimitada: **no piloto 36×3×4, não há evidência de que Meta-Learning selecione melhor que sempre Fuzzy.** Isso não prova impossibilidade em meta-base maior; só bloqueia alegação de benefício com estes dados.
 
-## 6. O que este relatório não autoriza
+## 5. O que este relatório não autoriza
 
 - generalização confirmatória;
 - promoção de Fuzzy como ótimo universal fora da amostra;
 - expansão silenciosa de seeds/instâncias sem decisão de Fase 5;
 - retuning de Surrogate/RF consultando holdout inexistente.
 
-## 7. Reprodução
+## 6. Reprodução
 
 ```bash
 python -m scripts.evaluate_meta_learning_selectors_pilot \
   --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 \
-  --output results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1
+  --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127
 ```
 
 Docs relacionados:
