@@ -46,6 +46,14 @@ Accuracy LOO (complementar): classifier **22,2%**; regressor **47,2%**.
 
 `best_global_train` empatou Fuzzy em 36/36: no treino de cada fold, Fuzzy foi a variante mais frequente — o seletor “aprendido” colapsa no baseline operacional.
 
+## 4.1 Leitura quantitativa e limites da incerteza
+
+A diferença pontual entre RF regressor e sempre Fuzzy é `0,0029053 - 0,0029187 ≈ -0,0000134`. Embora o número seja ligeiramente menor para o regressor, o placar pareado é 5 melhores, 3 piores e 28 empates em 36 instâncias; os IC95 bootstrap se sobrepõem amplamente. Isso não demonstra superioridade operacional.
+
+O intervalo bootstrap foi calculado reamostrando os 36 regrets por instância. Ele resume a variabilidade entre as instâncias observadas, mas não incorpora integralmente a incerteza de treinamento/seleção do modelo. Além disso, os 36 folds LOO têm conjuntos de treino fortemente sobrepostos. Portanto, os ICs não devem ser interpretados como substitutos de um holdout independente.
+
+A relação de 35 preditores para apenas 36 instâncias independentes é desfavorável. O RF pode estar sujeito a alta variância e o piloto não permite estimar com confiança o desempenho em novas famílias/dimensões. Aumentar seeds não corrige essa limitação estrutural; se a extensão continuar, a prioridade deve ser ampliar a diversidade de instâncias.
+
 ## 4. Interpretação
 
 1. **RF classifier piora** o regret vs sempre Fuzzy.
@@ -55,14 +63,14 @@ Accuracy LOO (complementar): classifier **22,2%**; regressor **47,2%**.
 
 Conclusão honestamente delimitada: **no piloto 36×3×4, não há evidência de que Meta-Learning selecione melhor que sempre Fuzzy.** Isso não prova impossibilidade em meta-base maior; só bloqueia alegação de benefício com estes dados.
 
-## 5. O que este relatório não autoriza
+## 6. O que este relatório não autoriza
 
 - generalização confirmatória;
 - promoção de Fuzzy como ótimo universal fora da amostra;
 - expansão silenciosa de seeds/instâncias sem decisão de Fase 5;
 - retuning de Surrogate/RF consultando holdout inexistente.
 
-## 6. Reprodução
+## 7. Reprodução
 
 ```bash
 python -m scripts.evaluate_meta_learning_selectors_pilot \
@@ -75,3 +83,6 @@ Docs relacionados:
 - [Status das fases](2026-11-27-meta-learning-phase-status.md)
 - [Freeze metabasis_pilot_v1](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md)
 - [Roadmap](../plans/2026-11-27-meta-learning-completion-roadmap.md)
+
+
+Próximo procedimento operacional: [runbook de reprodução e decisão da Fase 5](2026-11-27-meta-learning-next-execution-runbook.md).
