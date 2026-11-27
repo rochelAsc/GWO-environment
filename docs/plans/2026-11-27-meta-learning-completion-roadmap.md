@@ -372,3 +372,8 @@ Se o modelo não superar os baselines, isso não invalida o experimento: a concl
 - `tasks/week6_plan.md` registra a conclusão da Semana 6 e suas pendências de apresentação.
 - `experiments/meta_learning/README.md` continua sendo a referência metodológica do Meta-Learning; este roadmap operacionaliza sua execução em fases e gates.
 - Atualizar este documento ao concluir cada fase, preservando histórico de decisões. Não marcar tarefas concluídas sem artefato verificável.
+
+
+## Coordenação das baterias experimentais
+
+O roadmap de Meta-Learning deve ser executado em conjunto com o [runbook mestre de Surrogate e Meta-Learning](../reports/2026-11-27-master-execution-runbook-surrogate-and-meta-learning.md), que explicita a separação entre previsão de makespan por permutação e seleção de variante por instância, além de definir a sequência de gates, métricas, comparação de modelos e avaliação da distribuição operacional de candidatos GWO. O [índice operacional](../../experiments/meta_learning/PIPELINE_EXECUTION_INDEX.md) é o ponto de entrada para a execução.
