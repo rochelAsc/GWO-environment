@@ -1,5 +1,7 @@
 # Status das fases Meta-Learning — 2026-11-27
 
+**Decisão Fase 5:** expansão aprovada em 27/11/2026; preparação técnica e inventário são os próximos gates. A coleta v2 ainda não foi executada.
+
 ## Gates
 
 | Gate | Status | Artefato |
@@ -16,6 +18,7 @@
 | Freeze metabasis_pilot_v1 | Aprovado | `experiments/meta_learning/data/metabasis_pilot_v1/`; decisão `docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md` |
 | LOO seletores (exploratório) | Concluído | `results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1/` |
 | Reprodução freeze+LOO | Aprovada | [relatório A–D](2026-11-27-meta-learning-reproduction-ad.md); hashes 4/4; LOO recheck bit-idêntico |
+| Decisão Fase 5 | **Aprovada** | [decisão de expansão v2](../decisions/2026-11-27-meta-learning-expansion-v2.md); 60 primeiro, 120 condicionado a checkpoint |
 
 ## Decisões-chave
 
@@ -24,6 +27,7 @@
 3. Expansão para 36 instâncias (3 por grupo) baixada do espelho PISCO; custo viável no hardware local.
 4. Piloto 36×3×4 fechado, auditado e congelado como `metabasis_pilot_v1`. Avaliação LOO é exploratória; não é evidência confirmatória.
 5. Baseline operacional forte do piloto: **sempre Fuzzy**. Meta-Learning só se justifica se superar esse seletor em holdout por instância.
+6. Expansão autorizada: 60 instâncias (48 desenvolvimento + 12 holdout selado); alvo de 120 (96 desenvolvimento + 24 holdout), mantendo o piloto v1 apenas em desenvolvimento.
 
 ## Análise do piloto meta-base (36 instâncias)
 
@@ -138,4 +142,4 @@ Não reexecute o freeze no diretório existente: o artefato é imutável. A repr
 
 ## Runbook vigente
 
-A reprodução A–D do [runbook](2026-11-27-meta-learning-next-execution-runbook.md) está **concluída**. O próximo passo operacional é somente a decisão formal (a/b/c). Não há nova bateria a executar até essa decisão.
+A reprodução A–D está concluída. A decisão formal agora autoriza a preparação da expansão v2; a próxima execução depende dos gates de inventário, split e adaptação técnica descritos no runbook.
