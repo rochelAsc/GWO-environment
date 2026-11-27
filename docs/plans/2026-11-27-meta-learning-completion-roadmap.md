@@ -212,7 +212,7 @@ Desenho congelado:
 | 60 | 48 (4/grupo) | 12 (1/grupo) | 60 |
 | 120 | 96 (8/grupo) | 24 (2/grupo) | 120 |
 
-As 36 instâncias do piloto permanecem exclusivamente em desenvolvimento. Em cada grupo, das 7 instâncias ainda não usadas, selecionar 5 para desenvolvimento e 2 para holdout por split determinístico, estratificado e independente dos resultados. No checkpoint de 60, incluir 1 nova instância de cada partição por grupo; no estágio 120, incluir as 4 restantes de desenvolvimento e 1 restante de holdout por grupo.
+As 36 instâncias do piloto permanecem exclusivamente em desenvolvimento. Em cada grupo, das 7 instâncias ainda não usadas, selecionar 5 para desenvolvimento e 2 para holdout por split determinístico, estratificado e independente dos resultados. Seed pré-registrada: 20261127, com numpy.random.default_rng e grupos em ordem lexicográfica; registrar versão NumPy e hash do inventário. A primeira instância de cada partição recebe stage=60; as restantes, stage=120. No checkpoint de 60, incluir 1 nova instância de cada partição por grupo; no estágio 120, incluir as 4 restantes de desenvolvimento e 1 restante de holdout por grupo.
 
 - [ ] Inventariar os 120 arquivos, confirmar IDs/dimensões, origem, bounds e SHA-256.
 - [ ] Congelar manifesto de split e hash antes de observar novos resultados GWO.
