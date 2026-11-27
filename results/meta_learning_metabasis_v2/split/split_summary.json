@@ -1,0 +1,37 @@
+{
+  "protocol": "meta_learning_metabasis_v2_inventory_split",
+  "created_at_utc": "2026-11-27T12:38:02.133762+00:00",
+  "git_branch": "recovery/surrogate-learning-curve-v2-oom",
+  "git_commit": "b7611f307b8909b4225962848f28e75a9461b406",
+  "numpy_version": "2.5.1",
+  "split_seed": 20261127,
+  "rng": "numpy.random.default_rng(split_seed); sequential per lexicographic group",
+  "n_instances": 120,
+  "n_groups": 12,
+  "pilot_instances": 36,
+  "pilot_hashes_verified": true,
+  "checkpoint_60": {
+    "development": 48,
+    "holdout_sealed": 12,
+    "new_development_to_run": 12
+  },
+  "target_120": {
+    "development": 96,
+    "holdout_sealed": 24
+  },
+  "hashes_sha256": {
+    "instance_manifest_120.csv": "bbbdac54a2f8331eb553bc6071e18fdab7eeac84264591d725a827b35f1d892e",
+    "split_manifest.csv": "c17bce8856f6e22b35db6e7ad2b43b84ca82df3632f245fbeb7a909ad36a934a"
+  },
+  "paths": {
+    "inventory_csv": "C:/Users/roche/Documents/Github/GWO-environment/results/meta_learning_metabasis_v2/inventory/instance_manifest_120.csv",
+    "split_csv": "C:/Users/roche/Documents/Github/GWO-environment/results/meta_learning_metabasis_v2/split/split_manifest.csv",
+    "freeze_split_csv": "C:/Users/roche/Documents/Github/GWO-environment/experiments/meta_learning/data/metabasis_v2/split_manifest.csv"
+  },
+  "ub_missing": [],
+  "lb_missing": [],
+  "notes": [
+    "Holdout targets must remain sealed until confirmatory evaluation.",
+    "Do not alter split_seed or regenerate after inspecting algorithm outcomes."
+  ]
+}

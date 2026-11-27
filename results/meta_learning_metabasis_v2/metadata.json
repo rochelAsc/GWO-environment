@@ -1,0 +1,45 @@
+{
+  "protocol": "meta_learning_metabasis_v2",
+  "split_manifest": "C:/Users/roche/Documents/Github/GWO-environment/experiments/meta_learning/data/metabasis_v2/split_manifest.csv",
+  "split_sha256": "c17bce8856f6e22b35db6e7ad2b43b84ca82df3632f245fbeb7a909ad36a934a",
+  "partitions": [
+    "development"
+  ],
+  "stages": [
+    "60"
+  ],
+  "instances": [
+    "ta077",
+    "ta087",
+    "ta067",
+    "ta094",
+    "ta109",
+    "ta015",
+    "ta029",
+    "ta007",
+    "ta116",
+    "ta049",
+    "ta058",
+    "ta038"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "variants": [
+    "baseline",
+    "optuna",
+    "fuzzy",
+    "surrogate"
+  ],
+  "surrogate_samples": 2000,
+  "optuna_config_sha256": "f884121834b23ccefaa1fb81fd3958eb5b3b4071625a4c6dc81ab4b784c13d06",
+  "n_runs_expected": 144,
+  "n_runs_completed": 144,
+  "surrogate_freeze": "docs/decisions/2026-11-27-surrogate-variant-freeze.md",
+  "feature_freeze": "docs/decisions/2026-11-27-meta-feature-extractor-freeze.md",
+  "expansion_decision": "docs/decisions/2026-11-27-meta-learning-expansion-v2.md",
+  "unit": "instance; seeds estimate noise only",
+  "numpy_version": "2.5.1"
+}

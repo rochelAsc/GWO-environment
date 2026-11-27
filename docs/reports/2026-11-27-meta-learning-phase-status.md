@@ -1,6 +1,6 @@
 # Status das fases Meta-Learning — 2026-11-27
 
-**Decisão Fase 5:** expansão aprovada em 27/11/2026; preparação técnica e inventário são os próximos gates. A coleta v2 ainda não foi executada.
+**Estado atual:** Fase A + coleta/agregação development do checkpoint 60 **concluídas**. Holdout selado. Decisão 60→120 pendente (custo/integridade apenas).
 
 ## Gates
 
@@ -9,153 +9,57 @@
 | C1 populações | Aprovado | `scripts/validate_gwo_populations_csv.py`; SHA-256 `ca6212d2…abc0`; 300.600 linhas |
 | C1 análise | Aprovado | `results/gwo_population_distribution_audit_v1/analysis/` |
 | C1 dedupe streaming | Aprovado | `scripts/run_gwo_population_distribution_audit.py` |
-| C2 Surrogate freeze | Aprovado | `docs/decisions/2026-11-27-surrogate-variant-freeze.md`; ranking GWO fraco (recall top-3 mediana 0) |
-| C3 features freeze | Aprovado | `docs/decisions/2026-11-27-meta-feature-extractor-freeze.md`; 36 instâncias |
-| C4 custo 36 | Medido | `results/meta_learning_cost_pilot_v3/cost_projection.json` ≈ **1,06 h** (3 seeds) / **3,54 h** (10 seeds) |
-| C4 meta-base piloto | Aprovado | `results/meta_learning_metabasis_pilot_v1/`: **432/432** runs (36 instâncias × 4 variantes × 3 seeds) |
-| C4 análise do piloto | Concluída | `results/meta_learning_metabasis_pilot_v1/analysis/` |
-| C4 recheck A–E | Aprovado | `analysis_recheck_20261127/` idêntico ao publicado; 432/432; norm=ub 36/36 |
-| Freeze metabasis_pilot_v1 | Aprovado | `experiments/meta_learning/data/metabasis_pilot_v1/`; decisão `docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md` |
-| LOO seletores (exploratório) | Concluído | `results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1/` |
-| Reprodução freeze+LOO | Aprovada | [relatório A–D](2026-11-27-meta-learning-reproduction-ad.md); hashes 4/4; LOO recheck bit-idêntico |
-| Decisão Fase 5 | **Aprovada** | [decisão de expansão v2](../decisions/2026-11-27-meta-learning-expansion-v2.md); 60 primeiro, 120 condicionado a checkpoint |
+| C2 Surrogate freeze | Aprovado | `docs/decisions/2026-11-27-surrogate-variant-freeze.md` |
+| C3 features freeze | Aprovado | `docs/decisions/2026-11-27-meta-feature-extractor-freeze.md` |
+| C4 custo 36 | Medido | `results/meta_learning_cost_pilot_v3/cost_projection.json` |
+| C4 meta-base piloto | Aprovado | `results/meta_learning_metabasis_pilot_v1/` 432/432 |
+| Freeze metabasis_pilot_v1 | Aprovado | `experiments/meta_learning/data/metabasis_pilot_v1/` |
+| LOO + reprodução A–D | Aprovados | [LOO](2026-11-27-meta-learning-selector-loo-exploratory.md); [A–D](2026-11-27-meta-learning-reproduction-ad.md) |
+| Decisão Fase 5 | **Aprovada** | [expansão v2](../decisions/2026-11-27-meta-learning-expansion-v2.md) |
+| Inventário 120 + split | **Congelado** | [Fase A](2026-11-27-meta-learning-v2-phase-a-inventory-split.md); SHA split `c17bce88…934a` |
+| Checkpoint 60 development | **Concluído** | [relatório](2026-11-27-meta-learning-v2-checkpoint60-dev.md); 576/576 runs; holdout selado |
+| Decisão 60→120 | Pendente | Só custo/integridade; sem abrir holdout |
 
 ## Decisões-chave
 
-1. Não trocar MLP da variante Surrogate; ranking real em trajetórias GWO permanece fraco.
-2. Extrator `taillard_pfsp_features_v1` congelado; preditores só da matriz P.
-3. Expansão para 36 instâncias (3 por grupo) baixada do espelho PISCO; custo viável no hardware local.
-4. Piloto 36×3×4 fechado, auditado e congelado como `metabasis_pilot_v1`. Avaliação LOO é exploratória; não é evidência confirmatória.
-5. Baseline operacional forte do piloto: **sempre Fuzzy**. Meta-Learning só se justifica se superar esse seletor em holdout por instância.
-6. Expansão autorizada: 60 instâncias (48 desenvolvimento + 12 holdout selado); alvo de 120 (96 desenvolvimento + 24 holdout), mantendo o piloto v1 apenas em desenvolvimento.
+1. Surrogate MLP histórico congelado; orçamento desigual permanece explícito.
+2. Features só da matriz P (`taillard_pfsp_features_v1`).
+3. Piloto 36 imutável; expansão em `metabasis_v2` com split `seed=20261127`.
+4. Baseline operacional a superar: **sempre Fuzzy**.
+5. Holdout selado até protocolo confirmatório congelado.
+6. Checkpoint 60 development fechado (48 instâncias); não é evidência confirmatória.
 
-## Análise do piloto meta-base (36 instâncias)
+## Piloto 36 (histórico)
 
-Protocolo: média de makespan em 3 seeds por variante; normalização por UB publicado quando disponível, senão pela melhor média entre variantes da própria instância. Unidade = instância. Fonte: `analysis/summary.json` e `analysis/per_instance_targets.csv`.
+Fuzzy 17/36; regret Fuzzy 0,0029. LOO: RF sem ganho útil vs Fuzzy. Detalhes nos relatórios do piloto.
 
-### Desempenho agregado
+## Checkpoint 60 — desenvolvimento (48 instâncias)
 
-| Variante | Vitórias / 36 | y médio (norm.) | Regret médio vs oráculo | Tempo médio (s) |
+Relatório: [2026-11-27-meta-learning-v2-checkpoint60-dev.md](2026-11-27-meta-learning-v2-checkpoint60-dev.md).
+
+| Variante | Vitórias / 48 | y médio | Regret médio | Tempo médio (s) |
 |---|---:|---:|---:|---:|
-| fuzzy | **17** | **1,046** | **0,0029** | 11,44 |
-| baseline | 9 | 1,049 | 0,0061 | 11,15 |
-| optuna | 9 | 1,050 | 0,0068 | 11,20 |
-| surrogate | **1** | 1,063 | 0,0193 | **1,93** |
+| fuzzy | **20** | **1,050** | **0,0037** | 11,19 |
+| optuna | 14 | 1,053 | 0,0070 | 10,95 |
+| baseline | 13 | 1,052 | 0,0057 | 10,92 |
+| surrogate | 1 | 1,065 | 0,0195 | **1,86** |
 
-### Comparações pareadas (média normalizada)
+- 576 runs = 432 `pilot_v1_reused` + 144 `metabasis_v2_new`
+- Low-confidence: 30/48; norm=`ub` 48/48
+- Wall-clock novas 12: ≈ 0,33 h; extrapolação ≈ 1,3 h para as 48 development restantes até 120
 
-| Par | Placar |
-|---|---|
-| baseline vs optuna | 17–18 (1 empate) |
-| baseline vs fuzzy | 12–22 (2 empates) |
-| optuna vs fuzzy | 12–23 (1 empate) |
-| baseline vs surrogate | 31–4 (1 empate) |
-| optuna vs surrogate | 33–1 (2 empates) |
-| fuzzy vs surrogate | 32–3 (1 empate) |
+## Próximos passos
 
-### Vitórias por grupo de dimensão
+1. Decidir formalmente: avançar a 120 ou encerrar em 60 (documento de decisão).
+2. Se avançar: executar development `stage=120` (48 instâncias × 4 × 3 = 576 runs); holdout continua selado.
+3. Se encerrar em 60: treinar/CV só nas 48; congelar pipeline; só então abrir holdout 12.
+4. Não regenerar split; não tocar `metabasis_pilot_v1`.
 
-| Grupo | Vencedores |
-|---|---|
-| 20×5 | optuna 2, fuzzy 1 |
-| 20×10 | fuzzy 2, baseline 1 |
-| 20×20 | 1 cada (baseline / fuzzy / optuna) |
-| 50×5 | 1 cada (optuna / fuzzy / baseline) |
-| 50×10 | 1 cada (fuzzy / optuna / baseline) |
-| 50×20 | fuzzy 2, baseline 1 |
-| 100×5 | 1 cada (baseline / surrogate / optuna) |
-| 100×10 | fuzzy 3 |
-| 100×20 | fuzzy 2, baseline 1 |
-| 200×10 | optuna 2, baseline 1 |
-| 200×20 | fuzzy 2, optuna 1 |
-| 500×20 | fuzzy 2, baseline 1 |
-
-### Limitações do piloto
-
-- **22/36** rótulos com margem &lt; 0,5% entre 1º e 2º → muitos empates práticos; classificação será instável.
-- Surrogate permanece barato e de qualidade inferior neste protocolo; não usar vitórias de qualidade para alegar utilidade de ranking.
-- Três seeds por instância estimam ruído, não criam 36×3 unidades independentes.
-- Resultado exploratório: não alegar generalização confirmatória nem promover Fuzzy como ótimo universal fora desta amostra.
-
-## Avaliação exploratória LOO (36 instâncias)
-
-Relatório completo: [2026-11-27-meta-learning-selector-loo-exploratory.md](2026-11-27-meta-learning-selector-loo-exploratory.md).
-
-Protocolo: leave-one-instance-out; RF 200 árvores; seed 0; aleatório = média de 100 sorteios/fold. Fonte: `selector_eval_exploratory_v1/summary.json`.
-
-| Seletor | Regret médio | IC95 | vs Fuzzy (melhor/pior/empate) |
-|---|---:|---|---|
-| always Fuzzy | **0,00292** | [0,00159, 0,00441] | — |
-| RF regressor | 0,00291 | [0,00154, 0,00430] | 5 / 3 / 28 |
-| best-global-treino (= Fuzzy) | 0,00292 | [0,00159, 0,00441] | 0 / 0 / 36 |
-| RF classifier | 0,00523 | [0,00342, 0,00707] | 8 / 17 / 11 |
-| always Baseline | 0,00614 | [0,00425, 0,00829] | 12 / 22 / 2 |
-| always Optuna | 0,00681 | [0,00445, 0,00920] | 12 / 23 / 1 |
-| random | 0,00905 | [0,00717, 0,01098] | 6 / 29 / 1 |
-| always Surrogate | 0,01931 | [0,01473, 0,02388] | 3 / 32 / 1 |
-
-Accuracy LOO: classifier 22,2%; regressor 47,2%. RF regressor empatou Fuzzy em regret; classifier piorou. Sem evidência de ganho operacional no piloto.
-
-## Auditoria crítica da avaliação LOO
-
-- A diferença pontual de regret entre RF regressor e sempre Fuzzy é de aproximadamente **−0,0000134** (0,0029053 contra 0,0029187), pequena demais para sustentar ganho operacional; o placar pareado é 5/3/28.
-- Os IC95 bootstrap se sobrepõem amplamente. O bootstrap dos 36 regrets descreve variação entre instâncias do piloto, mas não incorpora integralmente a variabilidade do processo de treinamento, seleção de modelo ou mudança de distribuição.
-- O LOO treina 36 modelos com 35 instâncias cada e 35 preditores. A relação amostra/dimensão é desfavorável; o resultado deve ser tratado como diagnóstico exploratório, não como estimativa confirmatória de generalização.
-- Os folds LOO compartilham grande parte dos dados de treino; não equivalem a um holdout independente. Nenhum holdout confirmatório foi reservado.
-- O fato de o melhor-global-do-treino coincidir com Fuzzy em todos os folds mostra que o seletor aprendido por frequência colapsa no baseline operacional neste piloto.
-
-## Reprodução A–D (2026-11-27)
-
-Relatório completo: [2026-11-27-meta-learning-reproduction-ad.md](2026-11-27-meta-learning-reproduction-ad.md).  
-Registro JSON: `results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127/reproduction_record.json`.
-
-| Item | Resultado |
-|---|---|
-| Branch / HEAD | `recovery/surrogate-learning-curve-v2-oom` / `b5456d1f20523aca267c03ca379e58b3406c38fc` |
-| Testes | 29 passed |
-| Freeze SHA-256 | 4/4 OK (`metabasis_pilot_v1`); freeze **não** regenerado |
-| LOO recheck | `summary.json` e `per_instance_predictions.csv` bit-idênticos ao publicado |
-| SHA `summary.json` | `218c448f80f4f16a2aab7afca43a511665420824c2f0484328ef4351ec70a2ba` |
-| SHA predictions | `68edebba8e9e61c95b28e585f58687512cd22fef2adc4bd337c21a40fa14ae0d` |
-| Ambiente | Python 3.14.6; NumPy 2.5.1; pandas 2.3.3; scikit-learn 1.9.0 |
-| Divergências | nenhuma |
-| Decisão Fase 5 | **Aprovada posteriormente** | Decisão formal em 27/11/2026; ver documento de expansão v2 |
-
-## Decisão Fase 5 e próximos passos
-
-A expansão foi **aprovada**. A decisão formal está em [2026-11-27-meta-learning-expansion-v2.md](../decisions/2026-11-27-meta-learning-expansion-v2.md).
-
-| Item | Estado |
-|---|---|
-| Preservar metabasis_pilot_v1 | Obrigatório; freeze imutável |
-| Preparar inventário Taillard completo | Pendente |
-| Pré-registrar split estratificado | Pendente; antes de qualquer nova execução GWO |
-| Adaptar runner/agregador/freezer para v2 | Pendente; scripts atuais ainda têm defaults/schema de piloto |
-| Checkpoint 60 | Aprovado como primeira etapa; 48 desenvolvimento + 12 holdout selado |
-| Alvo 120 | Aprovado condicionalmente ao checkpoint de custo/integridade |
-| Seeds iniciais | 3 pareadas: [0, 1, 2] |
-| Novas execuções GWO | Ainda não iniciadas |
-
-### Próximas ações
-
-1. Completar e validar inventário dos 120 arquivos (12 grupos × 10), com proveniência e SHA-256.
-2. Congelar split determinístico: em cada grupo, 5 das 7 instâncias ainda não usadas para desenvolvimento e 2 para holdout. No checkpoint 60 entram 1 de cada partição; as demais entram na expansão a 120.
-3. Adaptar/testar os scripts para schema metabasis_v2. O freezer atual é específico do piloto e não pode ser usado diretamente.
-4. Executar apenas as 12 novas instâncias de desenvolvimento no checkpoint 60; manter os 12 holdouts selados.
-5. Revisar custo, integridade e cobertura antes de decidir a conclusão em 60 ou a expansão para 120.
-
-**Runbook vigente:** [2026-11-27-meta-learning-next-execution-runbook.md](2026-11-27-meta-learning-next-execution-runbook.md). Não iniciar a bateria antes do gate técnico e do manifesto de split congelado.
-
-## Comandos de verificação
+## Comandos
 
 ```bash
-python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
-python -m scripts.evaluate_meta_learning_selectors_pilot --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 --seed 0 --random-repeats 100
+python -m scripts.build_meta_learning_metabasis_v2_checkpoint60_dev
+python -m pytest -q tests/test_meta_learning_metabasis_v2_split.py tests/test_meta_learning_metabasis_v2_runner.py
+# se avançar a 120:
+python -m scripts.run_meta_learning_metabasis_v2 --stages 120 --partitions development
 ```
-
-Não reexecute o freeze no diretório existente: o artefato é imutável. A reprodução LOO deve usar o diretório novo indicado no runbook.
-
-
-## Runbook vigente
-
-A reprodução A–D está concluída. A decisão formal agora autoriza a preparação da expansão v2; a próxima execução depende dos gates de inventário, split e adaptação técnica descritos no runbook.

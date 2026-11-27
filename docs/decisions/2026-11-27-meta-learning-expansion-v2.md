@@ -13,7 +13,7 @@ Dar continuidade à extensão de Meta-Learning e preparar uma nova versão da me
 
 A unidade independente continua sendo a instância PFSP. Seeds, variantes, gerações e candidatos não aumentam o número de unidades independentes.
 
-Esta decisão autoriza a preparação metodológica e técnica. **Não afirma que as novas instâncias já foram obtidas, que os scripts já suportam o schema v2 ou que novas execuções GWO já foram realizadas.** A bateria só começa após os gates de prontidão do runbook.
+Esta decisão autorizou a preparação e a coleta progressiva. **Atualização:** inventário 120, split, scripts v2 e coleta/agregação development do checkpoint 60 já foram realizados (ver relatório do checkpoint 60). A decisão formal de avançar a 120 ou encerrar em 60 permanece pendente; holdout continua selado.
 
 ## 2. Evidência que motiva a expansão
 
@@ -95,17 +95,19 @@ No checkpoint de 60:
 - estimar custo real para completar 120;
 - decidir avançar, ajustar o plano ou encerrar em 60 sem abrir o holdout caso a intenção seja continuar.
 
+**Atualização 2026-11-27:** a parte de **desenvolvimento** do checkpoint 60 foi concluída (576/576 runs; holdout selado). Custo wall das 12 novas ≈ 0,33 h; extrapolação ≈ 1,3 h para as 48 development restantes até 120. Relatório: [2026-11-27-meta-learning-v2-checkpoint60-dev.md](../reports/2026-11-27-meta-learning-v2-checkpoint60-dev.md). A decisão formal 60→120 ainda não foi registrada.
+
 ## 7. Requisitos técnicos antes da bateria
 
-A infraestrutura atual ainda contém nomes e defaults específicos do piloto. Antes de executar a expansão, adaptar e testar os componentes para aceitar explicitamente o schema/diretórios v2, sem alterar o comportamento do piloto:
+**Status:** cumpridos para o checkpoint 60 development.
 
-- runner: identificar protocolo/dataset v2 nos metadados; aceitar subconjuntos de instâncias e seeds; retomar com segurança; validar compatibilidade de configuração ao encontrar linhas existentes;
-- agregador: aceitar manifesto, runs, seeds e diretório de saída v2; validar todas as combinações esperadas e não assumir que o conjunto é o piloto;
-- extrator/manifesto: gerar features para o inventário selecionado, preservar hash e versão; produzir manifesto com dimensões, bounds e split sem contaminar os preditores;
-- freezer: suportar schema metabasis_v2, diretório de saída novo e manifesto de split; recusar sobrescrita;
-- testes: cobrir split determinístico, ausência de vazamento, retomada, duplicatas, incompletude, hashes, alinhamento features/targets e recusa de sobrescrita.
+- runner v2: `scripts/run_meta_learning_metabasis_v2.py` (protocol `meta_learning_metabasis_v2`)
+- merge/agregação: `scripts/build_meta_learning_metabasis_v2_checkpoint60_dev.py`
+- freezer v2: `scripts/freeze_meta_learning_metabasis_v2.py` (recusa sobrescrita; não usa o freezer piloto)
+- inventário/split: `scripts/build_meta_learning_metabasis_v2_inventory_split.py`
+- testes: `tests/test_meta_learning_metabasis_v2_split.py`, `tests/test_meta_learning_metabasis_v2_runner.py`
 
-Não usar o freezer atual para escrever metabasis_v2: ele registra metabasis_pilot_v1 no schema e tem defaults específicos do piloto. Não executar o runner com a saída v2 antes de corrigir/validar os metadados do protocolo.
+O freezer/piloto v1 permanece intacto e não deve gravar em `metabasis_v2`.
 
 ## 8. Critérios para avançar de 60 para 120
 
@@ -141,6 +143,8 @@ O trabalho continua sendo GWO aplicado ao PFSP/Taillard. Meta-Learning é uma ca
 
 ## 11. Documentos vinculados
 
+- [Checkpoint 60 development](../reports/2026-11-27-meta-learning-v2-checkpoint60-dev.md)
+- [Fase A inventário/split](../reports/2026-11-27-meta-learning-v2-phase-a-inventory-split.md)
 - [Runbook da expansão](../reports/2026-11-27-meta-learning-next-execution-runbook.md)
 - [Roadmap de conclusão](../plans/2026-11-27-meta-learning-completion-roadmap.md)
 - [Status das fases](../reports/2026-11-27-meta-learning-phase-status.md)

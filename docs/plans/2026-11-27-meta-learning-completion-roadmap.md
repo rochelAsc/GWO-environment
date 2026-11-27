@@ -2,13 +2,16 @@
 
 **Data:** 27/11/2026  
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Status:** Fases 1–4 concluídas; freeze + LOO reproduzidos; expansão Fase 5 **aprovada**. Próximos gates: inventário Taillard 120, split pré-registrado, adaptação técnica v2 e coleta em estágios 60 → 120.  
+**Status:** Fases 1–4 concluídas; expansão aprovada; Fase A + **checkpoint 60 development concluídos** (576/576; holdout selado). Próximo: decisão formal 60→120.  
 **Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
 **Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).  
+**Checkpoint 60:** [2026-11-27-meta-learning-v2-checkpoint60-dev.md](../reports/2026-11-27-meta-learning-v2-checkpoint60-dev.md).  
+**Fase A:** [2026-11-27-meta-learning-v2-phase-a-inventory-split.md](../reports/2026-11-27-meta-learning-v2-phase-a-inventory-split.md).  
 **Reprodução A–D:** [2026-11-27-meta-learning-reproduction-ad.md](../reports/2026-11-27-meta-learning-reproduction-ad.md).  
 **LOO exploratório:** [2026-11-27-meta-learning-selector-loo-exploratory.md](../reports/2026-11-27-meta-learning-selector-loo-exploratory.md).  
 **Runbook:** [2026-11-27-meta-learning-next-execution-runbook.md](../reports/2026-11-27-meta-learning-next-execution-runbook.md).  
-**Freeze:** [2026-11-27-metabasis-pilot-v1-freeze.md](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md).
+**Freeze v1:** [2026-11-27-metabasis-pilot-v1-freeze.md](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md).  
+**Expansão:** [2026-11-27-meta-learning-expansion-v2.md](../decisions/2026-11-27-meta-learning-expansion-v2.md).
 
 > Este documento é um plano de execução futuro. Não afirma que as etapas pendentes, a meta-base, os modelos ou a avaliação final já existam.
 
@@ -214,23 +217,21 @@ Desenho congelado:
 
 As 36 instâncias do piloto permanecem exclusivamente em desenvolvimento. Em cada grupo, das 7 instâncias ainda não usadas, selecionar 5 para desenvolvimento e 2 para holdout por split determinístico, estratificado e independente dos resultados. Seed pré-registrada: 20261127, com numpy.random.default_rng e grupos em ordem lexicográfica; registrar versão NumPy e hash do inventário. A primeira instância de cada partição recebe stage=60; as restantes, stage=120. No checkpoint de 60, incluir 1 nova instância de cada partição por grupo; no estágio 120, incluir as 4 restantes de desenvolvimento e 1 restante de holdout por grupo.
 
-- [ ] Inventariar os 120 arquivos, confirmar IDs/dimensões, origem, bounds e SHA-256.
-- [ ] Congelar manifesto de split e hash antes de observar novos resultados GWO.
-- [ ] Adaptar runner, agregador e freezer para schema v2; o freezer atual grava schema piloto e não pode ser usado diretamente.
-- [ ] Criar testes de split, vazamento, retomada, completude, duplicatas, hashes e recusa de sobrescrita.
-- [ ] Reutilizar os 432 runs do piloto apenas após auditoria de compatibilidade e com proveniência histórica explícita.
-- [ ] Executar as 12 novas instâncias de desenvolvimento do checkpoint 60 (144 runs com 3 seeds × 4 variantes); manter os 12 holdouts selados.
-- [ ] Auditar custo real, cobertura, falhas e integridade; decidir avançar a 120 sem consultar holdout.
-- [ ] Se aprovado, executar as 48 instâncias de desenvolvimento restantes (576 runs) e preparar 12 holdouts restantes; completar 96 desenvolvimento + 24 holdout.
-- [ ] Congelar metabasis_v2 com dados, split, configurações, ambiente, commit e hashes.
+- [x] Inventariar os 120 arquivos, confirmar IDs/dimensões, origem, bounds e SHA-256.
+- [x] Congelar manifesto de split e hash antes de observar novos resultados GWO (`split_seed=20261127`).
+- [x] Runner/freezer v2 + testes de split/overwrite (`run_meta_learning_metabasis_v2.py`, `freeze_meta_learning_metabasis_v2.py`).
+- [x] Reutilizar os 432 runs do piloto com `source=pilot_v1_reused` após hash check.
+- [x] Executar as 12 novas development stage=60 (144/144); holdout selado.
+- [x] Agregar checkpoint 60 development (576/576; [relatório](../reports/2026-11-27-meta-learning-v2-checkpoint60-dev.md)).
+- [ ] Decidir formalmente avançar a 120 ou encerrar em 60 (sem consultar holdout).
+- [ ] Se aprovado, executar as 48 development restantes stage=120 (576 runs); holdouts permanecem selados.
+- [ ] Congelar metabasis_v2 completo com dados, split, configurações, ambiente, commit e hashes.
 
-Seeds iniciais: [0, 1, 2], pareadas entre variantes. Não aumentar seeds como substituto de instâncias. Manter orçamento desigual explícito: 15.030 avaliações exatas em Baseline/Optuna/Fuzzy; 1.530 exatas + 15.000 previsões em Surrogate.
+Seeds: [0, 1, 2]. Orçamento desigual explícito. Custo medido nas 12 novas: wall ≈ 0,33 h; extrapolação ≈ 1,3 h para 48 development restantes.
 
-Estimativa inicial, não garantida: 1,06 h observada para 36×3; extrapolação linear ≈1,8 h para 60×3 e ≈3,5 h para 120×3. Medir por grupo, pois instâncias maiores e preparação do Surrogate podem alterar o custo.
+**Aceite parcial (checkpoint 60 development):** cumprido. Holdout ainda selado; freeze confirmatório e decisão 60↔120 pendentes.
 
-**Aceite:** meta-base v2 auditada e versionada; 60/120 com split íntegro; zero chaves ausentes/duplicadas; cada execução rastreável; holdout selado até congelar protocolo e modelos.
-
-**Gate:** nenhuma execução v2 antes de inventário, split e gate técnico. Abrir holdout uma única vez: 12 se encerrar em 60 ou 24 se completar 120. Se continuar a 120, não abrir os 12 do checkpoint de 60.
+**Gate atual:** decisão 60→120. Abrir holdout uma única vez só após congelar pipeline.
 
 **Dependências:** Fases 0–4 concluídas; decisão de expansão aprovada.
 
@@ -357,13 +358,13 @@ Se o modelo não superar os baselines, isso não invalida o experimento: a concl
 
 ## 9. Ordem prática recomendada para a próxima sessão
 
-1. ~~Executar reprodução A–D e comparar artefatos.~~ **Feito** — hashes 4/4 e LOO bit-idêntico.
-2. **Executar Fase 5 conforme decisão aprovada:** inventário 120, split pré-registrado, adaptação técnica v2 e checkpoint 60.
-3. Revisar custo/integridade/cobertura e decidir se completa 120, sem abrir holdout.
-4. Treinar e selecionar modelos somente em desenvolvimento; congelar pipeline antes do holdout.
-5. Abrir holdout uma vez (12 ou 24 instâncias, conforme tamanho final) e avaliar regret vs sempre Fuzzy.
+1. ~~Reprodução A–D.~~ **Feito**
+2. ~~Inventário 120, split, scripts v2, coleta/agregação checkpoint 60 development.~~ **Feito**
+3. **Decidir** avançar a 120 ou encerrar em 60 (documento em `docs/decisions/`); sem abrir holdout.
+4. Se 120: rodar development `stage=120` (576 runs); se 60: treinar/CV nas 48 e congelar pipeline.
+5. Abrir holdout uma vez (12 ou 24) só após freeze do protocolo; avaliar regret vs sempre Fuzzy.
 
-**Gate atual:** expansão autorizada, mas coleta bloqueada até inventário, split e gate técnico.
+**Gate atual:** checkpoint 60 development fechado; falta decisão formal 60↔120.
 
 ## 10. Relação com outros planos e manutenção
 

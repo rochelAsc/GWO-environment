@@ -1,0 +1,143 @@
+{
+  "n_instances": 48,
+  "n_runs": 576,
+  "wins": {
+    "optuna": 14,
+    "fuzzy": 20,
+    "baseline": 13,
+    "surrogate": 1
+  },
+  "low_confidence_labels_margin_lt_0.5pct": 30,
+  "normalization_counts": {
+    "ub": 48
+  },
+  "mean_normalized_y": {
+    "baseline": 1.0515702482174327,
+    "optuna": 1.0527728056214167,
+    "fuzzy": 1.0495236849058938,
+    "surrogate": 1.0653351620404221
+  },
+  "mean_regret_vs_oracle_if_always": {
+    "baseline": 0.005749484384425831,
+    "optuna": 0.006952041788409899,
+    "fuzzy": 0.0037029210728869283,
+    "surrogate": 0.019514398207415223
+  },
+  "mean_runtime_seconds": {
+    "baseline": 10.923535314579366,
+    "optuna": 10.948839388181417,
+    "fuzzy": 11.19368131112747,
+    "surrogate": 1.8638521708376679
+  },
+  "wins_by_group": {
+    "100x10": {
+      "fuzzy": 3,
+      "optuna": 1
+    },
+    "100x20": {
+      "fuzzy": 2,
+      "baseline": 2
+    },
+    "100x5": {
+      "baseline": 1,
+      "surrogate": 1,
+      "optuna": 2
+    },
+    "200x10": {
+      "baseline": 1,
+      "optuna": 2,
+      "fuzzy": 1
+    },
+    "200x20": {
+      "fuzzy": 3,
+      "optuna": 1
+    },
+    "20x10": {
+      "fuzzy": 2,
+      "baseline": 1,
+      "optuna": 1
+    },
+    "20x20": {
+      "baseline": 2,
+      "fuzzy": 1,
+      "optuna": 1
+    },
+    "20x5": {
+      "optuna": 3,
+      "fuzzy": 1
+    },
+    "500x20": {
+      "fuzzy": 3,
+      "baseline": 1
+    },
+    "50x10": {
+      "fuzzy": 1,
+      "optuna": 1,
+      "baseline": 2
+    },
+    "50x20": {
+      "baseline": 2,
+      "fuzzy": 2
+    },
+    "50x5": {
+      "optuna": 2,
+      "fuzzy": 1,
+      "baseline": 1
+    }
+  },
+  "pairwise_mean_y": {
+    "baseline_vs_optuna": {
+      "a_wins": 23,
+      "b_wins": 24,
+      "ties": 1
+    },
+    "baseline_vs_fuzzy": {
+      "a_wins": 17,
+      "b_wins": 29,
+      "ties": 2
+    },
+    "baseline_vs_surrogate": {
+      "a_wins": 42,
+      "b_wins": 5,
+      "ties": 1
+    },
+    "optuna_vs_fuzzy": {
+      "a_wins": 18,
+      "b_wins": 29,
+      "ties": 1
+    },
+    "optuna_vs_surrogate": {
+      "a_wins": 44,
+      "b_wins": 2,
+      "ties": 2
+    },
+    "fuzzy_vs_surrogate": {
+      "a_wins": 43,
+      "b_wins": 4,
+      "ties": 1
+    }
+  },
+  "primary_selection_metric": "per_instance_regret_vs_oracle",
+  "notes": [
+    "Unit=instance; 3 seeds per variant aggregated by mean makespan.",
+    "Normalization: UB when available else relative to best mean among variants (rel_best).",
+    "When norm mixes ub and rel_best, do not treat global mean_y as one common scale; use per-instance regret.",
+    "Pilot only; not confirmatory Meta-Learning evaluation.",
+    "Checkpoint 60 development only; holdout targets sealed.",
+    "Pilot rows marked source=pilot_v1_reused after hash compatibility check."
+  ],
+  "protocol": "meta_learning_metabasis_v2_checkpoint60_dev",
+  "n_runs_development": 576,
+  "n_instances_development": 48,
+  "holdout_sealed": true,
+  "sources": {
+    "pilot_v1_reused": 432,
+    "metabasis_v2_new": 144
+  },
+  "hashes_sha256": {
+    "development_runs.csv": "3debe5a487ce94b274625d4d2f4f53216bd04d29065f6be3114865ef13948a2e",
+    "development_manifest.csv": "49afdcbbb35c2e62debe75a8f94679b894cb710cd949954b213f7815a367c4cf",
+    "per_instance_targets.csv": "9cb446ffce13e706377617eeb96a203dd8b00dd57f4dcbf360fc13bab1daf000",
+    "split_manifest.csv": "c17bce8856f6e22b35db6e7ad2b43b84ca82df3632f245fbeb7a909ad36a934a"
+  }
+}

@@ -3,10 +3,10 @@
 **Atualizado:** 27/11/2026  
 **Branch:** recovery/surrogate-learning-curve-v2-oom  
 **Decisão:** aprovada em [2026-11-27-meta-learning-expansion-v2.md](../decisions/2026-11-27-meta-learning-expansion-v2.md)  
-**Estado de entrada:** metabasis_pilot_v1 congelada e reprodução A–D aprovada.  
-**Objetivo:** preparar e executar, em etapas auditáveis, a expansão de 36 para 60 e, se viável, 120 instâncias Taillard, com holdout por instância reservado antes de observar novos resultados.
+**Estado de entrada:** Fase A concluída; **checkpoint 60 development concluído** (576/576; holdout selado).  
+**Objetivo:** decidir 60→120 e, se aprovado, coletar development `stage=120`; holdout permanece selado até avaliação confirmatória.
 
-> **Importante:** este runbook substitui o runbook de reprodução/decisão anterior. A reprodução A–D já terminou. Não repetir testes/LOO apenas por seguir este documento. A decisão de expansão foi aprovada, mas a coleta v2 ainda não foi executada. A primeira etapa é adaptar a infraestrutura, pois alguns scripts atuais ainda estão fixados no piloto v1.
+> **Importante:** inventário/split e coleta stage=60 já fechados — não regenerar split nem reexecutar as 12 development sem necessidade. Relatório: [checkpoint 60](2026-11-27-meta-learning-v2-checkpoint60-dev.md).
 
 ## 1. Estado confirmado e invariantes
 
@@ -120,18 +120,20 @@ A inspeção do código atual encontrou acoplamento explícito ao piloto:
 
 **Envie para revisão:** resumo do inventário por grupo, manifesto de split, hash do manifesto, lista de arquivos com hash/proveniência e relatório de bounds ausentes.
 
-## 6. Fase B — preparar dados de desenvolvimento do checkpoint 60
+## 6. Fase B — checkpoint 60 development (**concluída**)
 
-1. Preparar a base bruta v2 com as 36 linhas históricas de desenvolvimento e as 12 novas instâncias de desenvolvimento.
-2. Reutilizar os 432 resultados do piloto somente após comparar hash da instância, variante, seed, configuração, versão do código e definição de métricas. Marcar source=pilot_v1_reused; não alterar os arquivos congelados.
-3. Executar somente as 12 instâncias novas de desenvolvimento com 3 seeds × 4 variantes = 144 novas execuções. Total combinado: 48 × 3 × 4 = 576 linhas de desenvolvimento.
-4. Não executar ou consultar os 12 holdouts neste checkpoint se houver intenção de continuar para 120.
-5. Gerar features/manifesto, agregar os resultados e validar completude, chaves, hashes, bounds e contadores.
-6. Manter o output em results/meta_learning_metabasis_v2/; registrar custos reais por grupo/variante.
+Registro: [2026-11-27-meta-learning-v2-checkpoint60-dev.md](2026-11-27-meta-learning-v2-checkpoint60-dev.md).
 
-**Aceite:** 48 instâncias de desenvolvimento completas (576 runs), 12 holdouts selados, zero duplicatas/ausências, 35 preditores válidos e proveniência completa.
+1. ~~Base bruta v2 com 36 históricas + 12 novas.~~ **Feito**
+2. ~~Reutilizar 432 do piloto com `source=pilot_v1_reused` após hash check.~~ **Feito**
+3. ~~144 novas execuções development stage=60.~~ **Feito** (`completed_runs=144/144`)
+4. ~~Holdout selado.~~ **Feito** (ausente de `runs.csv`)
+5. ~~Agregar e validar.~~ **Feito** (`checkpoint60_dev/`: 576 runs, 48 instâncias)
+6. ~~Outputs em `results/meta_learning_metabasis_v2/`.~~ **Feito**
 
-> Nota: 720 runs é a contagem do checkpoint de 60 incluindo 144 execuções de holdout. No fluxo de desenvolvimento, só 576 runs são executados/abertos antes da decisão final. As 144 execuções de holdout ficam adiadas até a avaliação final se o estudo encerrar em 60.
+**Aceite:** cumprido. Fuzzy 20/48 wins; regret Fuzzy 0,0037; low-conf 30/48; wall-clock novas ≈ 0,33 h.
+
+> Holdout (144 runs se encerrar em 60; 288 se ir a 120) permanece adiado.
 
 ## 7. Checkpoint de decisão — avançar para 120 ou encerrar em 60
 
@@ -168,26 +170,26 @@ Se a coleta de holdout for feita só após congelar modelos/critério, executar 
 
 O holdout deve ser avaliado uma vez pelo pipeline congelado. Se houver alteração após observá-lo, esse conjunto deixa de ser confirmatório e será necessário um novo holdout independente para nova alegação confirmatória.
 
-## 10. Comandos de referência já existentes
-
-Estes comandos são válidos para inspeção/testes e para o runner atual, mas os comandos de produção v2 só devem ser fixados após o gate técnico da §4, porque o runner/freezer atuais têm metadados e defaults específicos do piloto.
+## 10. Comandos v2 validados
 
 ~~~bash
-# Estado do repositório
-git status --short
-git branch --show-current
-git rev-parse HEAD
+# Testes
+python -m pytest -q tests/test_meta_learning_metabasis_v2_split.py tests/test_meta_learning_metabasis_v2_runner.py
 
-# Suíte relevante do piloto e dos componentes GWO
-python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
+# Inventário/split (já congelado — não regenerar sem nova decisão)
+python -m scripts.build_meta_learning_metabasis_v2_inventory_split
 
-# Extrator determinístico; output separado do freeze v1
-python -m experiments.meta_learning.scripts.extract_instance_features --input-dir data/benchmarks/taillard --output results/meta_learning_metabasis_v2/inventory/instance_features_all.csv
+# Coleta development stage=60 (já concluída; retoma só chaves ausentes)
+python -m scripts.run_meta_learning_metabasis_v2 --stages 60 --partitions development
+
+# Merge piloto + agregação checkpoint 60
+python -m scripts.build_meta_learning_metabasis_v2_checkpoint60_dev
+
+# Se decisão avançar a 120 (development only; holdout selado)
+python -m scripts.run_meta_learning_metabasis_v2 --stages 120 --partitions development
 ~~~
 
-Não execute o extrator acima até o inventário dos arquivos estar completo e validado; ele varre todos os ta*.txt sob o diretório informado.
-
-Após o gate técnico, os comandos exatos de execução, agregação e freeze v2 deverão ser registrados aqui com os argumentos e paths validados. Não inventar nomes de scripts/flags antes de implementá-los.
+Não usar `--allow-holdout` até o protocolo confirmatório estar congelado.
 
 ## 11. Pacote a enviar após cada etapa
 
@@ -201,6 +203,8 @@ Após o gate técnico, os comandos exatos de execução, agregação e freeze v2
 
 ## 12. Documentos relacionados
 
+- [Checkpoint 60 development](2026-11-27-meta-learning-v2-checkpoint60-dev.md)
+- [Fase A inventário/split](2026-11-27-meta-learning-v2-phase-a-inventory-split.md)
 - [Decisão de expansão](../decisions/2026-11-27-meta-learning-expansion-v2.md)
 - [Roadmap de conclusão](../plans/2026-11-27-meta-learning-completion-roadmap.md)
 - [Status das fases](2026-11-27-meta-learning-phase-status.md)
