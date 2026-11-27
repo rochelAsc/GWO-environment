@@ -47,7 +47,7 @@ A decisão formal autoriza uma expansão em dois estágios. O piloto de 36 inst�
 | 60 | 48 (4 por grupo) | 12 (1 por grupo) | 60 |
 | 120 | 96 (8 por grupo) | 24 (2 por grupo) | 120 |
 
-Em cada grupo Taillard, as 7 instâncias ainda não usadas serão divididas deterministicamente em 5 para desenvolvimento e 2 para holdout, sem consultar resultados. Se houver expansão a 120, os 12 holdouts do checkpoint de 60 continuam selados; o holdout final de 24 só será aberto uma vez, depois do congelamento do pipeline. Seeds iniciais: 0, 1 e 2 pareadas. Não aumentar seeds como substituto de instâncias independentes.
+Em cada grupo Taillard, as 7 instâncias ainda não usadas serão divididas deterministicamente em 5 para desenvolvimento e 2 para holdout, sem consultar resultados. Seed pré-registrada: 20261127, usando numpy.random.default_rng e grupos em ordem lexicográfica; registrar versão NumPy e hash do inventário. Se houver expansão a 120, os 12 holdouts do checkpoint de 60 continuam selados; o holdout final de 24 só será aberto uma vez, depois do congelamento do pipeline. Seeds iniciais: 0, 1 e 2 pareadas. Não aumentar seeds como substituto de instâncias independentes.
 
 A inspeção dos scripts identificou defaults de piloto: o runner ainda registra protocolo v1 e o freezer grava schema metabasis_pilot_v1. Portanto, a bateria v2 não deve ser iniciada até a adaptação e os testes previstos no runbook. A coleta ainda não foi executada.
 
