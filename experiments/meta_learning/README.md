@@ -355,3 +355,19 @@ python -m experiments.meta_learning.scripts.run_surrogate_model_comparison_pilot
 ```
 
 A execução compara MLP 64×64, Random Forest, Extra Trees e HistGradientBoosting em `ta111`, 8.000 permutações uniformes (repetição 1) e teste fixo de 1.000 permutações. Treina sequencialmente em CPU, grava checkpoints por modelo e permite retomada. A execução foi concluída. Resultados, métricas de custo e interpretação estão na seção 10 de [surrogate_model_comparison_protocol.md](reports/surrogate_model_comparison_protocol.md). O piloto é exploratório (uma repetição, uma instância) e não autoriza integração de modelo ao GWO.
+
+
+### Distribuição real de candidatos das trajetórias GWO
+
+A investigação seguinte ao piloto de comparação de modelos é coletar as populações completas geradas pelas quatro variantes GWO. Os resultados antigos da Semana 6 não preservam as populações completas: o trace Surrogate contém apenas candidatos selecionados e o trace Fuzzy contém somente variáveis do controlador.
+
+A instrumentação opcional `population_observer` foi adicionada às três rotinas de otimização (Baseline/Optuna compartilham `gwo_pfs`). O callback recebe cópia defensiva da população inicial e de cada geração. O runner calcula permutações e makespans exatos apenas para diagnóstico; esses rótulos adicionais não influenciam a busca.
+
+Protocolo, custo esperado, critérios de validação e análise estão em [gwo_population_distribution_audit_protocol.md](../../docs/reports/gwo_population_distribution_audit_protocol.md).
+
+```bash
+python -m pytest -q tests/test_gwo_population_observer.py
+python -m experiments.meta_learning.scripts.run_gwo_population_distribution_audit
+```
+
+O piloto padrão usa ta111, quatro variantes e seeds 0–4 (300.600 candidatos esperados). **A execução local ainda não foi realizada.** O piloto deve validar custo e integridade antes de qualquer coleta ampliada ou treinamento de modelos com split por seed.
