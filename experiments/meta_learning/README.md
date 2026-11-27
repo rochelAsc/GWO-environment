@@ -1,6 +1,6 @@
 # Plano de Meta-Learning: classificação e regressão
 
-**Status (2026-11-27):** piloto 36×3×4 executado, auditado e congelado como `metabasis_pilot_v1`. LOO exploratório concluído: RF regressor praticamente empatou sempre Fuzzy (sem ganho operacional demonstrado); RF classifier foi pior. A extensão permanece exploratória; holdout confirmatório e expansão 60/120 ainda não autorizados. A curva/comparação de surrogate abaixo é trilho distinto.
+**Status (2026-11-27):** piloto 36×3×4 congelado (`metabasis_pilot_v1`); LOO exploratório sem ganho vs Fuzzy; **reprodução A–D aprovada** (hashes 4/4; LOO recheck bit-idêntico). Decisão formal Fase 5 ainda pendente. Holdout confirmatório e expansão 60/120 não autorizados. A curva/comparação de surrogate abaixo é trilho distinto.
 
 Este documento define o pipeline metodológico e aponta o estado real dos artefatos. É uma extensão opcional do projeto, não etapa obrigatória do roteiro do professor e não substitui as Semanas 1–6.
 
@@ -12,8 +12,9 @@ Este documento define o pipeline metodológico e aponta o estado real dos artefa
 | Decisão de freeze | [`docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md`](../../docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md) |
 | Status das fases | [`docs/reports/2026-11-27-meta-learning-phase-status.md`](../../docs/reports/2026-11-27-meta-learning-phase-status.md) |
 | Relatório LOO exploratório | [`docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md`](../../docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md) |
+| Reprodução A–D | [`docs/reports/2026-11-27-meta-learning-reproduction-ad.md`](../../docs/reports/2026-11-27-meta-learning-reproduction-ad.md) |
 | Roadmap | [`docs/plans/2026-11-27-meta-learning-completion-roadmap.md`](../../docs/plans/2026-11-27-meta-learning-completion-roadmap.md) |
-| Runbook vigente | [`docs/reports/2026-11-27-meta-learning-next-execution-runbook.md`](../../docs/reports/2026-11-27-meta-learning-next-execution-runbook.md) |
+| Runbook | [`docs/reports/2026-11-27-meta-learning-next-execution-runbook.md`](../../docs/reports/2026-11-27-meta-learning-next-execution-runbook.md) |
 
 ### Resultado do piloto de seleção
 
@@ -25,13 +26,13 @@ Este documento define o pipeline metodológico e aponta o estado real dos artefa
 
 O RF regressor não demonstrou superioridade: IC95 se sobrepõem amplamente e há 28 empates em 36 instâncias. O piloto tem 36 unidades independentes e 35 preditores; LOO não substitui holdout externo. Aumentar seeds não resolve a limitação do número de instâncias. Ver [relatório LOO](../../docs/reports/2026-11-27-meta-learning-selector-loo-exploratory.md).
 
-**Próxima ação:** reproduzir hashes e LOO conforme o runbook. Não executar freeze novamente no diretório existente nem expandir a base antes da decisão registrada.
+**Próxima ação:** decisão formal Fase 5 (continuar / encerrar / reformular). Reprodução A–D já documentada. Não executar freeze novamente no diretório existente nem expandir a base antes da decisão registrada em `docs/decisions/`.
 
-Comandos (raiz do repositório; reprodução em diretório novo):
+Comandos usados na reprodução (já executados; não repetir sobre o freeze):
 
 ```bash
+python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py tests/test_gwo_population_deduplicate.py tests/test_week6_surrogate.py
 python -m scripts.evaluate_meta_learning_selectors_pilot --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 --seed 0 --random-repeats 100
-python -m pytest -q tests/test_meta_learning_features.py tests/test_meta_learning_metabasis_pilot.py
 ```
 
 ## Trabalho concluído relacionado: curva de aprendizagem do surrogate

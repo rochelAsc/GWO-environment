@@ -15,6 +15,7 @@
 | C4 recheck A–E | Aprovado | `analysis_recheck_20261127/` idêntico ao publicado; 432/432; norm=ub 36/36 |
 | Freeze metabasis_pilot_v1 | Aprovado | `experiments/meta_learning/data/metabasis_pilot_v1/`; decisão `docs/decisions/2026-11-27-metabasis-pilot-v1-freeze.md` |
 | LOO seletores (exploratório) | Concluído | `results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1/` |
+| Reprodução freeze+LOO | Aprovada | [relatório A–D](2026-11-27-meta-learning-reproduction-ad.md); hashes 4/4; LOO recheck bit-idêntico |
 
 ## Decisões-chave
 
@@ -99,15 +100,31 @@ Accuracy LOO: classifier 22,2%; regressor 47,2%. RF regressor empatou Fuzzy em r
 - Os folds LOO compartilham grande parte dos dados de treino; não equivalem a um holdout independente. Nenhum holdout confirmatório foi reservado.
 - O fato de o melhor-global-do-treino coincidir com Fuzzy em todos os folds mostra que o seletor aprendido por frequência colapsa no baseline operacional neste piloto.
 
+## Reprodução A–D (2026-11-27)
+
+Relatório completo: [2026-11-27-meta-learning-reproduction-ad.md](2026-11-27-meta-learning-reproduction-ad.md).  
+Registro JSON: `results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127/reproduction_record.json`.
+
+| Item | Resultado |
+|---|---|
+| Branch / HEAD | `recovery/surrogate-learning-curve-v2-oom` / `b5456d1f20523aca267c03ca379e58b3406c38fc` |
+| Testes | 29 passed |
+| Freeze SHA-256 | 4/4 OK (`metabasis_pilot_v1`); freeze **não** regenerado |
+| LOO recheck | `summary.json` e `per_instance_predictions.csv` bit-idênticos ao publicado |
+| SHA `summary.json` | `218c448f80f4f16a2aab7afca43a511665420824c2f0484328ef4351ec70a2ba` |
+| SHA predictions | `68edebba8e9e61c95b28e585f58687512cd22fef2adc4bd337c21a40fa14ae0d` |
+| Ambiente | Python 3.14.6; NumPy 2.5.1; pandas 2.3.3; scikit-learn 1.9.0 |
+| Divergências | nenhuma |
+| Decisão Fase 5 | **pendente** |
+
 ## Próximos passos recomendados
 
-1. Reproduzir o freeze por SHA-256 e repetir o LOO em diretório novo, sem sobrescrever os artefatos publicados (runbook atualizado).
-2. Após reprodução, decidir formalmente se a extensão continua. Se continuar, priorizar diversidade/número de instâncias, não apenas mais seeds.
-3. Criar `metabasis_v2` para qualquer expansão; `metabasis_pilot_v1` permanece imutável.
-4. Reservar holdout por instância antes de tuning/seleção final; manter avaliação LOO atual como desenvolvimento exploratório.
-5. Não retunar Surrogate nem misturar orçamentos sem reportar a diferença.
+1. **Decisão formal obrigatória** (ainda pendente; nenhuma opção pré-selecionada): (a) expandir instâncias → `metabasis_v2` + holdout pré-reservado; (b) encerrar extensão como exploratória sem ganho vs Fuzzy; (c) reformular pergunta com novo protocolo.
+2. Se (a): priorizar diversidade 60–120, não só mais seeds; `metabasis_pilot_v1` imutável.
+3. Não retunar Surrogate nem misturar orçamentos sem reportar a diferença.
+4. Não iniciar bateria GWO até a decisão estar registrada em documento de decisão.
 
-**Gate atual:** Fase 5 não autorizada. A reprodução A–D do [runbook](2026-11-27-meta-learning-next-execution-runbook.md) e a decisão explícita de continuidade são pré-requisitos.
+**Gate atual:** reprodução A–D **aprovada e documentada**. Fase 5 **não** autorizada até decisão explícita (a/b/c).
 
 ## Comandos de verificação
 
@@ -121,4 +138,4 @@ Não reexecute o freeze no diretório existente: o artefato é imutável. A repr
 
 ## Runbook vigente
 
-A próxima execução está detalhada em [2026-11-27-meta-learning-next-execution-runbook.md](2026-11-27-meta-learning-next-execution-runbook.md). Ele substitui as antigas etapas A–E de auditoria da meta-base, que já foram concluídas e registradas nos commits mais recentes.
+A reprodução A–D do [runbook](2026-11-27-meta-learning-next-execution-runbook.md) está **concluída**. O próximo passo operacional é somente a decisão formal (a/b/c). Não há nova bateria a executar até essa decisão.

@@ -140,9 +140,11 @@ PY
 
 **Envie:** saída. Ela será anexada à avaliação de reprodutibilidade.
 
-## 8. Decisão que tomaremos com os resultados
+## 8. Decisão pendente (aguardando escolha explícita)
 
-Depois de revisar A–D, escolheremos e registraremos uma destas opções:
+A reprodução A–D foi executada e documentada em [2026-11-27-meta-learning-reproduction-ad.md](2026-11-27-meta-learning-reproduction-ad.md). Nenhuma opção abaixo foi selecionada ainda. Após a escolha, registrar a decisão em `docs/decisions/` antes de qualquer execução nova.
+
+Opções:
 
 1. **Continuar Meta-Learning com expansão de instâncias:** preparar `metabasis_v2`, priorizando diversidade e cobertura até 120 instâncias. Manter inicialmente 3–5 seeds pareadas para controlar custo; aumentar seeds depois se a variância por execução justificar. Reservar holdout por instância antes de qualquer tuning.
 2. **Encerrar a extensão como resultado exploratório negativo/insuficiente:** documentar que, com 36 instâncias e 35 features, não houve ganho demonstrável sobre sempre Fuzzy. O projeto principal GWO continua completo.
@@ -150,19 +152,29 @@ Depois de revisar A–D, escolheremos e registraremos uma destas opções:
 
 **Minha recomendação metodológica atual:** se a extensão for mantida, expandir primeiro o número de instâncias, não apenas o número de seeds. Mais seeds refinam as médias por instância, mas não resolvem a limitação de apenas 36 unidades independentes. Não iniciar a expansão antes de aprovar o desenho, custo e holdout.
 
-## 9. O que enviar ao final
+## 9. Registro de execução A–D
 
-- [ ] Saída de preparação (branch, HEAD, log e Python).
-- [ ] Saída completa dos testes.
-- [ ] Saída da verificação SHA-256 do freeze.
-- [ ] Saída e dois artefatos do LOO reexecutado.
-- [ ] Versões de Python, NumPy, pandas e scikit-learn.
-- [ ] Qualquer divergência ou warning, sem omitir.
+| Item | Resultado |
+|---|---|
+| Data | 2026-11-27 |
+| Branch / HEAD | `recovery/surrogate-learning-curve-v2-oom` / `b5456d1f20523aca267c03ca379e58b3406c38fc` |
+| Commits recentes | `b5456d1`, `5dec18e` |
+| Python | 3.14.6 |
+| NumPy / pandas / sklearn | 2.5.1 / 2.3.3 / 1.9.0 |
+| Testes | 29 passed (2 warnings de deps externas) |
+| Freeze hashes | 4/4 OK |
+| LOO recheck | `selector_eval_recheck_20261127/`; `summary.json` idêntico ao publicado |
+| Divergências | nenhuma |
+| Pacote A–D | completo (prep, testes, hashes, LOO, versões) |
+| Relatório | [2026-11-27-meta-learning-reproduction-ad.md](2026-11-27-meta-learning-reproduction-ad.md) |
+| JSON | `selector_eval_recheck_20261127/reproduction_record.json` |
+| Decisão Fase 5 | **pendente** (escolher §8 opção 1, 2 ou 3; nenhuma pré-selecionada) |
 
-Com esse pacote, revisarei a reprodução, atualizarei o status e definiremos a Fase 5. Até lá, não rode novas execuções GWO nem amplie a meta-base.
+Working tree limpa no início da rodada. Freeze não foi regenerado. Artefatos publicados não foram sobrescritos.
 
 ## 10. Documentos de referência
 
+- [Relatório da reprodução A–D](2026-11-27-meta-learning-reproduction-ad.md)
 - [Status das fases](2026-11-27-meta-learning-phase-status.md)
 - [Avaliação LOO exploratória](2026-11-27-meta-learning-selector-loo-exploratory.md)
 - [Decisão de freeze](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md)

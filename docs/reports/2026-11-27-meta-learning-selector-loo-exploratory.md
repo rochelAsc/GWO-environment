@@ -1,10 +1,13 @@
 # Avaliação exploratória LOO dos seletores meta — 2026-11-27
 
-**Status:** exploratório (não confirmatório)  
+**Status:** exploratório (não confirmatório); reprodução A–D aprovada  
 **Freeze:** `metabasis_pilot_v1`  
-**Branch/commit de execução:** `recovery/surrogate-learning-curve-v2-oom` / `f51f96d0…`  
-**Artefatos:** `results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1/`  
-**Script:** `python -m scripts.evaluate_meta_learning_selectors_pilot`
+**Branch/commit da avaliação original:** `recovery/surrogate-learning-curve-v2-oom` / `f51f96d0…`  
+**Branch/commit da reprodução:** `recovery/surrogate-learning-curve-v2-oom` / `b5456d1f…`  
+**Artefatos publicados:** `results/meta_learning_metabasis_pilot_v1/selector_eval_exploratory_v1/`  
+**Artefatos recheck:** `results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127/`  
+**Script:** `python -m scripts.evaluate_meta_learning_selectors_pilot`  
+**Relatório de reprodução:** [2026-11-27-meta-learning-reproduction-ad.md](2026-11-27-meta-learning-reproduction-ad.md)
 
 ## 1. Pergunta
 
@@ -75,14 +78,26 @@ Conclusão honestamente delimitada: **no piloto 36×3×4, não há evidência de
 ```bash
 python -m scripts.evaluate_meta_learning_selectors_pilot \
   --freeze-dir experiments/meta_learning/data/metabasis_pilot_v1 \
-  --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127
+  --output results/meta_learning_metabasis_pilot_v1/selector_eval_recheck_20261127 \
+  --seed 0 --random-repeats 100
 ```
+
+**Recheck 2026-11-27 (aprovado):**
+
+| Item | Valor |
+|---|---|
+| `summary.json` SHA-256 | `218c448f80f4f16a2aab7afca43a511665420824c2f0484328ef4351ec70a2ba` (idêntico) |
+| predictions SHA-256 | `68edebba8e9e61c95b28e585f58687512cd22fef2adc4bd337c21a40fa14ae0d` (idêntico) |
+| Ambiente | Python 3.14.6; NumPy 2.5.1; pandas 2.3.3; scikit-learn 1.9.0 |
+| Freeze | 4/4 hashes OK; não regenerado |
+
+Detalhes: [relatório A–D](2026-11-27-meta-learning-reproduction-ad.md).
 
 Docs relacionados:
 
 - [Status das fases](2026-11-27-meta-learning-phase-status.md)
 - [Freeze metabasis_pilot_v1](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md)
 - [Roadmap](../plans/2026-11-27-meta-learning-completion-roadmap.md)
+- [Runbook](2026-11-27-meta-learning-next-execution-runbook.md)
 
-
-Próximo procedimento operacional: [runbook de reprodução e decisão da Fase 5](2026-11-27-meta-learning-next-execution-runbook.md).
+Próximo passo: decisão formal Fase 5 (continuar / encerrar / reformular). Nenhuma opção pré-selecionada.

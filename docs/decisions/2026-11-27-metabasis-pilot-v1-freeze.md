@@ -44,4 +44,17 @@ Relatório: [2026-11-27-meta-learning-selector-loo-exploratory.md](../reports/20
 
 ## Resultado de seleção associado ao freeze
 
-A avaliação LOO exploratória (`selector_eval_exploratory_v1`) não mostrou ganho operacional útil de RF sobre sempre Fuzzy: regret médio 0,0029053 vs 0,0029187, placar pareado 5/3/28 e IC95 amplamente sobrepostos. O classificador teve regret médio 0,0052324. Assim, o freeze permanece válido como conjunto de desenvolvimento e auditoria, mas não autoriza alegação de benefício do Meta-Learning nem expansão automática. A próxima execução deve apenas reproduzir hashes/LOO conforme o runbook antes da decisão formal sobre Fase 5.
+A avaliação LOO exploratória (`selector_eval_exploratory_v1`) não mostrou ganho operacional útil de RF sobre sempre Fuzzy: regret médio 0,0029053 vs 0,0029187, placar pareado 5/3/28 e IC95 amplamente sobrepostos. O classificador teve regret médio 0,0052324. Assim, o freeze permanece válido como conjunto de desenvolvimento e auditoria, mas não autoriza alegação de benefício do Meta-Learning nem expansão automática.
+
+## Verificação de reprodução (2026-11-27)
+
+Reprodução A–D aprovada sem regenerar este diretório. Detalhes: [2026-11-27-meta-learning-reproduction-ad.md](../reports/2026-11-27-meta-learning-reproduction-ad.md).
+
+| Check | Resultado |
+|---|---|
+| Hashes dos 4 arquivos do freeze | OK vs `freeze_manifest.json` |
+| LOO recheck vs publicado | `summary.json` e predictions bit-idênticos |
+| HEAD da reprodução | `b5456d1f20523aca267c03ca379e58b3406c38fc` |
+| Decisão de expansão | **pendente** |
+
+Este freeze continua imutável. Qualquer expansão cria nova versão (`metabasis_v2`…), nunca sobrescreve `metabasis_pilot_v1`.

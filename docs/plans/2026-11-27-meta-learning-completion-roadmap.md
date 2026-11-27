@@ -2,11 +2,12 @@
 
 **Data:** 27/11/2026  
 **Branch de referência:** `recovery/surrogate-learning-curve-v2-oom`  
-**Status:** Fases 1–4 concluídas; `metabasis_pilot_v1` congelada; LOO exploratório concluído sem ganho operacional útil vs sempre Fuzzy. Fase 5 ainda bloqueada por gate de reprodução/decisão.  
+**Status:** Fases 1–4 concluídas; freeze + LOO exploratório reproduzidos (A–D aprovada). Sem ganho operacional útil vs sempre Fuzzy. Fase 5 bloqueada **somente** pela decisão formal (continuar / encerrar / reformular).  
 **Escopo:** selecionar automaticamente uma variante GWO para uma nova instância PFSP/Taillard, usando características da instância e resultados históricos das variantes.  
 **Status detalhado:** [2026-11-27-meta-learning-phase-status.md](../reports/2026-11-27-meta-learning-phase-status.md).  
+**Reprodução A–D:** [2026-11-27-meta-learning-reproduction-ad.md](../reports/2026-11-27-meta-learning-reproduction-ad.md).  
 **LOO exploratório:** [2026-11-27-meta-learning-selector-loo-exploratory.md](../reports/2026-11-27-meta-learning-selector-loo-exploratory.md).  
-**Próxima execução:** [runbook de reprodução e decisão](../reports/2026-11-27-meta-learning-next-execution-runbook.md).  
+**Runbook:** [2026-11-27-meta-learning-next-execution-runbook.md](../reports/2026-11-27-meta-learning-next-execution-runbook.md).  
 **Freeze:** [2026-11-27-metabasis-pilot-v1-freeze.md](../decisions/2026-11-27-metabasis-pilot-v1-freeze.md).
 
 > Este documento é um plano de execução futuro. Não afirma que as etapas pendentes, a meta-base, os modelos ou a avaliação final já existam.
@@ -202,7 +203,7 @@ O trilho de auditoria da distribuição GWO antecede a decisão sobre o surrogat
 
 **Objetivo:** somente se a extensão for mantida após a reprodução do piloto, obter instâncias independentes suficientes para treinar e avaliar seleção de variantes.
 
-**Gate de entrada (ainda pendente):** reproduzir hashes do freeze e LOO em diretório separado conforme o runbook; revisar divergências; registrar uma decisão aprovada sobre continuidade. O resultado atual não demonstra ganho de RF sobre sempre Fuzzy. Não iniciar execução GWO até este gate ser aprovado.
+**Gate de entrada:** reprodução A–D **aprovada** ([relatório](../reports/2026-11-27-meta-learning-reproduction-ad.md)). Resta apenas registrar decisão explícita de continuidade. O resultado atual não demonstra ganho de RF sobre sempre Fuzzy. Não iniciar execução GWO até a decisão estar versionada.
 
 - [ ] Após decisão de continuidade, expandir prioritariamente a diversidade de 36 para 60 instâncias e planejar cobertura do benchmark de 120; não aumentar apenas seeds como substituto de novas instâncias.
 - [ ] Reservar holdout por instância antes de tuning/seleção final; definir seu tamanho e estratificação por dimensão no plano da expansão.
@@ -344,13 +345,13 @@ Se o modelo não superar os baselines, isso não invalida o experimento: a concl
 
 ## 9. Ordem prática recomendada para a próxima sessão
 
-1. Executar o runbook vigente: confirmar branch/HEAD, rodar testes, verificar os quatro hashes do freeze e reproduzir o LOO em diretório novo.
-2. Comparar os artefatos reproduzidos com o relatório LOO e investigar qualquer divergência sem sobrescrever o freeze.
-3. Registrar decisão: (a) expandir instâncias com novo freeze e holdout pré-reservado; (b) encerrar a extensão como resultado exploratório sem ganho demonstrado; ou (c) reformular a pergunta com novo protocolo.
+1. ~~Executar o runbook vigente (hashes + LOO recheck).~~ **Feito** — ver [reprodução A–D](../reports/2026-11-27-meta-learning-reproduction-ad.md).
+2. ~~Comparar artefatos reproduzidos.~~ **Feito** — bit-idênticos; sem divergência.
+3. **Pendente:** registrar decisão em `docs/decisions/`: (a) expandir instâncias com `metabasis_v2` e holdout pré-reservado; (b) encerrar a extensão como exploratória sem ganho demonstrado; ou (c) reformular a pergunta com novo protocolo.
 4. Se (a), priorizar 60–120 instâncias independentes; mais seeds refinam estimativas dentro de instâncias, mas não corrigem n pequeno.
 5. Não retunar Surrogate, RF ou features consultando holdout; não iniciar bateria GWO sem decisão registrada.
 
-**Gate atual:** apenas reprodução e decisão. A expansão 60/120 não está autorizada.
+**Gate atual:** reprodução A–D aprovada e documentada. Falta só a decisão formal (§9 item 3). Expansão 60/120 não autorizada.
 
 ## 10. Relação com outros planos e manutenção
 
