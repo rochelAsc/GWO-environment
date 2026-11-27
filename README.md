@@ -154,3 +154,9 @@ O padrão compara 30 lobos, 500 iterações e 15.030 avaliações por execução
 ## Extensão opcional — Meta-Learning
 
 O planejamento da extensão de Meta-Learning está em [`experiments/meta_learning/README.md`](experiments/meta_learning/README.md). Ele define um único pipeline de coleta/meta-base para comparar classificação (Random Forest Classifier) e regressão (Random Forest Regressor), com divisão de treino/teste por instância para evitar vazamento. Esta pasta contém **somente o plano metodológico** neste estágio: não há implementação nem resultados de Meta-Learning publicados. A extensão exige ampliar o conjunto de instâncias Taillard e executar um piloto de custo antes de qualquer bateria completa; não é requisito obrigatório da entrega principal.
+
+## Roteiro de pesquisa GWO/PFSP — 27/11/2026
+
+O roteiro metodológico aprovado para a próxima fase está em [docs/research/gwo_pfsp_experimental_roadmap_2026-11-27.md](docs/research/gwo_pfsp_experimental_roadmap_2026-11-27.md), com o registro das decisões em [docs/decisions/2026-11-27-gwo-pfsp-research-roadmap.md](docs/decisions/2026-11-27-gwo-pfsp-research-roadmap.md) e a [revisão de literatura](docs/research/gwo_pfsp_literature_review_2026-11-27.md).
+
+O novo planejamento mantém PFSP clássico/makespan e GWO como escopo central; prevê Taillard estratificado em 72 instâncias de desenvolvimento e 48 de holdout, orçamento por avaliações exatas com checkpoints Fibonacci calibrados no piloto, sementes progressivas e avaliação final iniciando em 40 seeds com expansão condicionada à precisão estatística. O Meta-Learning fica pausado até a construção e auditoria de uma base experimental ampla. Esses documentos registram decisões e planos; não significam que a nova bateria tenha sido executada.
